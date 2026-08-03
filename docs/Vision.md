@@ -21,15 +21,16 @@ BioTools is successful when:
 - Experienced users find the workflow faster than manually constructing commands.
 - Every module teaches concepts while remaining useful in real research.
 
-## Out of Scope
+## Non-Goals
 
 BioTools is not intended to:
 
 - Replace existing bioinformatics software.
 - Execute bioinformatics pipelines as a primary goal.
 - Hide the underlying command line tools from users.
-- Become a general purpose workflow management system.
+- Become a workflow execution engine.
 - Sacrifice correctness for convenience.
+- Support every bioinformatics tool immediately.
 
 ## Decisions
 
