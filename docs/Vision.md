@@ -3,11 +3,11 @@ Empowering researchers through intuitive bioinformatics tools.
 
 ## Purpose
 
-Rather than forcing researchers to think in command-line syntax, flags, and implementation details, 
+Rather than forcing researchers to think in command line syntax, flags, and implementation details, 
 BioTools presents bioinformatics concepts in the way researchers naturally think about their work.
 Every tool is designed to reduce cognitive load while helping users build understanding through interaction.
 
-<b>BioTools is created with deep respect for the bioinformatics community and the open-source tools that make modern biological research possible.
+<b>BioTools is created with deep respect for the bioinformatics community and the open source tools that make modern biological research possible.
 Its goal is not to replace those tools, but to help more people learn, understand, and use them effectively.</b>
 
 ## What Success Looks Like
