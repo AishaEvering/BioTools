@@ -1,7 +1,10 @@
 # BioTools Roadmap
 BioTools is developed incrementally. Each milestone delivers a complete, usable improvement while preserving a simple and intuitive user experience.
 
-## Milestone 1 - Foundation
+No work outside the current milestone should begin until
+the milestone goals are complete.
+
+## 🎯 Milestone 1 - Foundation
 Goal: Define what BioTools is before writing significant code.
 
 ### Completed
@@ -15,7 +18,7 @@ Goal: Define what BioTools is before writing significant code.
 - Domain Model
 - Architecture
 
-## Milestone 2 - Visual Command Builder
+## 🎯 Milestone 2 - Visual Command Builder
 Goal: Build a usable base version of the SAM Flag Visual Builder.
 
 ### Core Logic
@@ -34,7 +37,7 @@ Goal: Build a usable base version of the SAM Flag Visual Builder.
 - Copy command
   
 
-## Milestone 3 - Smart Builder
+## 🎯 Milestone 3 - Smart Builder
 Goal: Add intelligent guidance and advanced interactions.
 
 ### Core Logic
@@ -44,16 +47,20 @@ Goal: Add intelligent guidance and advanced interactions.
 
 ### User Interface
 - Conflict feedback
-- Command history
-- Export command history
+- Ability to invert commands
+- Make Common Command Combinations Available
 
-## Milestone 4 - Version 1.0
+## 🎯 Milestone 4 - Version 1.0
 Goal: SAM Flag Version 1 Release
 - Polish
 - Testing
 - Portfolio integration
 
 ## Future BioTools
+Goal: SAM Builder Update
+- Track Command history
+- Export command history
+  
 Goal: Move beyond flags.
 - CIGAR Explorer
 - Coverage Explorer
@@ -64,7 +71,7 @@ Goal: Move beyond flags.
 Goal: Get and prioritize feedback.
 - Professor feedback
 - Community feedback
-- Contributing Guide<
+- Contributing Guide
 - Community contributions
 
 ## Guiding Principles
