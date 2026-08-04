@@ -43,12 +43,12 @@ Goal: Add intelligent guidance and advanced interactions.
 ### Core Logic
 - Conflict Detection
 - Inversions
-- Common Command Combinations
+- Command Presets
 
 ### User Interface
 - Conflict feedback
 - Ability to invert commands
-- Command Presets
+- Command presets selection controls
 
 ## 🎯 Milestone 4 - Version 1.0
 Goal: SAM Flag Version 1 Release
