@@ -1,75 +1,71 @@
 # BioTools Roadmap
+BioTools is developed incrementally. Each milestone delivers a complete, usable improvement while preserving a simple and intuitive user experience.
 
 ## Milestone 1 - Foundation
 Goal: Define what BioTools is before writing significant code.
 
-<b>Completed</b>
-<ul>
-<li>✅ GitHub repository created</li>
-<li>✅ README</li>
-<li>✅ Vision document</li>
-<li>✅ Roadmap</li>
-<li>✅ Philosophy</li>
-</ul>
+### Completed
+- ✅ GitHub repository created
+- ✅ README
+- ✅ Vision document
+- ✅ Roadmap
+- ✅ Philosophy
 
-<b>Next</b>
-<ul>
-<li>Architecture</li>
-<li>Domain Model</li>
-<li>Contributing Guide</li>
-</ul>
+### Next
+- Domain Model
+- Architecture
 
 ## Milestone 2 - Visual Command Builder
-Goal: SAM Flag Visual Builder (base)
+Goal: Build a usable base version of the SAM Flag Visual Builder.
 
-<b>Features</b>
-<ul>
-<li>Flag Library</li>
-<li>Base Filters</li>
-<li>Command Generator</li>
-<li>Explanation Engine</li>
-<li>Rule Engine</li>
-<li>Include flags</li>
-<li>Exclude flags</li>
-<li>Live command preview</li>
-<li>Copy command</li>
-</ul>
+### Core Logic
+- Flag Library
+- Include and exclude flag calculations
+- Command Generator
+- Explanation Engine
+- Base validation rules
+  
+### User Interface
+- UI Skeleton
+- Flag selection controls
+- Base filters
+- Live command preview
+- Readable Explanations
+- Copy command
+  
 
 ## Milestone 3 - Smart Builder
-Goal: SAM Flag Visual Builder
-<ul>
-<li>Conflict Detection</li>
-<li>Inversions</li>
-<li>Common Command Combinations</li>
-<li>Export command history</li>
-</ul>
+Goal: Add intelligent guidance and advanced interactions.
 
-## Milestone 4 - Public Release
+### Core Logic
+- Conflict Detection
+- Inversions
+- Common Command Combinations
+
+### User Interface
+- Conflict feedback
+- Command history
+- Export command history
+
+## Milestone 4 - Version 1.0
 Goal: SAM Flag Version 1 Release
-<ul>
-<li>Polish</li>
-<li>Testing</li>
-<li>Portfolio integration</li>
-</ul>
+- Polish
+- Testing
+- Portfolio integration
 
-## Future Modules
+## Future BioTools
 Goal: Move beyond flags.
-<ul>
-<li>CIGAR Explorer</li>
-<li>Coverage Explorer</li>
-<li>Read Group Visualizer</li>
-<li>BEDTools Support</li>
-</ul>
+- CIGAR Explorer
+- Coverage Explorer
+- Read Group Visualizer
+- BEDTools Support
 
 ## Community
 Goal: Get and prioritize feedback.
-<ul>
-<li>Documentation</li>
-<li>Professor feedback</li>
-<li>Community feedback</li>
-<li>Community contributions</li>
-</ul>
-
+- Professor feedback
+- Community feedback
+- Contributing Guide<
+- Community contributions
 
 ## Guiding Principles
 
