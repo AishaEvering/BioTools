@@ -56,7 +56,7 @@ Goal: SAM Flag Version 1 Release
 - Testing
 - Portfolio integration
 
-## Future BioTools
+## 🚀 Future BioTools
 Goal: Future SAM Builder Enhancements
 - Track Command history
 - Export command history
@@ -67,14 +67,14 @@ Goal: Move beyond flags.
 - Read Group Visualizer
 - BEDTools Support
 
-## Community
+## 🤝 Community
 Goal: Get and prioritize feedback.
 - Professor feedback
 - Community feedback
 - Contributing Guide
 - Community contributions
 
-## Guiding Principles
+## 💡Guiding Principles
 
 Every feature should satisfy these questions:
 1. Does it reduce cognitive load?
@@ -82,7 +82,7 @@ Every feature should satisfy these questions:
 3. Can a researcher accomplish the task in seconds?
 4. Is the interface intuitive and/or explained clearly?
 
-## What does success look like?
+## 🏆 What does success look like?
 - A beginner builds a valid command in under 10 seconds
 - An experienced researcher prefers BioTools over looking up flag values.
 - A professor is comfortable recommending it to a class.
