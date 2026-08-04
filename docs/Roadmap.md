@@ -48,7 +48,7 @@ Goal: Add intelligent guidance and advanced interactions.
 ### User Interface
 - Conflict feedback
 - Ability to invert commands
-- Make Common Command Combinations Available
+- Command Presets
 
 ## 🎯 Milestone 4 - Version 1.0
 Goal: SAM Flag Version 1 Release
@@ -57,7 +57,7 @@ Goal: SAM Flag Version 1 Release
 - Portfolio integration
 
 ## Future BioTools
-Goal: SAM Builder Update
+Goal: Future SAM Builder Enhancements
 - Track Command history
 - Export command history
   
