@@ -13,9 +13,9 @@ Goal: Define what BioTools is before writing significant code.
 - ✅ Vision document
 - ✅ Roadmap
 - ✅ Philosophy
+- ✅ Domain Model
 
 ### Next
-- Domain Model
 - Architecture
 
 ## 🎯 Milestone 2 - Visual Command Builder
