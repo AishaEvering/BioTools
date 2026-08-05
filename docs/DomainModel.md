@@ -248,6 +248,8 @@ It receives:
 It produces:
 - Validation Results
 
+Each call to evaluate produces a new set of validation results based on the current FlagFilter
+
 ```typescript
  interface RuleEngine{
   readonly rules: Rule[];
@@ -255,7 +257,7 @@ It produces:
   evaluate(flagFilter: FlagFilter): ValdationResult[];
 }
 ```
-Each call to evaluate produces a new set of validation results based on the current FlagFilter
+
 ---
 
 ### Command Combination
