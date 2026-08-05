@@ -20,6 +20,8 @@ Each flag contains:
 * An immutable name
 * An immutable description
 * An immutable category
+* An immutable inclusion phrase
+* An immutable exclusion phrase
 
 Example:
 
@@ -62,7 +64,7 @@ Calculated include value:
 3
 
 Calculated exclude value:
-1
+256
 ```
 
 A flag filter must not store a manually entered total that can become inconsistent with its selected flags. The total should always be derived from the current selections.
@@ -86,6 +88,7 @@ A View Option contains:
 * Command line syntax
 * Optional value
 * Description
+* explanationPhrase
 
 Example:
 
@@ -94,12 +97,13 @@ Name: Count
 Syntax: -q
 Value: 20
 Description: returns only reads with min mapping quality
+ExplanationPhrase: Only include reads with a mapping quality of at least 20.
 ```
 ---
 
 ### Samtools View Command
 
-A command represents the generated `samtools view` command.
+A SAMtools View Command represents the current configuration used to generate a samtools view command.
 
 A command may contain:
 
@@ -142,12 +146,31 @@ to become inconsistent with the current configuration.
 
 ---
 
-### Explanation
+### ExplanationEngine
 
-An explanation provides an interpretation of a selection or generated command.
+Generates an Explanation from the current SamtoolsViewCommand, CommandCombination, and any applicable ValidationResult objects.
+
+It receives:
+- A SAMtools View Command
+- CommandCombination
+- Validation Results
+
+It produces:
+- An Explanation
+
+The Explanation Engine does not modify the command, flag filter, or validation results.
+
+```typescript
+interface ExplanationEngine {
+  explain(
+    command: SamtoolsViewCommand,
+    validationResults: ValidationResult[],
+    activeCombination?: CommandCombination,
+  ): string[];
+}
+```
 
 An explanation may describe:
-
 * What an individual flag means
 * What included flags require
 * What excluded flags remove
@@ -159,8 +182,6 @@ Example:
 ```text
 This command returns alignments marked as properly paired while excluding secondary alignments.
 ```
-
-Explanations are derived from flag definitions, filter selections, and applicable rules.
 
 ---
 
@@ -212,6 +233,28 @@ Warnings allow command generation but alert the user to a potentially unintended
 Informational results teach or clarify without indicating a problem.
 
 ---
+### Rule Engine
+Evaluates the current FlagFilter against all defined rules.  It produces zero or more ValidationResult objects.
+The Rule Engine never modifies the user's selections.  It only evaluates them.
+
+It contains:
+- Rules
+
+It receives:
+- A Flag Filter
+
+It produces:
+- Validation Results
+
+```typescript
+ interface RuleEngine{
+  readonly rules: Rule[];
+}
+
+evaluate(flagFilter: FlagFilter): ValdationResult[];
+```
+Each call to evaluate produces a new set of validation results based on the current FlagFilter
+---
 
 ### Command Combination
 
@@ -245,27 +288,49 @@ An inversion must be determined by domain rules rather than by simply exchanging
 
 Not every command has a meaningful or safe automatic inversion. Unsupported inversions should be identified clearly.
 
+---
+
 ## Relationships
 
 ```text
 SAM Flag
    │
-   └── included in Flag Filter
+   └── included in or excluded from Flag Filter
              │
-             └── evaluated by Rules
-                       └── produce Validation Results
+             ├── used by SAMtools View Command
+             │         │
+             │         ├── configured by View Options
+             │         │
+             │         └── passed to Command Renderer
+             │                   │
+             │                   └── produces Rendered Command
              │
-             ├── used to generate Explanations
+             ├── evaluated by Rule Engine
+             │         │
+             │         ├── evaluates Rules
+             │         │
+             │         └── produces Validation Results
              │
-             └── used to generate Command
+             └── used to generate ExplanationEngine
+
+Rule
+   │
+   └── evaluated by Rule Engine
+
+Validation Result
+   │
+   └── used to generate Explanations
 
 Command Combination
    │
-   └── creates a predefined Flag Filter
+   ├── creates a predefined Flag Filter
+   │
+   └── may provide predefined View Options
 
 Inversion
    │
-   └── transforms a supported Flag Filter or Command Combination
+   └── transforms a supported Flag Filter
+       or Command Combination
 ```
 
 ## Domain Rules
