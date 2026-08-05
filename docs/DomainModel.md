@@ -254,7 +254,7 @@ Each call to evaluate produces a new set of validation results based on the curr
  interface RuleEngine{
   readonly rules: Rule[];
 
-  evaluate(flagFilter: FlagFilter): ValdationResult[];
+  evaluate(flagFilter: FlagFilter): ValidationResult[];
 }
 ```
 
@@ -262,7 +262,7 @@ Each call to evaluate produces a new set of validation results based on the curr
 
 ### Command Combination
 
-Contains a predefined SamtoolsViewCommand configuration and a researcher-facing explanation..
+Contains a predefined SamtoolsViewCommand configuration and a researcher-facing explanation.
 
 Examples may include:
 
@@ -332,7 +332,7 @@ Rule
 
 Validation Result
    │
-   └── used by Explanations
+   └── used by Explanation Engine
 
 Command Combination
    │
