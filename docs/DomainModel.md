@@ -31,6 +31,8 @@ Value: 1
 Hexadecimal: 0x1
 Description: The read is part of a paired-end sequencing record.
 Category: Template
+Inclusion phrase: reads that are part of a paired template
+Exclusion phrase: reads that are not marked as part of a paired template
 ```
 
 A SAM flag definition is reference data. It does not change based on user interaction.
@@ -93,11 +95,11 @@ A View Option contains:
 Example:
 
 ```text
-Name: Count
+Name: Minimum Mapping Quality
 Syntax: -q
 Value: 20
-Description: returns only reads with min mapping quality
-ExplanationPhrase: Only include reads with a mapping quality of at least 20.
+Description: Only include alignments with mapping quality at least 20.
+ExplanationPhrase: Includes only alignments with mapping quality of at least 20.
 ```
 ---
 
@@ -148,7 +150,7 @@ to become inconsistent with the current configuration.
 
 ### ExplanationEngine
 
-Generates an Explanation from the current SamtoolsViewCommand, CommandCombination, and any applicable ValidationResult objects.
+Generates explanation messages from the current command, active command combination, and validation results.
 
 It receives:
 - A SAMtools View Command
@@ -156,7 +158,7 @@ It receives:
 - Validation Results
 
 It produces:
-- An Explanation
+- Zero or more explanation messages
 
 The Explanation Engine does not modify the command, flag filter, or validation results.
 
@@ -249,16 +251,16 @@ It produces:
 ```typescript
  interface RuleEngine{
   readonly rules: Rule[];
-}
 
-evaluate(flagFilter: FlagFilter): ValdationResult[];
+  evaluate(flagFilter: FlagFilter): ValdationResult[];
+}
 ```
 Each call to evaluate produces a new set of validation results based on the current FlagFilter
 ---
 
 ### Command Combination
 
-A command combination is a predefined configuration representing a common research intention.
+Contains a predefined SamtoolsViewCommand configuration and a researcher-facing explanation..
 
 Examples may include:
 
@@ -278,6 +280,14 @@ A command combination contains:
 Command combinations populate the same flag filter used by manual selections. 
 They do not use a separate command-generation process.
 
+```typescript
+interface CommandCombination {
+  readonly name: string;
+  readonly description: string;
+  readonly command: SamtoolsViewCommand;
+  readonly explanation: string;
+}
+```
 ---
 
 ### Inversion
@@ -301,31 +311,34 @@ SAM Flag
              │         │
              │         ├── configured by View Options
              │         │
+             │         ├── used by Explanation Engine
+             │         │
              │         └── passed to Command Renderer
              │                   │
              │                   └── produces Rendered Command
              │
-             ├── evaluated by Rule Engine
-             │         │
-             │         ├── evaluates Rules
-             │         │
-             │         └── produces Validation Results
-             │
-             └── used to generate ExplanationEngine
-
+             └── evaluated by Rule Engine
+                       │
+                       ├── evaluates Rules
+                       │
+                       └── produces Validation Results
+                                  │
+                                  └── used by Explanation Engine
 Rule
    │
    └── evaluated by Rule Engine
 
 Validation Result
    │
-   └── used to generate Explanations
+   └── used by Explanations
 
 Command Combination
    │
    ├── creates a predefined Flag Filter
    │
-   └── may provide predefined View Options
+   ├── may provide predefined View Options
+   │
+   └── may provide a researcher-facing explanation
 
 Inversion
    │
