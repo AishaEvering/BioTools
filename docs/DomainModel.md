@@ -128,24 +128,17 @@ function renderSamtoolsViewCommand(
 ): string;
 ```
 
-The rendered command is derived from the current filter configuration.
+The rendered command is calculated dynamically whenever the command configuration changes.
+It is not stored as independent state because doing so could allow the rendered text
+to become inconsistent with the current configuration.
 
 The command should not contain `-f` or `-F` when no corresponding flags are selected.
-
----
-
-### Rendered Command
-A rendered command is the command-line text dynamically generated from the current command configuration.
 
 Example:
 
 ```text
 samtools view -h -q 20 -f 2 -F 256 sample.bam
 ```
-The rendered command is calculated dynamically whenever the command configuration changes.
-It is not stored as independent state because doing so could allow the rendered text
-to become inconsistent with the current configuration.
-
 ---
 
 ### ExplanationEngine
