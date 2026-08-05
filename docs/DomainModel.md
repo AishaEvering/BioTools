@@ -55,6 +55,9 @@ Included flags:
 - Read Paired: 1
 - Proper Pair: 2
 
+Excluded flags:
+- Secondary Alignment: 256
+
 Calculated include value:
 3
 
@@ -66,35 +69,9 @@ A flag filter must not store a manually entered total that can become inconsiste
 
 ---
 
-### Command Definition
-Identifies the underlying command line program and subcommand supported by a BioTool.
-
-A command definition may contain:
-
-* Base executable
-* Subcommand
-
-Example:
-
-```text
-Included flags:
-- Base executable: samtools
-- Subcommand: view
-```
-
-```typescript
-A CommandDefinition may be represented as:
-interface CommandDefinition{
- readonly executable: string;
- readonly subcommand: string;
-}
-```
-
----
-
 ### View Option
 
-Supported subcommand argument that are not part of the SAM bitwise flag filter.
+A View Option represents a supported samtools view argument that is not part of the SAM bitwise flag filter.
 
 Examples may include:
 - Include the header
@@ -102,29 +79,30 @@ Examples may include:
 - Set a minimum mapping quality
 - Select an output format
 
-** Only options explicitly supported should be included in the model.
+**Only options explicitly supported by BioTools should be included in the model.**
 
 A View Option contains:
 * Name
 * Command line syntax
+* Optional value
 * Description
 
 Example:
 
 ```text
 Name: Count
-Syntax: -c
-Description: only count them and print the total number
+Syntax: -q
+Value: 20
+Description: returns only reads with min mapping quality
 ```
 ---
 
-### Command
+### Samtools View Command
 
 A command represents the generated `samtools view` command.
 
 A command may contain:
 
-* CommandDefinition
 * FlagFilter
 * ViewOptions
 * Optional input filename
@@ -134,11 +112,14 @@ Example:
 
 ```typescript
 interface SamtoolsViewCommand{
-  readonly commandDefinition: CommandDefinition;
   readonly flagFilter: FlagFilter;
-  readonly options[]: ViewOption;
+  readonly options: ViewOption[];
   inputFile?: string;
 }
+
+function renderSamtoolsViewCommand(
+   command: SamtoolsViewCommand,
+): string;
 ```
 
 The rendered command is derived from the current filter configuration.
@@ -148,7 +129,7 @@ The command should not contain `-f` or `-F` when no corresponding flags are sele
 ---
 
 ### Rendered Command
-Produces the command line produced from the Command object
+A rendered command is the command-line text dynamically generated from the current command configuration.
 
 Example:
 
@@ -157,7 +138,7 @@ samtools view -h -q 20 -f 2 -F 256 sample.bam
 ```
 The rendered command is calculated dynamically whenever the command configuration changes.
 It is not stored as independent state because doing so could allow the rendered text
-to become inconsistent the current configuration.
+to become inconsistent with the current configuration.
 
 ---
 
@@ -269,17 +250,14 @@ Not every command has a meaningful or safe automatic inversion. Unsupported inve
 ```text
 SAM Flag
    │
-   └── used by Flag Selection
+   └── included in Flag Filter
              │
-             └── grouped into Flag Filter
-                       │
-                       ├── evaluated by Rules
-                       │        │
-                       │        └── produce Validation Results
-                       │
-                       ├── used to generate Explanations
-                       │
-                       └── used to generate Command
+             └── evaluated by Rules
+                       └── produce Validation Results
+             │
+             ├── used to generate Explanations
+             │
+             └── used to generate Command
 
 Command Combination
    │
@@ -318,7 +296,6 @@ The initial domain model must support:
 * Explanations
 * Base validation rules
 * Copyable command output
-* Initial Command combinations
 
 The following concepts are planned but are not required for the base Visual Command Builder:
 
