@@ -9,9 +9,9 @@ but the underlying SAM flag logic should remain separate from React.
 
 ## Core Concepts
 
-### SAM Flag
+### $${\color{blue}SAM \space Flag}$$
 
-A SAM flag represents one bitwise property associated with a sequencing alignment record.
+Represents one bitwise property associated with a sequencing alignment record.
 
 Each flag contains:
 
@@ -39,9 +39,9 @@ A SAM flag definition is reference data. It does not change based on user intera
 
 ---
 
-### Flag Filter
+### $${\color{blue}Flag \space Filter}$$
 
-A flag filter represents the complete collection of included and excluded flags selected by the user.
+Represents the complete collection of included and excluded flags selected by the user.
 
 A flag filter contains:
 
@@ -73,9 +73,9 @@ A flag filter must not store a manually entered total that can become inconsiste
 
 ---
 
-### View Option
+### $${\color{blue}View \space Option}$$
 
-A View Option represents a supported samtools view argument that is not part of the SAM bitwise flag filter.
+Represents a supported samtools view argument that is not part of the SAM bitwise flag filter.
 
 Examples may include:
 - Include the header
@@ -103,9 +103,9 @@ ExplanationPhrase: Includes only alignments with mapping quality of at least 20.
 ```
 ---
 
-### Samtools View Command
+### $${\color{blue}Samtools \space View \space Command}$$
 
-A SAMtools View Command represents the current configuration used to generate a samtools view command.
+Represents the current configuration used to generate a samtools view command.
 
 A command may contain:
 
@@ -141,7 +141,7 @@ samtools view -h -q 20 -f 2 -F 256 sample.bam
 ```
 ---
 
-### ExplanationEngine
+### $${\color{blue}Explanation \space Engine}$$
 
 Generates explanation messages from the current command, active command combination, and validation results.
 
@@ -180,9 +180,9 @@ This command returns alignments marked as properly paired while excluding second
 
 ---
 
-### Rule
+### $${\color{blue}Rule}$$
 
-A rule describes a relationship, constraint, warning, or implication involving one or more domain concepts.
+Describes a relationship, constraint, warning, or implication involving one or more domain concepts.
 
 A rule contains:
 
@@ -209,9 +209,9 @@ Rules evaluate the current filter configuration. They should not depend on React
 
 ---
 
-### Validation Result
+### $${\color{blue}Validation \space Result}$$
 
-A validation result represents the outcome of evaluating a rule.
+Represents the outcome of evaluating a rule.
 
 A validation result contains:
 
@@ -228,7 +228,9 @@ Warnings allow command generation but alert the user to a potentially unintended
 Informational results teach or clarify without indicating a problem.
 
 ---
-### Rule Engine
+
+### $${\color{blue}Rule \space Engine}$$
+
 Evaluates the current FlagFilter against all defined rules.  It produces zero or more ValidationResult objects.
 The Rule Engine never modifies the user's selections.  It only evaluates them.
 
@@ -253,7 +255,7 @@ Each call to evaluate produces a new set of validation results based on the curr
 
 ---
 
-### Command Combination
+### $${\color{blue}Command \space Combination}$$
 
 Contains a predefined SamtoolsViewCommand configuration and a researcher-facing explanation.
 
@@ -285,7 +287,7 @@ interface CommandCombination {
 ```
 ---
 
-### Inversion
+### $${\color{blue}Inversion}$$
 
 An inversion creates the logical opposite of a supported selection or command combination.
 
@@ -295,7 +297,7 @@ Not every command has a meaningful or safe automatic inversion. Unsupported inve
 
 ---
 
-## Relationships
+### $${\color{green}Relationships}$$
 
 ```text
 SAM Flag
@@ -341,7 +343,7 @@ Inversion
        or Command Combination
 ```
 
-## Domain Rules
+### $${\color{green}Domain \space Rules}$$
 
 The following rules apply across the application:
 
@@ -356,7 +358,7 @@ The following rules apply across the application:
 9. The domain model must preserve the terminology used by SAM and `samtools` or whatever executable being used.
 10. Explanations may simplify terminology but must not change its technical meaning.
 
-## Version 1 Scope
+### $${\color{green}Version \space 1 \space Scope}$$
 
 The initial domain model must support:
 
@@ -379,7 +381,7 @@ The following concepts are planned but are not required for the base Visual Comm
 * Exporting command history
 * User accounts
 
-## Open Questions
+### $${\color{green}Open \space Questions}$$
 
 The following decisions should be resolved during architecture design or implementation:
 
