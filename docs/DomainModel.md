@@ -90,7 +90,7 @@ A View Option contains:
 * Command line syntax
 * Optional value
 * Description
-* explanationPhrase
+* Explanation Phrase
 
 Example:
 
@@ -109,9 +109,9 @@ Represents the current configuration used to generate a samtools view command.
 
 A command may contain:
 
-* FlagFilter
-* ViewOptions
-* Optional input filename
+* Flag Filter
+* View Options
+* Optional Filename
 
 If no filename has been entered, the interface may display an instructional placeholder, <input.bam>.
 Example:
@@ -147,7 +147,7 @@ Generates explanation messages from the current command, active command combinat
 
 It receives:
 - A SAMtools View Command
-- CommandCombination
+- Command Combination
 - Validation Results
 
 It produces:
@@ -257,25 +257,30 @@ Each call to evaluate produces a new set of validation results based on the curr
 
 ### $${\color{blue}Command \space Combination}$$
 
-Contains a predefined SamtoolsViewCommand configuration and a researcher-facing explanation.
+Contains a predefined SamtoolsViewCommand configuration and a researcher facing explanation.
 
 Examples may include:
 
 * Properly paired reads
 * Primary alignments
 * Unmapped reads
-* Forward-strand alignments
-* Reverse-strand alignments
+* Forward strand alignments
+* Reverse strand alignments
 
 A command combination contains:
 
 * A name
 * A description
-* A Command
+* A command
 * An explanation
 
 Command combinations populate the same flag filter used by manual selections. 
-They do not use a separate command-generation process.
+They do not use a separate command generation process.
+
+Once loaded, a combination's flag remain part of the ordinary Flag Filter and may
+be further edited through normal manual selection.  The interface should indicate
+that a selection originated from a combination and whether it has since diverged
+from that combination's original configuration.
 
 ```typescript
 interface CommandCombination {
@@ -335,7 +340,7 @@ Command Combination
    │
    ├── may provide predefined View Options
    │
-   └── may provide a researcher-facing explanation
+   └── may provide a researcher facing explanation
 
 Inversion
    │
@@ -371,11 +376,11 @@ The initial domain model must support:
 * Explanations
 * Base validation rules
 * Copyable command output
+* A small curated set of Command Combinations, populating the same Flag Filter used by manual selections.
 
 The following concepts are planned but are not required for the base Visual Command Builder:
 
 * Advanced conflict detection
-* Command combinations
 * Command inversion
 * Command history
 * Exporting command history
