@@ -19,7 +19,7 @@ Goal: Define what BioTools is before writing significant code.
 - Architecture
 
 ## 🎯 Milestone 2 - Visual Command Builder
-Goal: Build a usable base version of the SAM Flag Visual Builder.
+Goal: Build a usable base version of the SAM Flag Visual Builder, including a small curated set of Command Combinations.
 
 ### Core Logic
 - Flag Library
@@ -27,6 +27,7 @@ Goal: Build a usable base version of the SAM Flag Visual Builder.
 - Command Generator
 - Explanation Engine
 - Base validation rules
+- Command Combinations (small curated set, e.g. properly paired reads, primary alignments, unmapped reads, forward strand, reverse strand, duplicates removed)
   
 ### User Interface
 - UI Skeleton
@@ -35,6 +36,7 @@ Goal: Build a usable base version of the SAM Flag Visual Builder.
 - Live command preview
 - Readable Explanations
 - Copy command
+- Loading a combination into the same Flag Filter used by manual selection
   
 
 ## 🎯 Milestone 3 - Smart Builder
@@ -43,12 +45,10 @@ Goal: Add intelligent guidance and advanced interactions.
 ### Core Logic
 - Conflict Detection
 - Inversions
-- Command Presets
 
 ### User Interface
 - Conflict feedback
 - Ability to invert commands
-- Command presets selection controls
 
 ## 🎯 Milestone 4 - Version 1.0
 Goal: SAM Flag Version 1 Release
@@ -60,6 +60,7 @@ Goal: SAM Flag Version 1 Release
 Goal: Future SAM Builder Enhancements
 - Track Command history
 - Export command history
+- Expand the Command Combination library
   
 Goal: Move beyond flags.
 - CIGAR Explorer
