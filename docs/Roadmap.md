@@ -4,7 +4,7 @@ BioTools is developed incrementally. Each milestone delivers a complete, usable 
 No work outside the current milestone should begin until
 the milestone goals are complete.
 
-## 🎯 Milestone 1 - Foundation
+## 🎯 Milestone 1 - Foundation 
 Goal: Define what BioTools is before writing significant code.
 
 ### Completed
@@ -14,9 +14,7 @@ Goal: Define what BioTools is before writing significant code.
 - ✅ Roadmap
 - ✅ Philosophy
 - ✅ Domain Model
-
-### Next
-- Architecture
+- ✅ Architecture
 
 ## 🎯 Milestone 2 - Visual Command Builder
 Goal: Build a usable base version of the SAM Flag Visual Builder, including a small curated set of Command Combinations.
