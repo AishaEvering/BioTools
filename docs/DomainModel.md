@@ -283,10 +283,10 @@ A filter preset contains:
 * A Flag Filter
 * An explanation
 
-Command combinations populate the same flag filter used by manual selections. 
+Filter Presets populate the same flag filter used by manual selections. 
 They do not use a separate command generation process.
 
-Once loaded, a preset's flag remain part of the ordinary Flag Filter and may
+Once loaded, a preset's flags remain part of the ordinary Flag Filter and may
 be further edited through normal manual selection.  
 
 ```typescript
@@ -301,7 +301,7 @@ interface FilterPreset {
 
 ### $${\color{blue}Inversion}$$
 
-An inversion creates the logical opposite of a supported selection or filter presets.
+An inversion creates the logical opposite of a supported selection Flag Filter or filter Preset.
 
 An inversion must be determined by domain rules rather than by simply exchanging every included and excluded flag.
 
@@ -345,9 +345,8 @@ Filter Preset
    │
    ├── creates a predefined Flag Filter
    │
-   ├── may provide predefined View Options
    │
-   └── may provide a researcher facing explanation
+   └── provides a researcher facing explanation
 
 Inversion
    │
