@@ -19,7 +19,7 @@ understand, construct, and validate them.
 
 ## Platform Architecture
 
-![Platform Architecture](images/platform.png)
+![Platform Architecture](imgs/platform.png)
 
 This diagram shows the shared services used across every BioTools application.
 
@@ -27,7 +27,7 @@ This diagram shows the shared services used across every BioTools application.
 
 ## User Journey
 
-![User Journey](images/user-journey.png)
+![User Journey](imgs/user-journey.png)
 
 This illustrates how a researcher interacts with the platform from making
 selections to generating a validated command.
@@ -36,7 +36,7 @@ selections to generating a validated command.
 
 ## Core Data Model
 
-![Core Data Model](images/core-data-model.png)
+![Core Data Model](imgs/core-data-model.png)
 
 The application maintains a single mutable Filter State.
 Commands are always derived from that state and are never stored independently.
@@ -45,7 +45,7 @@ Commands are always derived from that state and are never stored independently.
 
 ## Rule & Validation Pipeline
 
-![Core Data Model](images/rule-validation-pipeline.png)
+![Core Data Model](imgs/rule-validation-pipeline.png)
 
 The Rule Engine evaluates the Filter State against immutable rule definitions.
 Results are transformed into user-friendly explanations.
@@ -54,7 +54,7 @@ Results are transformed into user-friendly explanations.
 
 ## Command Combination Pipeline
 
-![Core Data Model](images/command-combination-pipeline.png)
+![Core Data Model](imgs/command-combination-pipeline.png)
 
 Preset command combinations and manual selections both produce the same
 Filter State, ensuring a single command generation path.
