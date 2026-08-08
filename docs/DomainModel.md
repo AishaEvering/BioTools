@@ -143,11 +143,11 @@ samtools view -h -q 20 -f 2 -F 256 sample.bam
 
 ### $${\color{blue}Explanation \space Engine}$$
 
-Generates explanation messages from the current command, active command combination, and validation results.
+Generates explanation messages from the current command, active filter preset, and validation results.
 
 It receives:
 - A SAMtools View Command
-- Command Combination
+- All Filter presets
 - Validation Results
 
 It produces:
@@ -156,12 +156,20 @@ It produces:
 The Explanation Engine does not modify the command, flag filter, or validation results.
 
 ```typescript
-interface ExplanationEngine {
+class ExplanationEngine {
+  constructor(
+    private readonly presets: FilterPreset[]
+  ) {}
+
   explain(
     command: SamtoolsViewCommand,
     validationResults: ValidationResult[],
-    activeCombination?: CommandCombination,
-  ): string[];
+  ): string[] {
+    // find matching preset
+    // generate flag explanations
+    // incorporate validation explanations
+    // consolidate messages
+  }
 }
 ```
 
@@ -268,7 +276,7 @@ Examples may include:
 * Reverse strand alignments
 * Duplicates removed
 
-A command combination contains:
+A filter preset contains:
 
 * A name
 * A description
@@ -278,10 +286,8 @@ A command combination contains:
 Command combinations populate the same flag filter used by manual selections. 
 They do not use a separate command generation process.
 
-Once loaded, a combination's flag remain part of the ordinary Flag Filter and may
-be further edited through normal manual selection.  The interface should indicate
-that a selection originated from a combination and whether it has since diverged
-from that combination's original configuration.
+Once loaded, a preset's flag remain part of the ordinary Flag Filter and may
+be further edited through normal manual selection.  
 
 ```typescript
 interface FilterPreset {
@@ -295,7 +301,7 @@ interface FilterPreset {
 
 ### $${\color{blue}Inversion}$$
 
-An inversion creates the logical opposite of a supported selection or command combination.
+An inversion creates the logical opposite of a supported selection or filter presets.
 
 An inversion must be determined by domain rules rather than by simply exchanging every included and excluded flag.
 
@@ -335,7 +341,7 @@ Validation Result
    │
    └── used by Explanation Engine
 
-Command Combination
+Filter Preset
    │
    ├── creates a predefined Flag Filter
    │
@@ -346,7 +352,7 @@ Command Combination
 Inversion
    │
    └── transforms a supported Flag Filter
-       or Command Combination
+       or Filter Preset
 ```
 
 ### $${\color{green}Domain \space Rules}$$
@@ -358,7 +364,7 @@ The following rules apply across the application:
 3. Command text is always generated from the current filter configuration.
 4. React components do not perform bitwise flag calculations.
 5. Rules and explanations do not depend on the visual interface.
-6. A predefined command combination uses the same domain model as a manually built command.
+6. A predefined filter preset uses the same domain model as a manually built command.
 7. Invalid selections must be identified before the command is presented as valid.
 8. Warnings must explain the concern without silently changing the user’s selections.
 9. The domain model must preserve the terminology used by SAM and `samtools` or whatever executable being used.
@@ -377,7 +383,7 @@ The initial domain model must support:
 * Explanations
 * Base validation rules
 * Copyable command output
-* A small curated set of Command Combinations, populating the same Flag Filter used by manual selections.
+* A small curated set of Filter Presets, populating the same Flag Filter used by manual selections.
 
 The following concepts are planned but are not required for the base Visual Command Builder:
 
