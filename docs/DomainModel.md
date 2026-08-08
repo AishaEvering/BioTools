@@ -143,11 +143,11 @@ samtools view -h -q 20 -f 2 -F 256 sample.bam
 
 ### $${\color{blue}Explanation \space Engine}$$
 
-Generates explanation messages from the current command, active filter preset, and validation results.
+Generates explanation messages from the current command, matching Filter Preset when one exists, and validation results.
 
 It receives:
 - A SAMtools View Command
-- All Filter presets
+- Filter presets
 - Validation Results
 
 It produces:
