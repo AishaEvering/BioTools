@@ -255,9 +255,9 @@ Each call to evaluate produces a new set of validation results based on the curr
 
 ---
 
-### $${\color{blue}Command \space Combination}$$
+### $${\color{blue}Filter \space Preset}$$
 
-Contains a predefined SamtoolsViewCommand configuration and a researcher facing explanation.
+Contains a predefined Flag Filter configuration and a researcher facing explanation.
 
 Examples may include:
 
@@ -266,12 +266,13 @@ Examples may include:
 * Unmapped reads
 * Forward strand alignments
 * Reverse strand alignments
+* Duplicates removed
 
 A command combination contains:
 
 * A name
 * A description
-* A command
+* A Flag Filter
 * An explanation
 
 Command combinations populate the same flag filter used by manual selections. 
@@ -283,10 +284,10 @@ that a selection originated from a combination and whether it has since diverged
 from that combination's original configuration.
 
 ```typescript
-interface CommandCombination {
+interface FilterPreset {
   readonly name: string;
   readonly description: string;
-  readonly command: SamtoolsViewCommand;
+  readonly filter: FlagFilter;
   readonly explanation: string;
 }
 ```
