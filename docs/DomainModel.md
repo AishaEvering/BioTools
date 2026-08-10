@@ -569,8 +569,7 @@ the Rule Engine determines that the Rule Condition is satisfied and produces:
 ```text
 ValidationResult
 ---------------------
-rule:
-  rule: Rule 7
+rule: Rule 7
 ```
 The Validation Result provides access to the Rule's evaluation information:
 ```text
@@ -708,9 +707,6 @@ It produces:
 
 The Explanation Engine does not modify the command, flag filter, or validation results.
 
-```Typescript
-```
-
 ```typescript
 class ExplanationEngine {
   constructor(
@@ -780,7 +776,7 @@ Each call to ```evaluate``` produces a new set of Validation Results based on th
 
 ```TypeScript
  interface RuleEngine{
-  readonly rules: RuleCatalog];
+  readonly rules: RuleCatalog;
 
   evaluate(flagFilter: FlagFilter): ValidationResult[];
 }
