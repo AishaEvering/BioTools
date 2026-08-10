@@ -47,6 +47,22 @@ Exclusion phrase: reads that are not marked as part of a paired template
 > to create SAM Flag objects at application startup.  User interaction may select or reference SAM
 > Flags, but does not modify their definitions.
 
+Example Catalog:
+```TypeScript
+class SamFlagCatalog {
+  getAll(): readonly SamFlag[];
+  getByValue(value: number): SamFlag | undefined;
+  getByName(name: string): SamFlag | undefined;
+}
+```
+
+Example Loader:
+```TypeScript
+interface SamFlagLoader {
+  load(): SamFlag[];
+}
+```
+
 ---
 
 ### $${\color{purple}Flag \space Filter}$$
@@ -85,21 +101,6 @@ Calculated exclude value:
 > [!NOTE]
 > A flag filter must not store a manually entered total that can become inconsistent with its selected flags. The total should always be derived from the current selections
 
-Example Catalog:
-```TypeScript
-class SamFlagCatalog {
-  getAll(): readonly SamFlag[];
-  getByValue(value: number): SamFlag | undefined;
-  getByName(name: string): SamFlag | undefined;
-}
-```
-
-Example Loader:
-```TypeScript
-interface SamFlagLoader {
-  load(): SamFlag[];
-}
-```
 ---
 
 ### $${\color{purple}View \space Option}$$
