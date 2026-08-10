@@ -17,48 +17,65 @@ Goal: Define what BioTools is before writing significant code.
 - ✅ Architecture
 
 ## 🎯 Milestone 2 - Visual Command Builder
-Goal: Build a usable base version of the SAM Flag Visual Builder, including a small curated set of Command Combinations.
+Goal: Build a usable base version of the SAM Flag Visual Builder.
 
 ### Core Logic
-- Flag Library
-- Include and exclude flag calculations
-- Command Generator
+- SAM Flag Library data and loading
+- Flag Filter include and exclude calculations
+- SAMtools View Command
+- View Options
+- Command Renderer
+- Rule Engine
+- Base Rules
+- Validation Results
 - Explanation Engine
-- Base validation rules
-- Command Combinations (small curated set, e.g. properly paired reads, primary alignments, unmapped reads, forward strand, reverse strand, duplicates removed)
+- Explanation Messages
   
 ### User Interface
 - UI Skeleton
 - Flag selection controls
-- Base filters
+- View Option controls
 - Live command preview
 - Readable Explanations
+- Validation feedback
 - Copy command
-- Loading a combination into the same Flag Filter used by manual selection
   
 
 ## 🎯 Milestone 3 - Smart Builder
 Goal: Add intelligent guidance and advanced interactions.
 
 ### Core Logic
-- Conflict Detection
-- Inversions
+- Filter Presets
+- Filter Preset matching
+- Advanced Rules and conflict detection
+- Filter Inversion
 
 ### User Interface
-- Conflict feedback
-- Ability to invert commands
+- Filter Preset selection
+- Preset match/divergence feedback
+- Advanced conflict feedback
+- Ability to invert supported filters
 
 ## 🎯 Milestone 4 - Version 1.0
 Goal: SAM Flag Version 1 Release
-- Polish
-- Testing
+- Release Polish
+- Final test coverage review
+- Accessibility/usability review
 - Portfolio integration
+- Version 1.0 release
+
+## 🧪 Development Standards
+These requirements apply throughout development:
+- Unit tests are added alongside domain and application logic.
+- Existing tests must remain passing as features are added.
+- GitHub CI runs the test suite automatically.
+- Changes must not be merged when required tests fail.
 
 ## 🚀 Future BioTools
 Goal: Future SAM Builder Enhancements
 - Track Command history
 - Export command history
-- Expand the Command Combination library
+- Expand the Filter Preset library
   
 Goal: Move beyond flags.
 - CIGAR Explorer
