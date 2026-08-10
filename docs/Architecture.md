@@ -54,7 +54,7 @@ Results are transformed into user-friendly explanations.
 
 ## Command Combination Pipeline
 
-![Core Data Model](imgs/command-combination-pipeline.png)
+![Core Data Model](imgs/filter-preset-pipeline.png)
 
 Preset command combinations and manual selections both produce the same
 Filter State, ensuring a single command generation path.
