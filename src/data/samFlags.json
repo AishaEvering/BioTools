@@ -1,0 +1,122 @@
+[
+  {
+    "id": 100,
+    "value": 1,
+    "hex": "0x1",
+    "name": "Read Paired",
+    "description": "The read is part of a paired-end sequencing record.",
+    "category": "Template",
+    "inclusionPhrase": "Includes reads that are part of a paired template.",
+    "exclusionPhrase": "Excludes reads that are part of a paired template."
+  },
+  {
+    "id": 101,
+    "value": 2,
+    "hex": "0x2",
+    "name": "Proper Pair",
+    "description": "Each segment is aligned as a proper pair.",
+    "category": "Template",
+    "inclusionPhrase": "Includes reads marked as properly paired.",
+    "exclusionPhrase": "Excludes reads marked as properly paired."
+  },
+  {
+    "id": 102,
+    "value": 4,
+    "hex": "0x4",
+    "name": "Read Unmapped",
+    "description": "The segment is unmapped; the aligner did not find a suitable alignment for the read.",
+    "category": "Mapping",
+    "inclusionPhrase": "Includes unmapped reads.",
+    "exclusionPhrase": "Excludes unmapped reads."
+  },
+  {
+    "id": 103,
+    "value": 8,
+    "hex": "0x8",
+    "name": "Mate Unmapped",
+    "description": "The segment's mate is unmapped; the aligner did not find a suitable alignment for the mate.",
+    "category": "Mapping",
+    "inclusionPhrase": "Includes reads with an unmapped mate.",
+    "exclusionPhrase": "Excludes reads with an unmapped mate."
+  },
+  {
+    "id": 104,
+    "value": 16,
+    "hex": "0x10",
+    "name": "Read Reverse Strand",
+    "description": "The segment sequence is reverse complemented relative to the reference orientation.",
+    "category": "Mapping",
+    "inclusionPhrase": "Includes reads marked as reverse strand.",
+    "exclusionPhrase": "Excludes reads marked as reverse strand."
+  },
+  {
+    "id": 105,
+    "value": 32,
+    "hex": "0x20",
+    "name": "Mate Reverse Strand",
+    "description": "The mate sequence is reverse complemented relative to the reference orientation.",
+    "category": "Mapping",
+    "inclusionPhrase": "Includes reads whose mate is marked as reverse strand.",
+    "exclusionPhrase": "Excludes reads whose mate is marked as reverse strand."
+  },
+  {
+    "id": 106,
+    "value": 64,
+    "hex": "0x40",
+    "name": "First in Pair",
+    "description": "The segment is the first segment in the template.",
+    "category": "Template",
+    "inclusionPhrase": "Includes reads marked as first in pair.",
+    "exclusionPhrase": "Excludes reads marked as first in pair."
+  },
+  {
+    "id": 107,
+    "value": 128,
+    "hex": "0x80",
+    "name": "Second in Pair",
+    "description": "The segment is the second segment in the template.",
+    "category": "Template",
+    "inclusionPhrase": "Includes reads marked as second in pair.",
+    "exclusionPhrase": "Excludes reads marked as second in pair."
+  },
+  {
+    "id": 108,
+    "value": 256,
+    "hex": "0x100",
+    "name": "Secondary Alignment",
+    "description": "The segment is not a primary alignment.",
+    "category": "Alignment",
+    "inclusionPhrase": "Includes secondary alignments.",
+    "exclusionPhrase": "Excludes secondary alignments."
+  },
+  {
+    "id": 109,
+    "value": 512,
+    "hex": "0x200",
+    "name": "Fails Quality Checks",
+    "description": "The segment fails platform/vendor quality checks.",
+    "category": "Quality",
+    "inclusionPhrase": "Includes reads that fail quality checks.",
+    "exclusionPhrase": "Excludes reads that fail quality checks."
+  },
+  {
+    "id": 110,
+    "value": 1024,
+    "hex": "0x400",
+    "name": "Duplicate",
+    "description": "The segment is either a PCR duplicate or an optical duplicate.",
+    "category": "Quality",
+    "inclusionPhrase": "Includes reads marked as duplicates.",
+    "exclusionPhrase": "Excludes reads marked as duplicates."
+  },
+  {
+    "id": 111,
+    "value": 2048,
+    "hex": "0x800",
+    "name": "Supplementary Alignment",
+    "description": "The segment is a supplementary alignment.",
+    "category": "Alignment",
+    "inclusionPhrase": "Includes supplementary alignments.",
+    "exclusionPhrase": "Excludes supplementary alignments."
+  }
+]
