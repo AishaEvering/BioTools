@@ -13,12 +13,11 @@ but the underlying SAM flag logic should remain separate from React.
 
 Represents one bitwise property associated with a sequencing alignment record.
 
-A SAM Flag exists in 5 forms within BioTools:
+A SAM Flag exists in 3 forms within BioTools:
 - SAM Flag Definition - the reference data stored in JSON
 - SAM Flag Interface - the TypeScript contract defining the required shape of a SAM Flag.
-- SAM Flag Object - the runtime object created from a SAM Flag definition and used by the application.
-- SAM Flag Catalog - owns the loaded collection and provides lookup/access
-- SAM Flag Loader - loads the collection of JSON objects to a list of concrete object.
+- SAM Flag Object - the runtime representation of a SAM Flag definition and used by the application.
+
 
 Each flag contains:
 
@@ -43,23 +42,21 @@ Exclusion phrase: reads that are not marked as part of a paired template
 ```
 
 > [!NOTE]
-> SAM Flag definitions are immutable reference data.  They are loaded from JSON and used
-> to create SAM Flag objects at application startup.  User interaction may select or reference SAM
-> Flags, but does not modify their definitions.
+> SAM Flag definitions are immutable reference data stored in JSON.  The SAM Flag Catalog loads
+> this data and exposes it to the application as SAM Flags. User interaction may select or reference
+> SAM Flags, but does not modify their definitions.
+
+**SAM Flag Catalog**
+The SAM Flag Catalog owns the loaded collection of SAM Flag objects and provides access to all flags
+or a specific flag by ID.
+
+The catalog does not create or modify SAM Flags.
 
 Example Catalog:
 ```TypeScript
 class SamFlagCatalog {
   getAll(): readonly SamFlag[];
-  getByValue(value: number): SamFlag | undefined;
-  getByName(name: string): SamFlag | undefined;
-}
-```
-
-Example Loader:
-```TypeScript
-interface SamFlagLoader {
-  load(): SamFlag[];
+  getFlagById(id: number): SamFlag | undefined;
 }
 ```
 
