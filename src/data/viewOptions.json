@@ -1,0 +1,53 @@
+[
+    {
+        "id": 200,
+        "name": "Include Header",
+        "syntax": "-h",
+        "description": "Include the SAM header in the output.",
+        "explanation": "including the SAM header",
+        "requiresValue": false
+    },
+    {
+        "id": 201,
+        "name": "Count Alignments",
+        "syntax": "-c",
+        "description": "Return only the number of matching alignment records.",
+        "explanation": "counting matching alignments",
+        "requiresValue": false
+    },
+    {
+        "id": 202,
+        "name": "Minimum Mapping Quality",
+        "syntax": "-q",
+        "description": "Only include alignments with a minimum mapping quality.",
+        "explanation": "with a minimum mapping quality of {value}",
+        "requiresValue": true,
+        "constraints": {
+            "type": "integer",
+            "minimum": 0
+        }
+    },
+    {
+        "id": 203,
+        "name": "Output Format",
+        "syntax": "-O",
+        "description": "Specify the output format.",
+        "explanation": "using the selected output format of {value}",
+        "requiresValue": true,
+        "constraints": {
+            "type": "enum",
+            "allowedValues": ["SAM", "BAM", "CRAM"]
+        }
+    },
+    {
+        "id": 204,
+        "name": "Output File",
+        "syntax": "-o",
+        "description": "Write the output to the specified file.",
+        "explanation": "writing output to a file named {value}",
+        "requiresValue": true,
+        "constraints": {
+            "type": "string"
+        }
+    }
+]
