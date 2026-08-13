@@ -286,6 +286,8 @@ Supported condition types for version 1:
 Determines whether a selected SAM Flag requires another SAM Flag to also be selected.
 ```contradiction```
 Determines whether a selected SAM Flags are mutually exclusive.
+```requires-option```
+Determines whether a selected SAM Flags require another SAM Flag.
 
 Contains:
 * Selected Flags: ```SamFlag[]```
@@ -432,6 +434,15 @@ Possible severity levels:
    selected flags: [First in Pair, Second in Pair]
    severity: Error
    message: A read can't be both first and second in a pair.
+   ```
+7. CRAM output selected without a Reference File
+   ```
+   id: 7
+   condition type: requires-option
+   selected flags: [Output Format]
+   selected flag value: "CRAM"
+   severity: Warning
+   message: CRAM output may require access to a reference FASTA.  Specify a reference file with -T when the reference can't otherwise be resolved.
    ```
 
 The Rule Interface defines the runtime shape of a Rule:
