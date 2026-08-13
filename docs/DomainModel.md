@@ -200,15 +200,15 @@ value: filtered.bam
 
 ---
 
-### $${\color{purple}Samtools \space View \space Command}$$
+### $${\color{purple}Sam \space View \space Command}$$
 
 Represents the current configuration used to generate a ```samtools view``` command.
 
-A Samtools View Command exists in 2 forms within BioTools:
-- Samtools View Command Interface - the TypeScript contract defining the required shape of a command configuration.
-- Samtools View Command Object - the runtime object containing the current flag filter, selected view options, and optional input filename.
+A Sam View Command exists in 2 forms within BioTools:
+- Sam View Command Interface - the TypeScript contract defining the required shape of a command configuration.
+- Sam View Command Object - the runtime object containing the current flag filter, selected view options, and optional input filename.
 
-A Samtools View Command contains:
+A Sam View Command contains:
 
 * Flag Filter: ```FlagFilter```
 * Selected View Options: ```SelectedViewOption[]```
@@ -221,7 +221,7 @@ A Samtools View Command contains:
 Example:
 
 ```typescript
-interface SamtoolsViewCommand{
+interface SamViewCommand{
   readonly flagFilter: FlagFilter;
   readonly options: SelectedViewOption[];
   readonly inputFile?: string;
@@ -229,7 +229,7 @@ interface SamtoolsViewCommand{
 ```
 The actual runtime object might conceptually look like:
 ``` text
-SamtoolsViewCommand Object
+SamViewCommand Object
 -----------------------------
 Flag Filter:
   Include: Proper Pair
@@ -245,13 +245,13 @@ Input File:
 
 The rendered command is derived from the object:
 ``` TypeScript
-function renderSamtoolsViewCommand(
-   command: SamtoolsViewCommand,
+function renderSamViewCommand(
+   command: SamViewCommand,
 ): string;
 ```
 
 > [!NOTE]
-> The rendered command is derived from the current Samtools View Command Object.
+> The rendered command is derived from the Sam View Command Object by the command renderer.
 > It is not stored as independent state because doing so could allow the rendered text
 > to become inconsistent with the current configuration.
 
@@ -286,6 +286,8 @@ Supported condition types for version 1:
 Determines whether a selected SAM Flag requires another SAM Flag to also be selected.
 ```contradiction```
 Determines whether a selected SAM Flags are mutually exclusive.
+```requires-option```
+Determines whether a selected SAM Flags require another SAM Flag.
 
 Contains:
 * Selected Flags: ```SamFlag[]```
@@ -432,6 +434,15 @@ Possible severity levels:
    selected flags: [First in Pair, Second in Pair]
    severity: Error
    message: A read can't be both first and second in a pair.
+   ```
+7. CRAM output selected without a Reference File
+   ```
+   id: 7
+   condition type: requires-option
+   selected flags: [Output Format]
+   selected flag value: "CRAM"
+   severity: Warning
+   message: CRAM output may require access to a reference FASTA.  Specify a reference file with -T when the reference can't otherwise be resolved.
    ```
 
 The Rule Interface defines the runtime shape of a Rule:
