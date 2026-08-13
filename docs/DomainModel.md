@@ -246,12 +246,12 @@ Input File:
 The rendered command is derived from the object:
 ``` TypeScript
 function renderSamViewCommand(
-   command: SamiewCommand,
+   command: SamViewCommand,
 ): string;
 ```
 
 > [!NOTE]
-> The rendered command is derived from the current Sam View Command Object.
+> The rendered command is derived from the Sam View Command Object by the command renderer.
 > It is not stored as independent state because doing so could allow the rendered text
 > to become inconsistent with the current configuration.
 
