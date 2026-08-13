@@ -167,8 +167,8 @@ Constraints: integer
 Represents a View Option that has been selected by the user, together with its configured value when the option requires one.
 
 A Selected View Option exists in 2 forms within BioTools:
-- SelectedView Option Interface - the TypeScript contract defining the required shape of the Selected View Option.
-- SelectedView Option Object - the runtime object created by the application when a user selects or configures a View Option. 
+- Selected View Option Interface - the TypeScript contract defining the required shape of the Selected View Option.
+- Selected View Option Object - the runtime object created by the application when a user selects or configures a View Option. 
  
 A Selected View Option contains:
 * Immutable option: ```ViewOption```
