@@ -6,7 +6,7 @@ describe("ViewOptionCatalog", () => {
 
   it("returns all view options", () => {
     const options = catalog.getAll();
-    expect(options).toHaveLength(5);
+    expect(options).toHaveLength(6);
   });
 
   it("returns a view option by id", () => {
