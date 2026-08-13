@@ -331,6 +331,15 @@ In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers
   "selectedFlags": [102, 103]
 }
 ```
+
+```JSON
+  "type": "requires-option";
+  selectedFlags: [203];
+  selectedValue?: "CRAM";
+  requiredOption: 205;
+}
+```
+
 The runtime Rule Condition Object contains references to the corresponding ```SAMFlag``` objects after those
 identifiers have been resolved by the application.
 
@@ -439,8 +448,9 @@ Possible severity levels:
    ```
    id: 7
    condition type: requires-option
-   selected flags: [Output Format]
-   selected flag value: "CRAM"
+   selected option: Output Format
+   selected value: "CRAM"
+   required option: Reference File
    severity: Warning
    message: CRAM output may require access to a reference FASTA.  Specify a reference file with -T when the reference can't otherwise be resolved.
    ```
@@ -463,8 +473,8 @@ A Rule Definition stored in JSON references SAM Flags by their identifiers:
   "id": 1,
   "condition": {
     "type": "requires-flags",
-    "selectedFlags": [100],
-    "requiredFlags": [101]
+    "selectedFlags": [101],
+    "requiredFlags": [100]
   },
   "severity": "warning",
   "message": "Proper Pair normally applies to reads marked as paired"
@@ -481,8 +491,8 @@ Rule Definition
 id: 1
 condition:
   type: requires-flags
-  selectedFlags: [100]
-  requiredFlags: [101]
+  selectedFlags: [101]
+  requiredFlags: [100]
 severity: warning
 message: ...
 
