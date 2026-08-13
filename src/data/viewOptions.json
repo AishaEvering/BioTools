@@ -49,5 +49,16 @@
         "constraints": {
             "type": "string"
         }
+    },
+    {
+        "id": 205,
+        "name": "Reference File",
+        "syntax": "-T",
+        "description": "Specify a reference FASTA file.",
+        "explanation": "using the reference file {value}",
+        "requiresValue": true,
+        "constraints": {
+            "type": "string"
+        }
     }
 ]
