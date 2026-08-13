@@ -333,10 +333,11 @@ In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers
 ```
 
 ```JSON
-  "type": "requires-option";
-  selectedFlags: [203];
-  selectedValue?: "CRAM";
-  requiredOption: 205;
+{
+  "type": "requires-option",
+  "selectedFlags": [203],
+  "selectedValue": "CRAM",
+  "requiredOption": 205
 }
 ```
 
