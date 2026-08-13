@@ -120,10 +120,10 @@ Options include:
 > Only options explicitly supported by BioTools should be included in the model.
  
 A View Option contains:
-* Immutable name
+* Immutable unique name
 * Immutable command-line syntax
 * Immutable description
-* Immutable explanation phrase
+* Immutable explanation
 * Immutable indication of whether a value is required
 * Optional immutable structured constraints describing the type and allowable values of user input.
 
@@ -134,7 +134,7 @@ Name: Minimum Mapping Quality
 Syntax: -q
 Requires Value: true
 Description: Filters alignments below the specified mapping quality.
-Explanation Phrase: Includes only alignments with mapping quality of at least {value}.
+Explanation: Includes only alignments with mapping quality of at least {value}.
 Constraints: integer
 ```
 ``` JSON
