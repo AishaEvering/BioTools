@@ -145,7 +145,7 @@ describe("renderSamViewCommand", () => {
     });
 
     expect(renderSamViewCommand(command))
-      .toBe("samtools view sample.bam");
+      .toBe('samtools view "sample.bam"');
   });
 
   it("renders the complete command", () => {
@@ -181,7 +181,7 @@ describe("renderSamViewCommand", () => {
     });
 
     expect(renderSamViewCommand(command))
-      .toBe("samtools view -h -q 20 -f 2 -F 256 sample.bam");
+      .toBe('samtools view -h -q 20 -f 2 -F 256 "sample.bam"');
   });
 
   it("renders undefined when a required option value is missing", () => {
@@ -202,4 +202,64 @@ describe("renderSamViewCommand", () => {
     expect(renderSamViewCommand(command))
       .toBe("samtools view -q undefined <input.bam>");
   });
+
+  it("wraps a string input filename in quotes", () => {
+    const command = createCommand({
+        inputFile: "sample.bam",
+    });
+
+    expect(renderSamViewCommand(command))
+    .toBe('samtools view "sample.bam"');
+  });
+
+  it("preserves spaces inside a quoted input filename", () => {
+    const command = createCommand({
+        inputFile: "my sample.bam",
+    });
+
+    expect(renderSamViewCommand(command))
+        .toBe('samtools view "my sample.bam"');
+  });
+
+  it("wraps string option values in quotes", () => {
+    const command = createCommand({
+        options: [
+        {
+            option: catalog.getViewOptionById(204)!,
+            value: "filtered.bam",
+        },
+        ],
+    });
+
+    expect(renderSamViewCommand(command))
+        .toBe('samtools view -o "filtered.bam" <input.bam>');
+  });
+
+ it("does not wrap numeric option values in quotes", () => {
+    const command = createCommand({
+        options: [
+        {
+            option: catalog.getViewOptionById(202)!,
+            value: 20,
+        },
+        ],
+    });
+
+    expect(renderSamViewCommand(command))
+        .toBe("samtools view -q 20 <input.bam>");
+ });
+  
+ it("wraps enum option values in quotes", () => {
+        const command = createCommand({
+            options: [
+            {
+                option: catalog.getViewOptionById(203)!,
+                value: "BAM",
+            },
+            ],
+        });
+
+        expect(renderSamViewCommand(command))
+            .toBe('samtools view -O "BAM" <input.bam>');
+ });
 });
