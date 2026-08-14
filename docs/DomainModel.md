@@ -387,7 +387,7 @@ A rule contains:
 * Immutable message
 
 Possible severity levels:
-* Information
+* Info
 * Warning
 * Error
 
@@ -465,7 +465,7 @@ interface Rule {
   readonly message: string;
 }
 
-type RuleSeverity = "information" | "warning" | "error";
+type RuleSeverity = "info" | "warning" | "error";
 ```
 
 A Rule Definition stored in JSON references SAM Flags by their identifiers:
