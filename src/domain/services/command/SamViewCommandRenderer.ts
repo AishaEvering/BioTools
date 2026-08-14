@@ -11,7 +11,7 @@ export function renderSamViewCommand(command: SamViewCommand): string {
 
     const options = renderSelectedOptions(command.options);
     
-    const inputFileName = command.inputFile ?? "<input.bam>";
+    const inputFileName = formatValue(command.inputFile) ?? "<input.bam>";
 
     return [
         "samtools view",
@@ -24,7 +24,17 @@ export function renderSamViewCommand(command: SamViewCommand): string {
 
 function renderSelectedOptions(options: SelectedViewOption[]): string {
     return options.map(({option, value}) => {
-        return option.requiresValue ? `${option.syntax} ${value}` : option.syntax;
+        return option.requiresValue ? `${option.syntax} ${formatValue(value)}` : option.syntax;
     }).join(" ");
 }
 
+function formatValue(value: string | number | undefined): string | number | undefined {
+    if (value === undefined) {
+        return undefined;
+    }
+
+    if (typeof value === "string") {
+        return `"${value}"`;
+    }
+    return value;
+}
