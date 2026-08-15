@@ -589,26 +589,41 @@ Rule Engine / Application
 
 ### $${\color{purple}Validation \space Result}$$
 
-Represents the result of a Rule whose condition was satisfied while evaluating the current application state.
-
-A Validation Result contains:
-
-- The rule that produced the result
-
 > [!NOTE]
-> The Rule provides the severity, message, and `Rule Condition` associated with the result.
+> Validation Result was removed from the version 1 domain model.
+>
+> Validation was originally modeled as a separate runtime result containing
+> the Rule whose condition was satisfied. As the Rule model evolved, validation
+> conditions were incorporated into the general Rule system.
+>
+> Because a Validation Result contained only a reference to a Rule, it did not
+> add additional domain information. The Rule Engine therefore returns the
+> Rules whose conditions are satisfied directly.
+>
+> A separate evaluation result object may be introduced in the future if
+> evaluation produces runtime-specific information that is not contained
+> within the Rule itself.
 
-Validation Results are created by the Rule Engine during evaluation. They represent runtime
-evaluation state and are not stored as reference data.
+~~Represents the result of a Rule whose condition was satisfied while evaluating the current application state.~~
 
-```TypeScript
+~~A Validation Result contains:~~
 
-interface ValidationResult{
-  readonly rule: Rule;
-}
-```
+~~- The rule that produced the result~~
 
-Examples of Rules that may produce Validation Results include:
+~~> [!NOTE]~~
+~~> The Rule provides the severity, message, and `Rule Condition` associated with the result.~~
+
+~~Validation Results are created by the Rule Engine during evaluation. They represent runtime~~
+~~evaluation state and are not stored as reference data.~~
+
+~~```TypeScript~~
+
+~~interface ValidationResult{~~
+~~readonly rule: Rule;~~
+~~}~~
+~~```~~
+
+Examples of Rules include:
 
 ```text
 Rule
@@ -634,41 +649,41 @@ severity: error
 message: A properly paired read cannot have an unmapped mate.
 ```
 
-Given the following `FlagFilter`:
+~~Given the following `FlagFilter`:~~
 
-```text
-FlagFilter
--------------------
-includedFlags:
-   - Proper Pair
+~~```text~~
+~~FlagFilter~~
+~~-------------------~~
+~~includedFlags:~~
+~~- Proper Pair~~
 
-excludedFlags:
-    - Proper Pair
-```
+~~excludedFlags:~~
+~~- Proper Pair~~
+~~```~~
 
-the Rule Engine determines that the Rule Condition is satisfied and produces:
+~~the Rule Engine determines that the Rule Condition is satisfied and produces:~~
 
-```text
-ValidationResult
----------------------
-rule: Rule 7
-```
+~~```text~~
+~~ValidationResult~~
+~~---------------------~~
+~~rule: Rule 7~~
+~~```~~
 
-The Validation Result provides access to the Rule's evaluation information:
+~~The Validation Result provides access to the Rule's evaluation information:~~
 
-```text
-result.rule.severity  → error
-result.rule.message   → "A SAM Flag cannot be both included and excluded."
-result.rule.condition → include-exclude-overlap
-```
+~~```text~~
+~~result.rule.severity  → error~~
+~~result.rule.message   → "A SAM Flag cannot be both included and excluded."~~
+~~result.rule.condition → include-exclude-overlap~~
+~~```~~
 
-- An `error` indicates that the current configuration is invalid and should not be treated as a valid command.
-- A `warning` indicates that command generation may continue, but the selection may be unintended or confusing.
-- An `information` result provides clarification without indicating a problem.
+~~- An `error` indicates that the current configuration is invalid and should not be treated as a valid command.~~
+~~- A `warning` indicates that command generation may continue, but the selection may be unintended or confusing.~~
+~~- An `information` result provides clarification without indicating a problem.~~
 
-> [!NOTE]
-> A Validation Result does not duplicate the Rule's severity, message, or condition. These remain properties
-> of the Rule that produced the result.
+~~> [!NOTE]~~
+~~> A Validation Result does not duplicate the Rule's severity, message, or condition. These remain properties~~
+~~> of the Rule that produced the result.~~
 
 ---
 
