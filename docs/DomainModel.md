@@ -565,8 +565,6 @@ interface RuleLoader {
 > Rules operate on domain/application state and must not depend on React components or other
 > presentation layer concerns.
 
-### Rule Catalog
-
 The Rule Catalog maintains the collection of loaded Rule Objects and provides
 access to the rules used by the application.
 
