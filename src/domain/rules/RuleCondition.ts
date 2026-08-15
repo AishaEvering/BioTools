@@ -4,7 +4,8 @@ import type { SamFlag } from "../sam/SamFlag";
 export const RULE_CONDITION_TYPES = {
     REQUIRES_FLAGS: "requires-flags",
     CONTRADICTION: "contradiction",
-    REQUIRES_OPTION: "requires-option"
+    REQUIRES_OPTION: "requires-option",
+    INCLUDE_EXCLUDE_OVERLAP: "include-exclude-overlap"
 } as const;
 
 export type RuleConditionType = 
@@ -39,6 +40,14 @@ export interface RequiresOptionCondition {
     readonly requiredOption: ViewOption;
 }
 
+export interface IncludeExcludeOverlapCondition {
+    readonly type: typeof RULE_CONDITION_TYPES.INCLUDE_EXCLUDE_OVERLAP;
+}
+
+export interface IncludeExcludeOverlapConditionDefinition {
+    readonly type: typeof RULE_CONDITION_TYPES.INCLUDE_EXCLUDE_OVERLAP;
+}
+
 export interface RequiresOptionConditionDefinition {
     readonly type: typeof RULE_CONDITION_TYPES.REQUIRES_OPTION;
     readonly selectedOption: number;
@@ -46,5 +55,12 @@ export interface RequiresOptionConditionDefinition {
     readonly requiredOption: number;
 }
 
-export type RuleConditionDefinition = RequiresFlagsConditionDefinition | ContradictionConditionDefinition | RequiresOptionConditionDefinition;
-export type RuleCondition = RequiresFlagsCondition | ContradictionCondition | RequiresOptionCondition;
+export type RuleConditionDefinition = RequiresFlagsConditionDefinition 
+| ContradictionConditionDefinition 
+| RequiresOptionConditionDefinition
+| IncludeExcludeOverlapConditionDefinition;
+
+export type RuleCondition = RequiresFlagsCondition 
+| ContradictionCondition 
+| RequiresOptionCondition
+| IncludeExcludeOverlapCondition;
