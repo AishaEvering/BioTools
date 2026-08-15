@@ -1,5 +1,5 @@
 import rulesDefinitions from "../../../data/rules.json";
-import type { Rule, RuleSeverity } from "../../rules/Rule";
+import type { Rule } from "../../rules/Rule";
 import type { RuleLoader } from "../../rules/RuleLoader";
 import { RULE_CONDITION_TYPES, type RuleCondition, type RuleConditionDefinition } from "../../rules/RuleCondition";
 import type { SamFlagCatalog } from "../samFlags/SamFlagCatalog";
@@ -51,6 +51,11 @@ private readonly viewOptionCatalog: ViewOptionCatalog;
 					selectedOption: this.getViewOption(ruleCondition.selectedOption),
 					selectedValue: ruleCondition.selectedValue,
 					requiredOption: this.getViewOption(ruleCondition.requiredOption),
+				};
+            
+           case RULE_CONDITION_TYPES.INCLUDE_EXCLUDE_OVERLAP:
+				return {
+					type: RULE_CONDITION_TYPES.INCLUDE_EXCLUDE_OVERLAP,
 				};
 
 			default:

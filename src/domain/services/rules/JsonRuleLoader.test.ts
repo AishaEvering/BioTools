@@ -13,7 +13,7 @@ describe("JsonRuleLoader", () => {
     it("loads all rule definitions", () => {
     const rules = loader.load();
 
-    expect(rules).toHaveLength(7);
+    expect(rules).toHaveLength(10);
     });
 
     it("resolves flag identifiers for a requires-flags condition", () => {
@@ -57,6 +57,17 @@ describe("JsonRuleLoader", () => {
             expect(rule.condition.selectedFlags[0].id).toBe(106);
             expect(rule.condition.selectedFlags[1].id).toBe(107);
         }
+    });
+
+    it("resolves flag identifiers for a include-exclude overlap condition", () => {
+        const rules = loader.load();
+        const rule = rules.find(rule => rule.id === 307)!;
+
+        expect(rule.condition.type).toBe(
+            RULE_CONDITION_TYPES.INCLUDE_EXCLUDE_OVERLAP
+        );
+
+        expect(rule.message).toBe("A SAM flag can't be both included and excluded at the same time.");
     });
 
     it("throws when a referenced SAM flag does not exist", () => {

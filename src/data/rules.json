@@ -53,8 +53,7 @@
         "id": 305,
         "condition": {
             "type": "contradiction",
-            "selectedFlags": [106, 107],
-            "requiredFlags": []
+            "selectedFlags": [106, 107]
         },
         "severity": "error",
         "message": "A read can't be both first and second in a pair."
@@ -69,5 +68,31 @@
         },
         "severity": "warning",
         "message": "CRAM output may require access to a reference FASTA. Specify a reference file with -T when the reference cannot otherwise be resolved."
+    },
+    {
+        "id": 307,
+        "condition": {
+            "type": "include-exclude-overlap"
+        },
+        "severity": "error",
+        "message": "A SAM flag can't be both included and excluded at the same time."
+    },
+    {
+        "id": 308,
+        "condition": {
+            "type": "contradiction",
+            "selectedFlags": [101, 102]
+        },
+        "severity": "error",
+        "message": "A read marked as properly paired can't also be marked as unmapped."
+    },
+    {
+        "id": 309,
+        "condition": {
+            "type": "contradiction",
+            "selectedFlags": [101, 103]
+        },
+        "severity": "error",
+        "message": "A properly paired read can't have an unmapped mate."
     }
 ]
