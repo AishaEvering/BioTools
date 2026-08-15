@@ -672,8 +672,8 @@ message: A properly paired read cannot have an unmapped mate.
 ~~The Validation Result provides access to the Rule's evaluation information:~~
 
 ~~```text~~
-~~result.rule.severity  → error~~
-~~result.rule.message   → "A SAM Flag cannot be both included and excluded."~~
+~~result.rule.severity → error~~
+~~result.rule.message → "A SAM Flag cannot be both included and excluded."~~
 ~~result.rule.condition → include-exclude-overlap~~
 ~~```~~
 
@@ -798,15 +798,14 @@ Not every command has a meaningful or safe automatic inversion. Unsupported inve
 
 ### $${\color{blue}Explanation \space Engine}$$
 
-Generates explanation messages from the current `SAMtools View command`, matching Filter Preset when one exists, and validation results.
+Generates explanation messages from the current `SamViewCommand` and the Rules whose conditions are
+satisfied by the current application state.
 
 It receives:
 
-- A SAMtools View Command
-- Filter presets
-- Validation Results
-
-It produces:
+- A SamViewCommand
+- matched rules
+  It produces:
 
 - Zero or more explanation messages
 
@@ -819,21 +818,21 @@ class ExplanationEngine {
   ) {}
 
   explain(
-    command: SamtoolsViewCommand,
-    validationResults: ValidationResult[],
+    command: SamViewCommand,
+    matchedRules:readonly Rule[],
   ): ExplanationMessage[] {
-    // find matching preset
     // generate flag explanations
-    // incorporate validation explanations
+    // generate option explanations
+    // incorporate matched rule explanations
     // consolidate messages
   }
 
-  interface ExplanationMessage{
+  export interface ExplanationMessage{
    readonly text: string;
    readonly type: ExplanationType;
   }
 
-  type ExplanationType = "command" | "preset" | "validation";
+  export type ExplanationType = "command" | "rule";
 }
 ```
 
@@ -846,8 +845,18 @@ An explanation may describe:
 - Why a selection is invalid or potentially confusing
 
 > [!NOTE]
-> Validation related explanations are derived from Validation Results, the Explanation Engine does
-> not independently evaluate Rules.
+> Rule related explanations are derived from Rules already matched by the Rule Engine. The Explanation
+> Engine does not independently evaluate Rules.
+
+```text
+Rule Engine
+    ↓
+determines WHICH rules apply
+
+Explanation Engine
+    ↓
+determines HOW to explain the current command and those rules
+```
 
 Example:
 
