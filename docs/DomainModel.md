@@ -4,7 +4,7 @@
 
 This document defines the core concepts used by the SAM Flag Visual Builder.
 
-The domain model is independent of the user interface. React components may display and modify these concepts, 
+The domain model is independent of the user interface. React components may display and modify these concepts,
 but the underlying SAM flag logic should remain separate from React.
 
 ## Core Concepts
@@ -14,20 +14,20 @@ but the underlying SAM flag logic should remain separate from React.
 Represents one bitwise property associated with a sequencing alignment record.
 
 A SAM Flag exists in 3 forms within BioTools:
+
 - SAM Flag Definition - the reference data stored in JSON
 - SAM Flag Interface - the TypeScript contract defining the required shape of a SAM Flag.
 - SAM Flag Object - the runtime representation of a SAM Flag definition and used by the application.
 
-
 Each flag contains:
 
-* An immutable unique numeric value
-* An immutable hexadecimal value
-* An immutable name
-* An immutable description
-* An immutable category
-* An immutable inclusion phrase
-* An immutable exclusion phrase
+- An immutable unique numeric value
+- An immutable hexadecimal value
+- An immutable name
+- An immutable description
+- An immutable category
+- An immutable inclusion phrase
+- An immutable exclusion phrase
 
 Example:
 
@@ -42,7 +42,7 @@ Exclusion phrase: reads that are not marked as part of a paired template
 ```
 
 > [!NOTE]
-> SAM Flag definitions are immutable reference data stored in JSON.  The SAM Flag Catalog loads
+> SAM Flag definitions are immutable reference data stored in JSON. The SAM Flag Catalog loads
 > this data and exposes it to the application as SAM Flags. User interaction may select or reference
 > SAM Flags, but does not modify their definitions.
 
@@ -53,6 +53,7 @@ or a specific flag by ID.
 The catalog does not create or modify SAM Flags.
 
 Example Catalog:
+
 ```TypeScript
 class SamFlagCatalog {
   getAll(): readonly SamFlag[];
@@ -67,15 +68,16 @@ class SamFlagCatalog {
 Represents the complete collection of included and excluded flags selected by the user.
 
 A Flag Filter exists in 2 forms within BioTools:
+
 - Flag Filter Interface - the TypeScript contract defining the required shape of a Flag Filter.
 - Flag Filter Object - the runtime object created and updated as the user's flag selections change.
 
 A flag filter contains:
 
-* Included flags
-* Excluded flags
-* Calculated include value
-* Calculated exclude value
+- Included flags
+- Excluded flags
+- Calculated include value
+- Calculated exclude value
 
 The include and exclude values are calculated by combining the numeric values of the selected flags.
 
@@ -95,6 +97,7 @@ Calculated include value:
 Calculated exclude value:
 256
 ```
+
 > [!NOTE]
 > A flag filter must not store a manually entered total that can become inconsistent with its selected flags. The total should always be derived from the current selections
 
@@ -105,27 +108,30 @@ Calculated exclude value:
 Represents a supported Samtools view argument that is not part of the SAM bitwise flag filter.
 
 A View Option exists in 3 forms within BioTools:
+
 - View Option Definition - the reference data stored in JSON.
 - View Option Interface - the TypeScript contract defining the required shape of the View Option.
 - View Option Object - the runtime object created from a View Option definition and used by the application.
-  
+
 Options include:
-- Include the header - ```-h```
-- Count matching records - ```-c```
-- Set a minimum mapping quality - ```-q INT```
-- Select an output format - ```SAM, BAM, or CRAM```
-- Specify an output file - ```-o FILE```
+
+- Include the header - `-h`
+- Count matching records - `-c`
+- Set a minimum mapping quality - `-q INT`
+- Select an output format - `SAM, BAM, or CRAM`
+- Specify an output file - `-o FILE`
 
 > [!IMPORTANT]
 > Only options explicitly supported by BioTools should be included in the model.
- 
+
 A View Option contains:
-* Immutable unique name
-* Immutable command-line syntax
-* Immutable description
-* Immutable explanation
-* Immutable indication of whether a value is required
-* Optional immutable structured constraints describing the type and allowable values of user input.
+
+- Immutable unique name
+- Immutable command-line syntax
+- Immutable description
+- Immutable explanation
+- Immutable indication of whether a value is required
+- Optional immutable structured constraints describing the type and allowable values of user input.
 
 Example:
 
@@ -137,7 +143,8 @@ Description: Filters alignments below the specified mapping quality.
 Explanation: Includes only alignments with mapping quality of at least {value}.
 Constraints: integer
 ```
-``` JSON
+
+```JSON
 {
   "name": "Output Format",
   "syntax": "...",
@@ -148,7 +155,8 @@ Constraints: integer
   }
 }
 ```
-``` JSON
+
+```JSON
 {
   "name": "Minimum Mapping Quality",
   "syntax": "-q",
@@ -167,32 +175,40 @@ Constraints: integer
 Represents a View Option that has been selected by the user, together with its configured value when the option requires one.
 
 A Selected View Option exists in 2 forms within BioTools:
+
 - Selected View Option Interface - the TypeScript contract defining the required shape of the Selected View Option.
-- Selected View Option Object - the runtime object created by the application when a user selects or configures a View Option. 
- 
+- Selected View Option Object - the runtime object created by the application when a user selects or configures a View Option.
+
 A Selected View Option contains:
-* Immutable option: ```ViewOption```
-* Optional value: ```string | number```
+
+- Immutable option: `ViewOption`
+- Optional value: `string | number`
 
 Example:
 
 Boolean option like Include Header:
+
 ```text
 option: Include Header
 value: none
 ```
+
 Minimum mapping quality:
+
 ```text
 option: Minimum Mapping Quality
 value: 20
 ```
 
 Output format:
+
 ```text
 option: Output Format
 value: BAM
 ```
+
 Output file:
+
 ```text
 option: Output File
 value: filtered.bam
@@ -202,33 +218,36 @@ value: filtered.bam
 
 ### $${\color{purple}Sam \space View \space Command}$$
 
-Represents the current configuration used to generate a ```samtools view``` command.
+Represents the current configuration used to generate a `samtools view` command.
 
 A Sam View Command exists in 2 forms within BioTools:
+
 - Sam View Command Interface - the TypeScript contract defining the required shape of a command configuration.
 - Sam View Command Object - the runtime object containing the current flag filter, selected view options, and optional input filename.
 
 A Sam View Command contains:
 
-* Flag Filter: ```FlagFilter```
-* Selected View Options: ```SelectedViewOption[]```
-* Optional Input Filename: ```string```
+- Flag Filter: `FlagFilter`
+- Selected View Options: `SelectedViewOption[]`
+- Optional Input Filename: `string`
 
 > [!NOTE]
-> If no filename has been entered, the interface may display an instructional placeholder, ```<input.bam>```.
+> If no filename has been entered, the interface may display an instructional placeholder, `<input.bam>`.
 > The placeholder is presentation-only and is not stored as the actual filename.
 
 Example:
 
 ```typescript
-interface SamViewCommand{
+interface SamViewCommand {
   readonly flagFilter: FlagFilter;
   readonly options: SelectedViewOption[];
   readonly inputFile?: string;
 }
 ```
+
 The actual runtime object might conceptually look like:
-``` text
+
+```text
 SamViewCommand Object
 -----------------------------
 Flag Filter:
@@ -244,7 +263,8 @@ Input File:
 ```
 
 The rendered command is derived from the object:
-``` TypeScript
+
+```TypeScript
 function renderSamViewCommand(
    command: SamViewCommand,
 ): string;
@@ -262,6 +282,7 @@ Example:
 ```text
 samtools view -h -q 20 -f 2 -F 256 sample.bam
 ```
+
 ---
 
 ### $${\color{purple}Rule \space Condition}$$
@@ -270,30 +291,34 @@ Represents the machine evaluable condition that determines whether a Rule applie
 to the current application state.
 
 A Rule exists in 2 forms within BioTools:
+
 - Rule Condition Interface - the TypeScript contract defining that required shape of a Rule Condition.
 - Rule Condition Object - the runtime object used by the Rule Engine when evaluating a Rule.
 
 > [!NOTE]
-> A Rule Condition is defined as part of a Rule Definition in JSON.  It is not stored as independent
+> A Rule Condition is defined as part of a Rule Definition in JSON. It is not stored as independent
 > reference data and therefore does not have its own JSON definition or catalog.
 
 A Rule Condition contains:
-* Immutable condition type
-* Immutable condition specific values, when required
+
+- Immutable condition type
+- Immutable condition specific values, when required
 
 Supported condition types for version 1:
-```requires-flags```
+`requires-flags`
 Determines whether a selected SAM Flag requires another SAM Flag to also be selected.
-```contradiction```
+`contradiction`
 Determines whether a selected SAM Flags are mutually exclusive.
-```requires-option```
+`requires-option`
 Determines whether a selected SAM Flags require another SAM Flag.
 
 Contains:
-* Selected Flags: ```SamFlag[]```
-* Required Flags: ```SamFlag[]```
+
+- Selected Flags: `SamFlag[]`
+- Required Flags: `SamFlag[]`
 
 Example:
+
 ```text
 Type: requires-flags
 Selected Flags: [Proper Pair]
@@ -302,7 +327,8 @@ Required Flags: [Read Paired]
 Type: contradiction
 Selected Flags: [First in Pair, Second in Pair]
 ```
-This condition is satisfied when ```Proper Pair``` is selected but ```Read Paired``` is not selected.
+
+This condition is satisfied when `Proper Pair` is selected but `Read Paired` is not selected.
 
 ```TypeScript
 type RuleCondition =
@@ -316,7 +342,9 @@ type RuleCondition =
   readonly selectedFlags: SamFlag[];
 }
 ```
+
 In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers:
+
 ```JSON
 {
   "type": "requires-flags",
@@ -341,7 +369,7 @@ In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers
 }
 ```
 
-The runtime Rule Condition Object contains references to the corresponding ```SAMFlag``` objects after those
+The runtime Rule Condition Object contains references to the corresponding `SAMFlag` objects after those
 identifiers have been resolved by the application.
 
 ```text
@@ -373,26 +401,30 @@ requiredFlags:
 
 Describes a relationship, warning, or implication involving one or more domain concepts.
 
-A Rule exists in 4 forms within BioTools:
+A Rule exists in 3 forms within BioTools:
+
 - Rule Definition - the reference data stored in JSON.
 - Rule Interface - the TypeScript contract defining that required shape of a Rule.
 - Rule Object - the runtime object created from a Rule definition and used by the application.
-- Rule Loader - loads the collection of JSON objects to a list of concrete object.
-  
+
+Rule Definitions are converted into Rule Objects by a Rule Loader.
+
 A rule contains:
 
-* Immutable unique identifier
-* Immutable ```Rule Condition```
-* Immutable severity
-* Immutable message
+- Immutable unique identifier
+- Immutable `Rule Condition`
+- Immutable severity
+- Immutable message
 
 Possible severity levels:
-* Info
-* Warning
-* Error
+
+- Info
+- Warning
+- Error
 
 **Version 1 Rules**
-1. ```PROPER_PAIR (0x2)```applies to reads that are part of a paired template and therefore requires ```PAIRED (0x1)```
+
+1. `PROPER_PAIR (0x2)`applies to reads that are part of a paired template and therefore requires `PAIRED (0x1)`
    ```
    id: 1
    condition type: requires-flags
@@ -457,6 +489,7 @@ Possible severity levels:
    ```
 
 The Rule Interface defines the runtime shape of a Rule:
+
 ```TypeScript
 interface Rule {
   readonly id: number;
@@ -469,6 +502,7 @@ type RuleSeverity = "info" | "warning" | "error";
 ```
 
 A Rule Definition stored in JSON references SAM Flags by their identifiers:
+
 ```JSON
 {
   "id": 1,
@@ -482,10 +516,11 @@ A Rule Definition stored in JSON references SAM Flags by their identifiers:
 }
 ```
 
-When the Rule Definition is loaded, the flag identifiers within its ```RuleCondition``` are
-resolved to the corresponding ```SAMFlag``` objects.
+When the Rule Definition is loaded, the flag identifiers within its `RuleCondition` are
+resolved to the corresponding `SAMFlag` objects.
 
 Conceptually:
+
 ```text
 Rule Definition
 -----------------------------
@@ -513,6 +548,7 @@ message: ...
 ```
 
 Example Rule Loader:
+
 ```TypeScript
 interface RuleLoader {
   load(): Rule[];
@@ -520,11 +556,11 @@ interface RuleLoader {
 ```
 
 > [!NOTE]
-> Rule Definitions are immutable reference data.  They describe how a configuration should be evaluated
+> Rule Definitions are immutable reference data. They describe how a configuration should be evaluated
 > but do not contain evaluation state or evaluation results.
 
 > [!IMPORTANT]
-> Rule operate on domain/application state and must not depend on React components or other
+> Rules operate on domain/application state and must not depend on React components or other
 > presentation layer concerns.
 
 ---
@@ -535,15 +571,15 @@ Represents the result of a Rule whose condition was satisfied while evaluating t
 
 A Validation Result contains:
 
-* The rule that produced the result
+- The rule that produced the result
 
 > [!NOTE]
-> The Rule provides the severity, message, and ```Rule Condition``` associated with the result.
+> The Rule provides the severity, message, and `Rule Condition` associated with the result.
 
-Validation Results are created by the Rule Engine during evaluation.  They represent runtime
+Validation Results are created by the Rule Engine during evaluation. They represent runtime
 evaluation state and are not stored as reference data.
 
-``` TypeScript
+```TypeScript
 
 interface ValidationResult{
   readonly rule: Rule;
@@ -551,6 +587,7 @@ interface ValidationResult{
 ```
 
 Examples of Rules that may produce Validation Results include:
+
 ```text
 Rule
 ----------------------
@@ -575,7 +612,8 @@ severity: error
 message: A properly paired read cannot have an unmapped mate.
 ```
 
-Given the following ```FlagFilter```:
+Given the following `FlagFilter`:
+
 ```text
 FlagFilter
 -------------------
@@ -585,63 +623,67 @@ includedFlags:
 excludedFlags:
     - Proper Pair
 ```
+
 the Rule Engine determines that the Rule Condition is satisfied and produces:
+
 ```text
 ValidationResult
 ---------------------
 rule: Rule 7
 ```
+
 The Validation Result provides access to the Rule's evaluation information:
+
 ```text
 result.rule.severity  → error
 result.rule.message   → "A SAM Flag cannot be both included and excluded."
 result.rule.condition → include-exclude-overlap
 ```
 
-- An ```error``` indicates that the current configuration is invalid and should not be treated as a valid command.
-- A ```warning``` indicates that command generation may continue, but the selection may be unintended or confusing.
-- An ```information``` result provides clarification without indicating a problem.
+- An `error` indicates that the current configuration is invalid and should not be treated as a valid command.
+- A `warning` indicates that command generation may continue, but the selection may be unintended or confusing.
+- An `information` result provides clarification without indicating a problem.
 
 > [!NOTE]
-> A Validation Result does not duplicate the Rule's severity, message, or condition.  These remain properties
+> A Validation Result does not duplicate the Rule's severity, message, or condition. These remain properties
 > of the Rule that produced the result.
 
 ---
-
 
 ### $${\color{purple}Filter \space Preset}$$
 
 Contains a predefined Flag Filter configuration and a researcher facing explanation.
 
 A Filter Preset exists in 5 forms within BioTools:
+
 - Filter Preset Definition - the reference data stored in JSON.
 - Filter Preset Interface - the TypeScript contract defining that required shape of a FilterPreset.
 - Filter Preset Object - created after its referenced SAM Flag identifiers are resolved.
 - Filter Preset Catalog - owns the loaded collection and provides lookup/access
 - Filter Preset Loader - loads the collection of JSON objects to a list of concrete object.
-  
+
 Examples may include:
 
-* Properly paired reads
-* Primary alignments
-* Unmapped reads
-* Forward strand alignments
-* Reverse strand alignments
-* Duplicates removed
+- Properly paired reads
+- Primary alignments
+- Unmapped reads
+- Forward strand alignments
+- Reverse strand alignments
+- Duplicates removed
 
 A filter preset contains:
 
-* Immutable unique identifier
-* Immutable name
-* Immutable description
-* Immutable Flag Filter
-* Immutable explanation
+- Immutable unique identifier
+- Immutable name
+- Immutable description
+- Immutable Flag Filter
+- Immutable explanation
 
-Filter Presets populate the same flag filter used by manual selections. 
+Filter Presets populate the same flag filter used by manual selections.
 They do not use a separate command generation process.
 
 Once loaded, a preset's flags remain part of the ordinary Flag Filter and may
-be further edited through normal manual selection.  
+be further edited through normal manual selection.
 
 ```JSON
 {
@@ -687,13 +729,16 @@ filter:
 ```
 
 Filter Preset Catalog Example:
+
 ```TypeScript
 class FilterPresetCatalog {
   getAll(): readonly FilterPreset[];
   findMatching(filter: FlagFilter): FilterPreset | undefined;
 }
 ```
+
 Filter Preset Loader Example:
+
 ```TypeScript
 interface FilterPresetLoader {
   load(flagCatalog: SamFlagCatalog): FilterPreset[];
@@ -701,6 +746,7 @@ interface FilterPresetLoader {
 ```
 
 ---
+
 ### $${\color{purple}Filter \space Inversion}$$
 
 An inversion creates the logical opposite of a supported selection Flag Filter or filter Preset.
@@ -715,14 +761,16 @@ Not every command has a meaningful or safe automatic inversion. Unsupported inve
 
 ### $${\color{blue}Explanation \space Engine}$$
 
-Generates explanation messages from the current ```SAMtools View command```, matching Filter Preset when one exists, and validation results.
+Generates explanation messages from the current `SAMtools View command`, matching Filter Preset when one exists, and validation results.
 
 It receives:
+
 - A SAMtools View Command
 - Filter presets
 - Validation Results
 
 It produces:
+
 - Zero or more explanation messages
 
 The Explanation Engine does not modify the command, flag filter, or validation results.
@@ -753,11 +801,12 @@ class ExplanationEngine {
 ```
 
 An explanation may describe:
-* What an individual flag means
-* What relationships or requirements are relevant to the selected flags
-* What excluded flags remove
-* What the complete command will return
-* Why a selection is invalid or potentially confusing
+
+- What an individual flag means
+- What relationships or requirements are relevant to the selected flags
+- What excluded flags remove
+- What the complete command will return
+- Why a selection is invalid or potentially confusing
 
 > [!NOTE]
 > Validation related explanations are derived from Validation Results, the Explanation Engine does
@@ -773,26 +822,29 @@ This command returns alignments marked as properly paired while excluding second
 
 ### $${\color{blue}Rule \space Engine}$$
 
-Evaluates the current ```FlagFilter``` against all applicable Rules and produces zero
-or more ```ValidationResult``` objects.  
+Evaluates the current `FlagFilter` against all applicable Rules and produces zero
+or more `ValidationResult` objects.
 
 > [!NOTE]
-> The Rule Engine never modifies the user's selections.  It only evaluates them.
+> The Rule Engine never modifies the user's selections. It only evaluates them.
 
 It contains:
+
 - Rules
 
 It receives:
+
 - A Flag Filter
 
 It produces:
+
 - Validation Results
 
-Each call to ```evaluate``` produces a new set of Validation Results based on the current ```FlagFilter```.
+Each call to `evaluate` produces a new set of Validation Results based on the current `FlagFilter`.
 
 > [!NOTE]
-> The Rule Engine determines whether Rule Conditions are satisfied.  It does not generate user facing explanations
-> beyond the information contained in the resulting ```ValidationResult```.
+> The Rule Engine determines whether Rule Conditions are satisfied. It does not generate user facing explanations
+> beyond the information contained in the resulting `ValidationResult`.
 
 ```TypeScript
  interface RuleEngine{
@@ -914,31 +966,31 @@ The following rules apply across the application:
 
 The initial domain model must support:
 
-* The standard SAM flag library
-* Include selections
-* Exclude selections
-* Include value calculation
-* Exclude value calculation
-* Base command generation
-* Explanations
-* Base validation rules
-* Copyable command output
+- The standard SAM flag library
+- Include selections
+- Exclude selections
+- Include value calculation
+- Exclude value calculation
+- Base command generation
+- Explanations
+- Base validation rules
+- Copyable command output
 
 The following concepts are planned but are not required for the base Visual Command Builder:
 
-* A small curated set of Filter Presets, populating the same Flag Filter used by manual selections.
-* Advanced conflict detection
-* Command inversion
-* Command history
-* Exporting command history
-* User accounts
+- A small curated set of Filter Presets, populating the same Flag Filter used by manual selections.
+- Advanced conflict detection
+- Command inversion
+- Command history
+- Exporting command history
+- User accounts
 
 ## Open Questions
 
 The following decisions should be resolved during architecture design or implementation:
 
-* Which non-flag `samtools view` filters belong in Version 1?
-* Should selecting a dependent flag automatically select its related parent flag, or only display a warning?
-* Which combinations should be classified as errors versus warnings?
-* Should generated commands use decimal flag values only, or optionally display hexadecimal values?
-* How should the application represent flags whose meaning depends on whether the record is paired?
+- Which non-flag `samtools view` filters belong in Version 1?
+- Should selecting a dependent flag automatically select its related parent flag, or only display a warning?
+- Which combinations should be classified as errors versus warnings?
+- Should generated commands use decimal flag values only, or optionally display hexadecimal values?
+- How should the application represent flags whose meaning depends on whether the record is paired?
