@@ -1,22 +1,50 @@
 import type { ViewOption } from "../options/ViewOption";
 import type { SamFlag } from "../sam/SamFlag";
 
+export const RULE_CONDITION_TYPES = {
+    REQUIRES_FLAGS: "requires-flags",
+    CONTRADICTION: "contradiction",
+    REQUIRES_OPTION: "requires-option"
+} as const;
+
+export type RuleConditionType = 
+typeof RULE_CONDITION_TYPES[keyof typeof RULE_CONDITION_TYPES];
+
 export interface RequiresFlagsCondition {
-    readonly type: "requires-flags";
+    readonly type: typeof RULE_CONDITION_TYPES.REQUIRES_FLAGS;
     readonly selectedFlags: readonly SamFlag[];
-    readonly requiredFlags?: readonly SamFlag[];
+    readonly requiredFlags: readonly SamFlag[];
 }
 
-export interface ContainsFlagsCondition {
-    readonly type: "contradiction";
+export interface RequiresFlagsConditionDefinition {
+    readonly type: typeof RULE_CONDITION_TYPES.REQUIRES_FLAGS;
+    readonly selectedFlags: readonly number[];
+    readonly requiredFlags: readonly number[];
+}
+
+export interface ContradictionCondition {
+    readonly type: typeof RULE_CONDITION_TYPES.CONTRADICTION;
     readonly selectedFlags: readonly SamFlag[];
+}
+
+export interface ContradictionConditionDefinition {
+    readonly type: typeof RULE_CONDITION_TYPES.CONTRADICTION;
+    readonly selectedFlags: readonly number[];
 }
 
 export interface RequiresOptionCondition {
-    readonly type: "requires-option";
+    readonly type: typeof RULE_CONDITION_TYPES.REQUIRES_OPTION;
     readonly selectedOption: ViewOption;
     readonly selectedValue?: string | number;
-    readonly requiredOptions: ViewOption;
+    readonly requiredOption: ViewOption;
 }
 
-export type RuleCondition = RequiresFlagsCondition | ContainsFlagsCondition | RequiresOptionCondition;
+export interface RequiresOptionConditionDefinition {
+    readonly type: typeof RULE_CONDITION_TYPES.REQUIRES_OPTION;
+    readonly selectedOption: number;
+    readonly selectedValue?: string | number;
+    readonly requiredOption: number;
+}
+
+export type RuleConditionDefinition = RequiresFlagsConditionDefinition | ContradictionConditionDefinition | RequiresOptionConditionDefinition;
+export type RuleCondition = RequiresFlagsCondition | ContradictionCondition | RequiresOptionCondition;
