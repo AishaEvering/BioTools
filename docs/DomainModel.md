@@ -407,7 +407,9 @@ A Rule exists in 3 forms within BioTools:
 - Rule Interface - the TypeScript contract defining that required shape of a Rule.
 - Rule Object - the runtime object created from a Rule definition and used by the application.
 
-Rule Definitions are converted into Rule Objects by a Rule Loader.
+Rule Definitions are converted into Rule Objects by a Rule Loader. Loaded Rule Objects
+are maintained by the Rule Catalog, which provides access to the application's
+supported rules.
 
 A rule contains:
 
@@ -562,6 +564,28 @@ interface RuleLoader {
 > [!IMPORTANT]
 > Rules operate on domain/application state and must not depend on React components or other
 > presentation layer concerns.
+
+### Rule Catalog
+
+The Rule Catalog maintains the collection of loaded Rule Objects and provides
+access to the rules used by the application.
+
+The Rule Catalog receives Rules from a Rule Loader rather than reading JSON
+directly.
+
+```text
+Conceptually:
+
+Rule Definitions
+       ↓
+   Rule Loader
+       ↓
+    Rule[]
+       ↓
+  Rule Catalog
+       ↓
+Rule Engine / Application
+```
 
 ---
 
