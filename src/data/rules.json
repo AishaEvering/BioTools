@@ -3,7 +3,7 @@
         "id": 300,
         "condition": {
             "type": "requires-flags",
-            "selectedFlags": [101],
+            "includedFlags": [101],
             "requiredFlags": [100]
         },
         "severity": "warning",
@@ -13,7 +13,7 @@
         "id": 301,
         "condition": {
             "type": "requires-flags",
-            "selectedFlags": [103],
+            "includedFlags": [103],
             "requiredFlags": [100]
         },
         "severity": "warning",
@@ -23,7 +23,7 @@
         "id": 302,
         "condition": {
             "type": "requires-flags",
-            "selectedFlags": [105],
+            "includedFlags": [105],
             "requiredFlags": [100]
         },
         "severity": "warning",
@@ -33,7 +33,7 @@
         "id": 303,
         "condition": {
             "type": "requires-flags",
-            "selectedFlags": [106],
+            "includedFlags": [106],
             "requiredFlags": [100]
         },
         "severity": "warning",
@@ -43,7 +43,7 @@
         "id": 304,
         "condition": {
             "type": "requires-flags",
-            "selectedFlags": [107],
+            "includedFlags": [107],
             "requiredFlags": [100]
         },
         "severity": "warning",
@@ -53,7 +53,7 @@
         "id": 305,
         "condition": {
             "type": "contradiction",
-            "selectedFlags": [106, 107]
+            "includedFlags": [106, 107]
         },
         "severity": "error",
         "message": "A read can't be both first and second in a pair."
@@ -81,7 +81,7 @@
         "id": 308,
         "condition": {
             "type": "contradiction",
-            "selectedFlags": [101, 102]
+            "includedFlags": [101, 102]
         },
         "severity": "error",
         "message": "A read marked as properly paired can't also be marked as unmapped."
@@ -90,7 +90,7 @@
         "id": 309,
         "condition": {
             "type": "contradiction",
-            "selectedFlags": [101, 103]
+            "includedFlags": [101, 103]
         },
         "severity": "error",
         "message": "A properly paired read can't have an unmapped mate."

@@ -25,7 +25,7 @@ describe("JsonRuleLoader", () => {
         );
 
         if (rule.condition.type === RULE_CONDITION_TYPES.REQUIRES_FLAGS) {
-            expect(rule.condition.selectedFlags[0].id).toBe(101);
+            expect(rule.condition.includedFlags[0].id).toBe(101);
             expect(rule.condition.requiredFlags[0].id).toBe(100);
         }
     });
@@ -54,8 +54,8 @@ describe("JsonRuleLoader", () => {
         );
 
         if (rule.condition.type === RULE_CONDITION_TYPES.CONTRADICTION) {
-            expect(rule.condition.selectedFlags[0].id).toBe(106);
-            expect(rule.condition.selectedFlags[1].id).toBe(107);
+            expect(rule.condition.includedFlags[0].id).toBe(106);
+            expect(rule.condition.includedFlags[1].id).toBe(107);
         }
     });
 

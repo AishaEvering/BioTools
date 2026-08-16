@@ -13,24 +13,24 @@ typeof RULE_CONDITION_TYPES[keyof typeof RULE_CONDITION_TYPES];
 
 export interface RequiresFlagsCondition {
     readonly type: typeof RULE_CONDITION_TYPES.REQUIRES_FLAGS;
-    readonly selectedFlags: readonly SamFlag[];
+    readonly includedFlags: readonly SamFlag[];
     readonly requiredFlags: readonly SamFlag[];
 }
 
 export interface RequiresFlagsConditionDefinition {
     readonly type: typeof RULE_CONDITION_TYPES.REQUIRES_FLAGS;
-    readonly selectedFlags: readonly number[];
+    readonly includedFlags: readonly number[];
     readonly requiredFlags: readonly number[];
 }
 
 export interface ContradictionCondition {
     readonly type: typeof RULE_CONDITION_TYPES.CONTRADICTION;
-    readonly selectedFlags: readonly SamFlag[];
+    readonly includedFlags: readonly SamFlag[];
 }
 
 export interface ContradictionConditionDefinition {
     readonly type: typeof RULE_CONDITION_TYPES.CONTRADICTION;
-    readonly selectedFlags: readonly number[];
+    readonly includedFlags: readonly number[];
 }
 
 export interface RequiresOptionCondition {
