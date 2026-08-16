@@ -334,12 +334,12 @@ This condition is satisfied when `Proper Pair` is selected but `Read Paired` is 
 type RuleCondition =
 {
   readonly type: "requires-flags";
-  readonly selectedFlags: SamFlag[];
+  readonly includedFlags: SamFlag[];
   readonly requiredFlags: SamFlag[];
 }
 {
   readonly type: "contradiction";
-  readonly selectedFlags: SamFlag[];
+  readonly includedFlags: SamFlag[];
 }
 ```
 
@@ -348,7 +348,7 @@ In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers
 ```JSON
 {
   "type": "requires-flags",
-  "selectedFlags": [100],
+  "includedFlags": [100],
   "requiredFlags": [101]
 }
 ```
@@ -356,7 +356,7 @@ In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers
 ```JSON
 {
   "type": "contradiction",
-  "selectedFlags": [102, 103]
+  "includedFlags": [102, 103]
 }
 ```
 
@@ -376,7 +376,7 @@ identifiers have been resolved by the application.
 JSON Rule Condition
 -------------------
 type: requires-flags
-selectedFlags: [100]
+includedFlags: [100]
 requiredFlags: [101]
 
           ↓ resolve identifiers
@@ -384,7 +384,7 @@ requiredFlags: [101]
 RuleCondition Object
 --------------------
 type: requires-flags
-selectedFlags:
+includedFlags:
   - SamFlag Object → Proper Pair
 
 requiredFlags:
@@ -430,7 +430,7 @@ Possible severity levels:
    ```
    id: 1
    condition type: requires-flags
-   selected flags: [Proper Pair]
+   included flags: [Proper Pair]
    required flags: [Read Paired]
    severity: Warning
    message: Proper Pair normally applies to reads marked as paired.
@@ -439,7 +439,7 @@ Possible severity levels:
    ```
    id: 2
    condition type: requires-flags
-   selected flags: [Mate Unmapped]
+   included flags: [Mate Unmapped]
    required flags: [Read Paired]
    severity: Warning
    message: Mate Unmapped applies to reads that are part of a paired template.
@@ -448,7 +448,7 @@ Possible severity levels:
    ```
    id: 3
    condition type: requires-flags
-   selected flags: [Mate Reverse]
+   included flags: [Mate Reverse]
    required flags: [Read Paired]
    severity: Warning
    message: Mate Reverse applies to reads that are part of a paired template.
@@ -457,7 +457,7 @@ Possible severity levels:
    ```
    id: 4
    condition type: requires-flags
-   selected flags: [First in Pair]
+   included flags: [First in Pair]
    required flags: [Read Paired]
    severity: Warning
    message: First in Pair applies to reads that are part of a paired template.
@@ -466,7 +466,7 @@ Possible severity levels:
    ```
    id: 5
    condition type: requires-flags
-   selected flags: [Second in Pair]
+   included flags: [Second in Pair]
    required flags: [Read Paired]
    severity: Warning
    message: Second in Pair applies to reads that are part of a paired template.
@@ -475,7 +475,7 @@ Possible severity levels:
    ```
    id: 6
    condition type: contradiction
-   selected flags: [First in Pair, Second in Pair]
+   included flags: [First in Pair, Second in Pair]
    severity: Error
    message: A read can't be both first and second in a pair.
    ```
@@ -510,7 +510,7 @@ A Rule Definition stored in JSON references SAM Flags by their identifiers:
   "id": 1,
   "condition": {
     "type": "requires-flags",
-    "selectedFlags": [101],
+    "includedFlags": [101],
     "requiredFlags": [100]
   },
   "severity": "warning",
@@ -529,7 +529,7 @@ Rule Definition
 id: 1
 condition:
   type: requires-flags
-  selectedFlags: [101]
+  includedFlags: [101]
   requiredFlags: [100]
 severity: warning
 message: ...
@@ -541,7 +541,7 @@ Rule Object
 id: 1
 condition:
   type: requires-flags
-  selectedFlags:
+  includedFlags:
     - Proper Pair → SamFlag Object
   requiredFlags:
     - Read Paired → SamFlag Object
@@ -637,14 +637,14 @@ message: A SAM Flag can't be both included and excluded.
 id: 8
 condition:
   type: contradiction
-selected flags: [Proper Pair, Read Unmapped]
+included flags: [Proper Pair, Read Unmapped]
 severity: error
 message: A read marked as properly paired cannot also be marked as unmapped.
 
 id: 9
 condition:
   type: contradiction
-selected flags: [Proper Pair, Mate Unmapped]
+included flags: [Proper Pair, Mate Unmapped]
 severity: error
 message: A properly paired read cannot have an unmapped mate.
 ```
@@ -868,47 +868,48 @@ This command returns alignments marked as properly paired while excluding second
 
 ### $${\color{blue}Rule \space Engine}$$
 
-Evaluates the current `FlagFilter` against all applicable Rules and produces zero
-or more `ValidationResult` objects.
+Evaluates the current `SamViewCommand` against all applicable Rules and returns zero
+or more matching `Rule` objects.
 
 > [!NOTE]
 > The Rule Engine never modifies the user's selections. It only evaluates them.
 
 It contains:
 
-- Rules
+- A Rule Catalog
 
 It receives:
 
-- A Flag Filter
+- SamViewCommand
 
 It produces:
 
-- Validation Results
+- Zero or more Matched Rules
 
-Each call to `evaluate` produces a new set of Validation Results based on the current `FlagFilter`.
+Each call to `evaluate` produces a new set of matched `Rules[]` based on the current `SamViewCommand`.
 
 > [!NOTE]
 > The Rule Engine determines whether Rule Conditions are satisfied. It does not generate user facing explanations
-> beyond the information contained in the resulting `ValidationResult`.
+> beyond the information contained in the resulting `Rules`.
 
 ```TypeScript
- interface RuleEngine{
-  readonly rules: RuleCatalog;
+ export class RuleEngine {
+  private readonly ruleCatalog: RuleCatalog;
 
-  evaluate(flagFilter: FlagFilter): ValidationResult[];
-}
-```
-
-```TypeScript
- class RuleEngine {
   constructor(
-    private readonly rules: RuleCatalog
+    this.ruleCatalog = ruleCatalog;
   ) {}
 
-  evaluate(flagFilter: FlagFilter): ValidationResult[] {
+  evaluate(command: SamViewCommand): readonly Rule[] {
     // evaluate each rule
-    // return satisfied rule results
+    // return rules whose conditions are satisfied
+  }
+
+  private isConditionSatisfied(
+    condition: RuleCondition,
+    command: SamViewCommand
+  ): boolean {
+    //evaluate condition
   }
 }
 ```

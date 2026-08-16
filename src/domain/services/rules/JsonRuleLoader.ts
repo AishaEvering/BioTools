@@ -35,14 +35,14 @@ private readonly viewOptionCatalog: ViewOptionCatalog;
 			case RULE_CONDITION_TYPES.REQUIRES_FLAGS:
 				return {
 					type: RULE_CONDITION_TYPES.REQUIRES_FLAGS,
-					selectedFlags: ruleCondition.selectedFlags.map(id => this.getFlag(id)),
+					includedFlags: ruleCondition.includedFlags.map(id => this.getFlag(id)),
 					requiredFlags: ruleCondition.requiredFlags.map(id => this.getFlag(id)),
 				};
 
 			case RULE_CONDITION_TYPES.CONTRADICTION:
 				return {
 					type: RULE_CONDITION_TYPES.CONTRADICTION,
-					selectedFlags: ruleCondition.selectedFlags.map(id => this.getFlag(id)),
+					includedFlags: ruleCondition.includedFlags.map(id => this.getFlag(id)),
 				};
 
 			case RULE_CONDITION_TYPES.REQUIRES_OPTION:
