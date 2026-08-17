@@ -809,23 +809,25 @@ It receives:
 
 - Zero or more explanation messages
 
-The Explanation Engine does not modify the command, flag filter, or validation results.
+The Explanation Engine does not modify the command, flag filter, or matched Rules.
 
 ```typescript
-class ExplanationEngine {
-  constructor(
-    private readonly presetCatalog: FilterPresetCatalog
-  ) {}
+export class ExplanationEngine {
+  explain(
+    command: SamViewCommand,
+    matchedRules: readonly Rule[],
+  ): readonly ExplanationMessage[]{
+    // ...
+  }
 
   explain(
     command: SamViewCommand,
     matchedRules:readonly Rule[],
-  ): ExplanationMessage[] {
-    // generate flag explanations
-    // generate option explanations
-    // incorporate matched rule explanations
-    // consolidate messages
-  }
+  ): readonly ExplanationMessage[] {
+    // generate an explanation for each included flag
+    // generate an explanation for each excluded flag
+    // generate an explanation for each selected option
+    // generate an explanation for each matched rule
 
   export interface ExplanationMessage{
    readonly text: string;
