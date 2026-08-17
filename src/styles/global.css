@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+
+.workspace{
+    max-width:1280px;
+    margin:0 auto;
+    padding:28px;
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:24px;
+    align-items:start;
+}
+
+@media (max-width: 880px){
+    .workspace{grid-template-columns:1fr;padding:16px;}
+}

@@ -1,0 +1,29 @@
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--line);
+    background:var(--paper);
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .brand .mark{
+    width:28px;height:28px;border-radius:6px;
+    background:var(--teal);
+    display:inline-flex;align-items:center;justify-content:center;
+    color:#fff; font-family:var(--mono); font-weight:600; font-size:13px;
+  }
+  .brand h1{font-size:19px;margin:0;font-weight:700;letter-spacing:-0.01em;}
+  .crumbs{font-size:13px;color:var(--ink-soft);font-family:var(--mono);}
+  .crumbs strong{color:var(--ink);font-weight:600;}
+  .topbar-actions{display:flex;gap:14px;color:var(--ink-soft);font-size:12px;}
+  .topbar-actions span{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;}
+  .topbar-actions svg{width:18px;height:18px;stroke:var(--ink-soft);}
+
+@media (max-width: 880px){
+    .topbar{padding:14px 18px;}
+}

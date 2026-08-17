@@ -1,0 +1,13 @@
+  .output-panel{
+    position:sticky;
+    top:24px;
+    background:var(--terminal);
+    border-radius:var(--radius);
+    color:var(--terminal-text);
+    overflow:hidden;
+    border:1px solid var(--teal-deep);
+  }
+
+ @media (max-width: 880px){
+    .output-panel{position:static;}
+  }

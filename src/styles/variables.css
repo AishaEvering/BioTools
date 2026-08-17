@@ -1,0 +1,26 @@
+:root{
+    --bg: #eef2ef;
+    --paper: #ffffff;
+    --ink: #10241f;
+    --ink-soft: #4a5a55;
+    --line: #d7e0db;
+    --line-soft: #e6ebe8;
+    --teal: #1b6b5b;
+    --teal-dim: #e2efec;
+    --teal-deep: #123f36;
+    --wine: #a63b48;
+    --wine-dim: #f5e5e6;
+    --amber: #b9761f;
+    --amber-dim: #f7ecd9;
+    --info: #3a6ea5;
+    --info-dim: #e4ecf3;
+    --error: #c0392b;
+    --error-dim: #f8ddd9;
+    --terminal: #10241f;
+    --terminal-line: #1e3a32;
+    --terminal-text: #d9f2e8;
+    --terminal-accent: #6fd9b8;
+    --radius: 10px;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
