@@ -4,7 +4,7 @@
         "name": "Include Header",
         "syntax": "-h",
         "description": "Include the SAM header in the output.",
-        "explanation": "including the SAM header",
+        "explanation": "Includes the SAM header in the output.",
         "requiresValue": false
     },
     {
@@ -12,7 +12,7 @@
         "name": "Count Alignments",
         "syntax": "-c",
         "description": "Return only the number of matching alignment records.",
-        "explanation": "counting matching alignments",
+        "explanation": "Returns only the number of matching alignment records.",
         "requiresValue": false
     },
     {
@@ -20,7 +20,7 @@
         "name": "Minimum Mapping Quality",
         "syntax": "-q",
         "description": "Only include alignments with a minimum mapping quality.",
-        "explanation": "with a minimum mapping quality of {value}",
+        "explanation": "Includes only alignments with a minimum mapping quality of {value}.",
         "requiresValue": true,
         "constraints": {
             "type": "integer",
@@ -32,7 +32,7 @@
         "name": "Output Format",
         "syntax": "-O",
         "description": "Specify the output format.",
-        "explanation": "using the selected output format of {value}",
+        "explanation": "Uses {value} as the output format.",
         "requiresValue": true,
         "constraints": {
             "type": "enum",
@@ -44,7 +44,7 @@
         "name": "Output File",
         "syntax": "-o",
         "description": "Write the output to the specified file.",
-        "explanation": "writing output to a file named {value}",
+        "explanation": "Writes the output to the file {value}.",
         "requiresValue": true,
         "constraints": {
             "type": "string"
@@ -55,7 +55,7 @@
         "name": "Reference File",
         "syntax": "-T",
         "description": "Specify a reference FASTA file.",
-        "explanation": "using the reference file {value}",
+        "explanation": "Uses {value} as the reference FASTA file.",
         "requiresValue": true,
         "constraints": {
             "type": "string"
