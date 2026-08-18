@@ -4,3 +4,39 @@
     border-radius:var(--radius);
     padding:24px;
   }
+
+  .legend{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+    margin:14px 0 0;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .legend .legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .legend .swatch{
+    width:10px;
+    height:10px;
+    border-radius:3px;
+    flex-shrink:0;
+  }
+
+  .legend .swatch.include{background:var(--teal);}
+  .legend .swatch.exclude{background:var(--wine);}
+
+  .legend .swatch.neutral{
+    background:var(--paper);
+    border:1.5px solid var(--line);
+  }
+
+  .legend .legend-hint{
+    color:#93a19b;
+    font-style:italic;
+  }

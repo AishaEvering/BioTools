@@ -1,0 +1,15 @@
+  .hidden-card{
+    font-size:12px;
+    font-family:var(--mono);
+    border:1px dashed #b9c8c2;
+    border-radius:999px;
+    padding:4px 11px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    background:var(--paper);
+  }
+  .hidden-card:hover{
+    border-color:var(--teal);
+    color:var(--teal-deep);
+    background:var(--teal-dim);
+  }

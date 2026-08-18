@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./BuilderPanel.css";
 import FlagSearch from "../../Flags/FlagSearch";
 import { SamFlagCatalog } from "../../../domain/services/samFlags/SamFlagCatalog";
 import FlagCategoryFilter from "../../Flags/FlagCategoryFilter";
+import type { SamFlag } from "../../../domain/sam/SamFlag";
+import type { FlagSelectionState } from "../../Flags/FlagCard";
+import type { FlagFilter } from "../../../domain/filtering/FlagFilter";
+import { createFlagFilter } from "../../../domain/services/filtering/CreateFlagFilter";
+import FlagGroups from "../../Flags/FlagGroups";
+import HiddenFlags from "../../Flags/HiddenFlags";
 
 const samFlagCatalog = new SamFlagCatalog();
 
 export default function BuilderPanel() {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [hiddenFlagIds, setHiddenFlagIds] = useState<Set<number>>(new Set());
+  const [flagFilter, setFlagFilter] = useState<FlagFilter>(
+    createFlagFilter([], []),
+  );
 
   const flags = samFlagCatalog.getAll();
 
@@ -20,6 +30,10 @@ export default function BuilderPanel() {
   ];
 
   const filteredFlags = flags.filter((flag) => {
+    if (hiddenFlagIds.has(flag.id)) {
+      return false;
+    }
+
     const matchedSearch =
       !normalizedSearch ||
       [
@@ -36,7 +50,72 @@ export default function BuilderPanel() {
     return matchedSearch && matchesCategory;
   });
 
-  console.log(filteredFlags);
+  function getFlagState(flag: SamFlag): FlagSelectionState {
+    if (flagFilter.includedFlags.some((f) => f.id === flag.id)) {
+      return "include";
+    }
+
+    if (flagFilter.excludedFlags.some((f) => f.id === flag.id)) {
+      return "exclude";
+    }
+    return "none";
+  }
+
+  function handleCycleFlag(flag: SamFlag) {
+    const currentState = getFlagState(flag);
+
+    if (currentState === "none") {
+      setFlagFilter(
+        createFlagFilter(
+          [...flagFilter.includedFlags, flag],
+          flagFilter?.excludedFlags,
+        ),
+      );
+    }
+
+    if (currentState === "include") {
+      setFlagFilter(
+        createFlagFilter(
+          flagFilter.includedFlags.filter((f) => f.id !== flag.id),
+          [...flagFilter.excludedFlags, flag],
+        ),
+      );
+    }
+
+    if (currentState === "exclude") {
+      setFlagFilter(
+        createFlagFilter(
+          flagFilter.includedFlags,
+          flagFilter.excludedFlags.filter((f) => f.id !== flag.id),
+        ),
+      );
+    }
+  }
+
+  function handleHideFlag(flag: SamFlag) {
+    setFlagFilter(
+      createFlagFilter(
+        flagFilter.includedFlags.filter((f) => f.id !== flag.id),
+        flagFilter.excludedFlags.filter((f) => f.id !== flag.id),
+      ),
+    );
+
+    setHiddenFlagIds((current) => {
+      const next = new Set(current);
+      next.add(flag.id);
+      return next;
+    });
+  }
+
+  const hiddenFlags = flags.filter((flag) => hiddenFlagIds.has(flag.id));
+
+  function handleRestoreFlag(flag: SamFlag) {
+    setHiddenFlagIds((current) => {
+      const next = new Set(current);
+      next.delete(flag.id);
+      return next;
+    });
+  }
 
   return (
     <div className="builder">
@@ -45,6 +124,30 @@ export default function BuilderPanel() {
         categories={categories}
         selectedCategory={selectedCategory}
         onChange={setSelectedCategory}
+      />
+      <div className="legend">
+        <div className="legend-item">
+          <span className="swatch include"></span>Include (-f)
+        </div>
+        <div className="legend-item">
+          <span className="swatch exclude"></span>Exclude (-F)
+        </div>
+        <div className="legend-item">
+          <span className="swatch neutral"></span>Not applied
+        </div>
+        <span className="legend-hint">
+          — click a flag to include, again to exclude, and again to clear
+        </span>
+      </div>
+
+      <HiddenFlags flags={hiddenFlags} onRestore={handleRestoreFlag} />
+
+      <FlagGroups
+        flags={filteredFlags}
+        categories={categories}
+        getState={getFlagState}
+        onCycle={handleCycleFlag}
+        onHide={handleHideFlag}
       />
     </div>
   );
