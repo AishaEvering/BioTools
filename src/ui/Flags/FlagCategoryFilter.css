@@ -1,0 +1,14 @@
+  .flag-category-filters{display:flex;gap:8px;margin:18px 0 4px;flex-wrap:wrap;}
+  .category-button{
+    border:1px solid var(--line);
+    background:var(--paper);
+    padding:7px 15px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    color:var(--ink-soft);
+    transition:all .15s ease;
+  }
+  .category-button:hover{border-color:var(--teal);color:var(--teal);}
+  .category-button.active{background:var(--ink);border-color:var(--ink);color:#fff;}

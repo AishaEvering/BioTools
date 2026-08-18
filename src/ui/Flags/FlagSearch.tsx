@@ -1,4 +1,3 @@
-import React from "react";
 import "./FlagSearch.css";
 
 interface FlagSearchProps {
@@ -9,7 +8,7 @@ interface FlagSearchProps {
 export default function FlagSearch({ value, onChange }: FlagSearchProps) {
   return (
     <div className="search">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+      <svg viewBox="0 0 24 24" fill="none" strokeWidth="2">
         <circle cx="11" cy="11" r="7" />
         <path d="M21 21l-4.3-4.3" />
       </svg>
