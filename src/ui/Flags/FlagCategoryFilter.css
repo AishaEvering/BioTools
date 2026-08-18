@@ -10,5 +10,13 @@
     color:var(--ink-soft);
     transition:all .15s ease;
   }
-  .category-button:hover{border-color:var(--teal);color:var(--teal);}
-  .category-button.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+  .category-button:hover{
+    border-color:var(--teal);
+    color:var(--teal);
+  }
+
+  .category-button.active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:#fff;
+ }

@@ -1,13 +1,26 @@
   .search{
-    display:flex;align-items:center;gap:10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
     border:1px solid var(--line);
     border-radius:999px;
     padding:11px 18px;
     background:var(--bg);
   }
-  .search svg{width:16px;height:16px;stroke:var(--ink-soft);flex-shrink:0;}
+  .search svg{
+    width:16px;
+    height:16px;
+    stroke:var(--ink-soft);
+    flex-shrink:0;
+  }
+  
   .search input{
-    border:none;background:transparent;outline:none;
-    font-family:var(--sans);font-size:14px;color:var(--ink);width:100%;
+    border:none;
+    background:transparent;
+    outline:none;
+    font-family:var(--sans);
+    font-size:14px;
+    color:var(--ink);
+    width:100%;
   }
   .search input::placeholder{color:#93a19b;}

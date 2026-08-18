@@ -1,0 +1,108 @@
+  .flag-card .flash{
+    position:absolute; 
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    color:#fff;
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:.02em;
+    opacity:0;
+    pointer-events:none;
+  }
+
+  .flag-card .flash.show{
+    animation: flag-flash 700ms ease-out;
+  }
+
+  @keyframes flag-flash {
+    0%{
+        opacity: 1;
+    }
+    30%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+  }
+
+  .flag-card .flash.flash-include{background:var(--teal);}
+  .flag-card .flash.flash-exclude{background:var(--wine);}
+  .flag-card .flash.flash-off{background:var(--ink-soft);}
+  .flag-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    border:1.5px solid var(--line);
+    border-left:4px solid var(--line);
+    background:var(--paper);
+    border-radius:9px;
+    padding:9px 26px 9px 12px;
+    cursor:pointer;
+    min-width:150px;
+    transition:all .12s ease;
+    user-select:none;
+  }
+  .flag-card:hover{border-color:#adc4bc;}
+  .flag-card:hover{border-left-color:#adc4bc;}
+
+  .flag-card .label{
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .flag-card .bit{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--ink-soft);
+   }
+
+  .flag-card.include{
+    background:var(--teal-dim);
+    border-color:var(--teal);
+    border-left-color:var(--teal);
+  }
+
+  .flag-card.include .label{color:var(--teal-deep);}
+  .flag-card.include .bit{color:var(--teal);}
+
+  .flag-card.exclude{
+    background:var(--wine-dim);
+    border-color:var(--wine);
+    border-left-color:var(--wine);
+  }
+
+  .flag-card.exclude .label{color:#6d232c;}
+  .flag-card.exclude .bit{color:var(--wine);}
+  .card-remove{
+    position:absolute;
+    top:6px;
+    right:6px;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    border:none;
+    background:transparent;
+    color:var(--ink-soft);
+    font-size:13px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    opacity:.4;
+    transition:opacity .12s ease, background .12s ease;
+  }
+  .card-remove:hover{
+    opacity:1;
+    background:rgba(0,0,0,.08);
+  }
+
+  @media (max-width: 880px){
+    .flag-card{min-width:140px;flex:1 1 calc(50% - 10px);}
+  }
