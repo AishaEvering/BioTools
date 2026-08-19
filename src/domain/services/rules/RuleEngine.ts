@@ -73,6 +73,12 @@ import type { RuleCatalog } from "./RuleCatalog";
                     )
                 );
             }
+            case RULE_CONDITION_TYPES.OPTION_VALUE:{
+                return command.options.some(
+                    selected => selected.option.id === condition.selectedOption.id &&
+                    selected.value === condition.selectedValue
+                );
+            }
             default:
                 throw new Error(`Unknown rule condition type: ${(condition as RuleCondition).type}`);
         }

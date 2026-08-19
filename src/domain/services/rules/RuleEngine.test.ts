@@ -264,32 +264,32 @@ describe("Rules", () => {
             expect(rules.some(rule => rule.id === 307)).toBe(false);
         });
     });
-
-    describe(RULE_CONDITION_TYPES.REQUIRES_OPTION, () => {
-
+    
+    describe("Option_Rules", () => {
         const OUTPUT_FORMAT = 203;
         const REFERENCE_FILE = 205;
         const INCLUDE_HEADER = 200;
+        const MIN_MAPPING_QUALITY = 202;
 
         function createSelectedViewOption(
-        overrides: Partial<SelectedViewOption> = {},
+            overrides: Partial<SelectedViewOption> = {},
         ): SelectedViewOption {
-            return {
-                option: {
-                    id: 0,
-                    name: "",
-                    syntax: "",
-                    description: "",
-                    explanation: "",
-                    requiresValue: false
-                },
-                ...overrides,
-            };
+                return {
+                    option: {
+                        id: 0,
+                        name: "",
+                        syntax: "",
+                        description: "",
+                        explanation: "",
+                        requiresValue: false
+                    },
+                    ...overrides,
+                };
         }
 
         function getSelectedViewOption(id: number, value?: string | number):SelectedViewOption{
             const option = viewOptionCatalog.getViewOptionById(id);
-            
+                
             if(!option){
                 throw new Error(`Expected View Option ${id} to exist`);
             }
@@ -300,75 +300,119 @@ describe("Rules", () => {
             });
         }
 
-        it("does not match when option and value match and required option is selected", () => {
-            const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "CRAM")
-            const referenceFileOption = getSelectedViewOption(REFERENCE_FILE, "ref.fastq")
+        describe(RULE_CONDITION_TYPES.OPTION_VALUE, () => {
+            it("does not match when option match and value does not match", () => {
+                const minMappingQualityOption = getSelectedViewOption(MIN_MAPPING_QUALITY, 50)
+  
+                const command = createCommand({
+                    options: [minMappingQualityOption]
+                });
 
+                const rules = engine.evaluate(command);
 
-            const command = createCommand({
-                options: [outputFormatOption, referenceFileOption]
+                expect(rules).toHaveLength(0);
+                expect(rules.some(rule => rule.id === 310)).toBe(false);
             });
 
-            const rules = engine.evaluate(command);
+            it("matches when option and value matches", () => {
+                const minMappingQualityOption = getSelectedViewOption(MIN_MAPPING_QUALITY, 255)
 
-            expect(rules).toHaveLength(0);
-            expect(rules.some(rule => rule.id === 306)).toBe(false);
+                const command = createCommand({
+                    options: [minMappingQualityOption]
+
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 310)).toBe(true);
+            });
+
+            it("does not match when option matches but value is undefined", () => {
+                const minMappingQualityOption = getSelectedViewOption(MIN_MAPPING_QUALITY)
+
+                const command = createCommand({
+                    options: [minMappingQualityOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(0);
+                expect(rules.some(rule => rule.id === 310)).toBe(false);
+            });
         });
 
-        it("matches when option and value matches and does not have required option", () => {
-            const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "CRAM")
+        describe(RULE_CONDITION_TYPES.REQUIRES_OPTION, () => {
+            it("does not match when option and value match and required option is selected", () => {
+                const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "CRAM")
+                const referenceFileOption = getSelectedViewOption(REFERENCE_FILE, "ref.fastq")
 
 
-            const command = createCommand({
-                options: [outputFormatOption]
+                const command = createCommand({
+                    options: [outputFormatOption, referenceFileOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(0);
+                expect(rules.some(rule => rule.id === 306)).toBe(false);
             });
 
-            const rules = engine.evaluate(command);
-
-            expect(rules).toHaveLength(1);
-            expect(rules.some(rule => rule.id === 306)).toBe(true);
-        });
-
-        it("does not match when option matches but value does not match", () => {
-            const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "BAM")
+            it("matches when option and value matches and does not have required option", () => {
+                const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "CRAM")
 
 
-            const command = createCommand({
-                options: [outputFormatOption]
+                const command = createCommand({
+                    options: [outputFormatOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 306)).toBe(true);
             });
 
-            const rules = engine.evaluate(command);
-
-            expect(rules).toHaveLength(0);
-            expect(rules.some(rule => rule.id === 306)).toBe(false);
-        });
-
-        it("does not match when option matches but value does not match with required option", () => {
-            const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "BAM")
-            const referenceFileOption = getSelectedViewOption(REFERENCE_FILE, "ref.fasta")
+            it("does not match when option matches but value does not match", () => {
+                const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "BAM")
 
 
-            const command = createCommand({
-                options: [outputFormatOption, referenceFileOption]
+                const command = createCommand({
+                    options: [outputFormatOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(0);
+                expect(rules.some(rule => rule.id === 306)).toBe(false);
             });
 
-            const rules = engine.evaluate(command);
+            it("does not match when option matches but value does not match with required option", () => {
+                const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "BAM")
+                const referenceFileOption = getSelectedViewOption(REFERENCE_FILE, "ref.fasta")
 
-            expect(rules).toHaveLength(0);
-            expect(rules.some(rule => rule.id === 306)).toBe(false);
-        });
 
-        it("does not match when option does not match", () => {
-            const includeHeaderOption = getSelectedViewOption(INCLUDE_HEADER)
+                const command = createCommand({
+                    options: [outputFormatOption, referenceFileOption]
+                });
 
-            const command = createCommand({
-                options: [includeHeaderOption]
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(0);
+                expect(rules.some(rule => rule.id === 306)).toBe(false);
             });
 
-            const rules = engine.evaluate(command);
+            it("does not match when option does not match", () => {
+                const includeHeaderOption = getSelectedViewOption(INCLUDE_HEADER)
 
-            expect(rules).toHaveLength(0);
-            expect(rules.some(rule => rule.id === 306)).toBe(false);
+                const command = createCommand({
+                    options: [includeHeaderOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(0);
+                expect(rules.some(rule => rule.id === 306)).toBe(false);
+            });
         });
     });
 

@@ -1,0 +1,102 @@
+  
+.option-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:10px 12px;
+    margin-bottom:8px;
+  }
+
+  .option-row{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+
+  .option-row .opt-main{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:10px 12px;
+  }
+  
+  .option-row.has-error .opt-main{
+    border-color:var(--error);
+    background:var(--error-dim);
+  }
+
+  .option-row .opt-error-text{
+    font-size:11.5px;
+    color:var(--error);
+    padding:5px 12px 0;
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+
+  .option-row-wrap{margin-bottom:8px;}
+
+  .option-row .opt-label{
+    flex:1;
+    font-size:13px;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  .option-row .opt-label .opt-flag-tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--teal);
+    background:var(--teal-dim);
+    border-radius:4px;
+    padding:1px 5px;
+    margin-right:8px;
+  }
+
+  .option-row .opt-value{
+    width:130px;
+    flex-shrink:0;
+    font-family:var(--mono);
+    font-size:13px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:7px 8px;
+    background:var(--paper);
+    outline:none;
+    text-align:center;
+  }
+
+  .option-row .opt-value:focus{border-color:var(--teal);}
+  .option-row.has-error .opt-value{border-color:var(--error);}
+
+  .option-row .opt-toggle-note{
+    width:130px;
+    flex-shrink:0;
+    text-align:center;
+    font-size:11px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  .option-row .opt-remove{
+    flex-shrink:0;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    border:none;
+    background:transparent;
+    color:var(--ink-soft);
+    font-size:15px;
+    cursor:pointer;
+  }
+
+  .option-row .opt-remove:hover{
+    background:var(--wine-dim);
+    color:var(--wine);
+  }

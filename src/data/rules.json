@@ -94,5 +94,15 @@
         },
         "severity": "error",
         "message": "A properly paired read can't have an unmapped mate."
+    },
+    {
+        "id": 310,
+        "condition":{
+            "type": "option-value",
+            "selectedOption": 202,
+            "selectedValue": 255
+        },
+        "severity": "warning",
+        "message": "A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality."
     }
 ]

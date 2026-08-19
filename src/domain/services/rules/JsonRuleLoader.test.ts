@@ -13,7 +13,7 @@ describe("JsonRuleLoader", () => {
     it("loads all rule definitions", () => {
     const rules = loader.load();
 
-    expect(rules).toHaveLength(10);
+    expect(rules).toHaveLength(11);
     });
 
     it("resolves flag identifiers for a requires-flags condition", () => {
@@ -68,6 +68,17 @@ describe("JsonRuleLoader", () => {
         );
 
         expect(rule.message).toBe("A SAM flag can't be both included and excluded at the same time.");
+    });
+
+    it("resolves flag identifiers for a option-value condition", () => {
+        const rules = loader.load();
+        const rule = rules.find(rule => rule.id === 310)!;
+
+        expect(rule.condition.type).toBe(
+            RULE_CONDITION_TYPES.OPTION_VALUE
+        );
+
+        expect(rule.message).toBe("A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality.");
     });
 
     it("throws when a referenced SAM flag does not exist", () => {
