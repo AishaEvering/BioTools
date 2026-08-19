@@ -1,5 +1,13 @@
-export interface ViewOptionConstraints {
-    readonly type: "integer" | "enum" | "string";
-    readonly minimum?: number;
-    readonly allowableValues?: readonly string[];
-}
+export type ViewOptionConstraints =
+  | {
+      readonly type: "integer";
+      readonly minimum?: number;
+      readonly maximum?: number;
+    }
+  | {
+      readonly type: "enum";
+      readonly allowableValues: string[];
+    }
+  | {
+      readonly type: "string";
+    };

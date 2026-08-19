@@ -6,6 +6,7 @@ export interface ViewOption {
     readonly syntax: string;
     readonly description: string;
     readonly explanation: string;
+    readonly placeholder?: string;
     readonly requiresValue: boolean;
     readonly constraints?: ViewOptionConstraints;
 }

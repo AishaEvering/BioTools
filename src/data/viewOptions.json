@@ -21,10 +21,12 @@
         "syntax": "-q",
         "description": "Only include alignments with a minimum mapping quality.",
         "explanation": "Includes only alignments with a minimum mapping quality of {value}.",
+        "placeholder": "20",
         "requiresValue": true,
         "constraints": {
             "type": "integer",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 255
         }
     },
     {
@@ -36,7 +38,7 @@
         "requiresValue": true,
         "constraints": {
             "type": "enum",
-            "allowedValues": ["SAM", "BAM", "CRAM"]
+            "allowableValues": ["SAM", "BAM", "CRAM"]
         }
     },
     {
@@ -45,6 +47,7 @@
         "syntax": "-o",
         "description": "Write the output to the specified file.",
         "explanation": "Writes the output to the file {value}.",
+        "placeholder": "output.bam",
         "requiresValue": true,
         "constraints": {
             "type": "string"
@@ -56,6 +59,7 @@
         "syntax": "-T",
         "description": "Specify a reference FASTA file.",
         "explanation": "Uses {value} as the reference FASTA file.",
+        "placeholder": "reference.fa",
         "requiresValue": true,
         "constraints": {
             "type": "string"

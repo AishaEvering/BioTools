@@ -9,8 +9,13 @@ import type { FlagFilter } from "../../../domain/filtering/FlagFilter";
 import { createFlagFilter } from "../../../domain/services/filtering/CreateFlagFilter";
 import FlagGroups from "../../Flags/FlagGroups";
 import HiddenFlags from "../../Flags/HiddenFlags";
+import Options from "../../Options/Options";
+import { ViewOptionCatalog } from "../../../domain/services/viewOptions/ViewOptionCatalog";
+import type { ViewOption } from "../../../domain/options/ViewOption";
+import type { SelectedViewOption } from "../../../domain/options/SelectedViewOption";
 
 const samFlagCatalog = new SamFlagCatalog();
+const viewOptionCatalog = new ViewOptionCatalog();
 
 export default function BuilderPanel() {
   const [searchText, setSearchText] = useState("");
@@ -19,8 +24,12 @@ export default function BuilderPanel() {
   const [flagFilter, setFlagFilter] = useState<FlagFilter>(
     createFlagFilter([], []),
   );
+  const [selectedOptions, setSelectedOptions] = useState<SelectedViewOption[]>(
+    [],
+  );
 
   const flags = samFlagCatalog.getAll();
+  const viewOptions = viewOptionCatalog.getAll();
 
   const normalizedSearch = searchText.trim().toLowerCase();
 
@@ -117,6 +126,49 @@ export default function BuilderPanel() {
     });
   }
 
+  function handleAddOption(option: ViewOption) {
+    let value: string | number | undefined;
+
+    if (option.constraints?.type === "enum") {
+      value = option.constraints.allowableValues[0];
+    }
+
+    setSelectedOptions((current) => [
+      ...current,
+      {
+        option,
+        value,
+      },
+    ]);
+  }
+
+  function handleRemoveOption(option: ViewOption) {
+    setSelectedOptions((current) =>
+      current.filter((selected) => selected.option.id !== option.id),
+    );
+  }
+
+  function handleOptionValueChange(option: ViewOption, value: string | number) {
+    setSelectedOptions((current) =>
+      current.map((selected) =>
+        selected.option.id === option.id
+          ? {
+              ...selected,
+              value,
+            }
+          : selected,
+      ),
+    );
+  }
+
+  //   const activeOptions = selectedOptions.filter((selected) => {
+  //     if (!selected.option.requiresValue) {
+  //       return true;
+  //     }
+
+  //     return selected.value !== undefined && selected.value !== "";
+  //   });
+
   return (
     <div className="builder">
       <FlagSearch value={searchText} onChange={setSearchText} />
@@ -148,6 +200,14 @@ export default function BuilderPanel() {
         getState={getFlagState}
         onCycle={handleCycleFlag}
         onHide={handleHideFlag}
+      />
+
+      <Options
+        availableOptions={viewOptions}
+        selectedOptions={selectedOptions}
+        onAdd={handleAddOption}
+        onRemove={handleRemoveOption}
+        onValueChange={handleOptionValueChange}
       />
     </div>
   );

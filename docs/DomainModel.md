@@ -151,7 +151,7 @@ Constraints: integer
   "requiresValue": true,
   "constraints": {
     "type": "enum",
-    "allowedValues": ["SAM", "BAM", "CRAM"]
+    "allowableValues": ["SAM", "BAM", "CRAM"]
   }
 }
 ```

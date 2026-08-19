@@ -5,7 +5,8 @@ export const RULE_CONDITION_TYPES = {
     REQUIRES_FLAGS: "requires-flags",
     CONTRADICTION: "contradiction",
     REQUIRES_OPTION: "requires-option",
-    INCLUDE_EXCLUDE_OVERLAP: "include-exclude-overlap"
+    INCLUDE_EXCLUDE_OVERLAP: "include-exclude-overlap",
+    OPTION_VALUE: "option-value"
 } as const;
 
 export type RuleConditionType = 
@@ -55,12 +56,27 @@ export interface RequiresOptionConditionDefinition {
     readonly requiredOption: number;
 }
 
+export interface OptionValueCondition {
+    readonly type: typeof RULE_CONDITION_TYPES.OPTION_VALUE;
+    readonly selectedOption: ViewOption;
+    readonly selectedValue?: string | number;
+}
+
+export interface OptionValueConditionDefinition {
+    readonly type: typeof RULE_CONDITION_TYPES.OPTION_VALUE;
+  readonly selectedOption: number;
+    readonly selectedValue?: string | number;
+}
+
+
 export type RuleConditionDefinition = RequiresFlagsConditionDefinition 
 | ContradictionConditionDefinition 
 | RequiresOptionConditionDefinition
-| IncludeExcludeOverlapConditionDefinition;
+| IncludeExcludeOverlapConditionDefinition
+| OptionValueConditionDefinition;
 
 export type RuleCondition = RequiresFlagsCondition 
 | ContradictionCondition 
 | RequiresOptionCondition
-| IncludeExcludeOverlapCondition;
+| IncludeExcludeOverlapCondition
+| OptionValueCondition;

@@ -1,0 +1,97 @@
+  
+  .options{
+    margin-top:28px;
+    padding-top:20px;
+    border-top:1px solid var(--line-soft);
+  }
+  .options h2{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--ink-soft);
+    font-weight:600;
+    margin:0 0 14px;
+  }
+
+  .add-option-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    width:100%;
+    border:1.5px dashed #b9c8c2;
+    border-radius:9px;
+    padding:9px 0;
+    cursor:pointer;
+    color:var(--ink-soft);
+    font-size:12.5px;
+    font-weight:500;
+    background:transparent;
+  }
+
+  .add-option-btn:hover{
+    border-color:var(--teal);
+    color:var(--teal);
+    background:var(--teal-dim);
+  }
+
+  .add-option-form{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    border:1.5px solid var(--teal);
+    background:var(--teal-dim);
+    border-radius:9px;
+    padding:12px;
+  }
+  .add-option-form select{
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:8px 9px;
+    font-family:var(--sans);
+    font-size:13px;
+    outline:none;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .add-option-form select:focus{border-color:var(--teal);}
+
+  .add-option-form .form-actions{
+    display:flex;
+    gap:8px;
+    margin-top:2px;
+  }
+
+  .add-option-form .form-actions button{
+    flex:1;
+    border:none;
+    border-radius:6px;
+    padding:7px 0;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:var(--sans);
+  }
+
+  .add-option-form .btn-add{
+    background:var(--teal);
+    color:#fff;
+  }
+
+  .add-option-form .btn-add:hover{background:var(--teal-deep);}
+
+  .add-option-form .btn-cancel{
+    background:transparent;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+   }
+
+  .add-option-form .form-note{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  
+  @media (max-width: 880px){
+    .output-panel{position:static;}
+  }

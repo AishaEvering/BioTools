@@ -12,7 +12,7 @@ describe("RuleCatalog", () => {
     describe("getAll", () => {
         it("returns all rules", () => {
             const rules = catalog.getAll();
-            expect(rules).toHaveLength(10);
+            expect(rules).toHaveLength(11);
         });
 
         it("contains unique rule IDs", () => {

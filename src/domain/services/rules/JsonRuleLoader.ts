@@ -58,6 +58,13 @@ private readonly viewOptionCatalog: ViewOptionCatalog;
 					type: RULE_CONDITION_TYPES.INCLUDE_EXCLUDE_OVERLAP,
 				};
 
+            case RULE_CONDITION_TYPES.OPTION_VALUE:
+                return{
+                    type: RULE_CONDITION_TYPES.OPTION_VALUE,
+                    selectedOption: this.getViewOption(ruleCondition.selectedOption),
+                    selectedValue: ruleCondition.selectedValue,
+                };
+
 			default:
 				throw new Error(`Unknown rule condition: ${ruleCondition}`);
 		}
