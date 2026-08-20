@@ -1,8 +1,9 @@
 import type { SamViewCommand } from "../../command/SamViewCommand";
 import type { Rule } from "../../rules/Rule";
 import { RULE_CONDITION_TYPES, type RuleCondition } from "../../rules/RuleCondition";
+import { DEFAULT_INPUT_FILE } from "../command/SamViewCommandRenderer";
 import type { RuleCatalog } from "./RuleCatalog";
-
+import * as path from 'path';
  export class RuleEngine {
   private readonly ruleCatalog: RuleCatalog;
 
@@ -78,6 +79,14 @@ import type { RuleCatalog } from "./RuleCatalog";
                     selected => selected.option.id === condition.selectedOption.id &&
                     selected.value === condition.selectedValue
                 );
+            }
+            case RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION: {
+                if(!command.inputFile || command.inputFile === DEFAULT_INPUT_FILE)
+                    return false;
+                
+                const extension = path.extname(command.inputFile).toLowerCase();
+
+                return !condition.allowedExtensions.includes(extension) 
             }
             default:
                 throw new Error(`Unknown rule condition type: ${(condition as RuleCondition).type}`);

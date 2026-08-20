@@ -1,0 +1,56 @@
+.file-field{
+    margin:0 20px 16px;
+}
+
+.file-field label{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#8fb3a6;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.file-field .file-input-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#0a1712;
+    border:1px solid var(--terminal-line);
+    border-radius:7px;
+    padding:8px 12px;
+}
+
+  .file-field .file-input-row svg{
+    width:14px;
+    height:14px;
+    stroke:#5f8377;
+    flex-shrink:0;
+}
+
+  
+.file-field input{
+    flex:1;
+    min-width:0;
+    background:transparent;
+    border:none;
+    outline:none;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--terminal-accent);
+}
+
+.file-field input::placeholder{color:#3f5f54;}
+.file-field.has-error .file-input-row{border-color:var(--error);}
+
+.file-field .file-msg{
+    font-size:11px;
+    margin-top:6px;
+    padding-left:2px; 
+}
+
+  
+.file-field.has-error .file-msg{color:#f2a89c;}
+  
+.file-field.has-warn .file-msg{color:#e6d3a3;}

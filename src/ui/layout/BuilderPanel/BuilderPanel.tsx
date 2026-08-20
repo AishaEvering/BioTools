@@ -148,13 +148,18 @@ export default function BuilderPanel() {
     );
   }
 
-  function handleOptionValueChange(option: ViewOption, value: string | number) {
+  function handleOptionValueChange(
+    option: ViewOption,
+    value: string | number | undefined,
+  ) {
+    const normalizedValue = Number.isNaN(value) ? undefined : value;
+
     setSelectedOptions((current) =>
       current.map((selected) =>
         selected.option.id === option.id
           ? {
               ...selected,
-              value,
+              value: normalizedValue,
             }
           : selected,
       ),

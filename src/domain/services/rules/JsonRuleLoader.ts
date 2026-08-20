@@ -64,6 +64,12 @@ private readonly viewOptionCatalog: ViewOptionCatalog;
                     selectedOption: this.getViewOption(ruleCondition.selectedOption),
                     selectedValue: ruleCondition.selectedValue,
                 };
+            
+            case RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION:
+                return{
+                    type: RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION,
+                    allowedExtensions: ruleCondition.allowedExtensions,
+                };
 
 			default:
 				throw new Error(`Unknown rule condition: ${ruleCondition}`);
