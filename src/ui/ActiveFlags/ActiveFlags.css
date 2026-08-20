@@ -1,0 +1,13 @@
+  .active-chips{
+    display:flex;flex-wrap:wrap;gap:6px;
+    padding:0 20px 16px;
+    border-bottom:1px solid var(--terminal-line);
+  }
+  .active-chips:empty{display:none;}
+  .mini-chip{
+    font-family:var(--mono);font-size:11px;
+    padding:3px 9px;border-radius:999px;
+    display:flex;align-items:center;gap:5px;
+  }
+  .mini-chip.include{background:rgba(111,217,184,.14);color:var(--terminal-accent);}
+  .mini-chip.exclude{background:rgba(214,112,124,.16);color:#e59aa2;}
