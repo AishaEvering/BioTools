@@ -4,6 +4,7 @@ import InputFile from "../../InputFile/InputFile";
 import { SamFlagCatalog } from "../../../domain/services/samFlags/SamFlagCatalog";
 import type { FlagFilter } from "../../../domain/filtering/FlagFilter";
 import BitMaskBar from "../../BitMaskBar/BitMaskBar";
+import ActiveFlags from "../../ActiveFlags/ActiveFlags";
 
 interface OutputPanelProps {
   flagFilter: FlagFilter;
@@ -22,6 +23,7 @@ export default function OutputPanel({ flagFilter }: OutputPanelProps) {
       </div>
       <BitMaskBar flags={flags} flagFilter={flagFilter} />
       <InputFile value={inputFile} onChange={setInputFile} />
+      <ActiveFlags flags={flags} flagFilter={flagFilter} />
     </div>
   );
 }
