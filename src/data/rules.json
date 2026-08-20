@@ -104,5 +104,14 @@
         },
         "severity": "warning",
         "message": "A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality."
+    },
+    {
+        "id": 311,
+        "condition": {
+            "type": "input-file-extension",
+            "allowedExtensions": [".bam", ".sam", ".cram"]
+        },
+        "severity": "warning",
+        "message": "Input file does not have a typical SAM/BAM/CRAM extension."
     }
 ]

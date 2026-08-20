@@ -416,6 +416,70 @@ describe("Rules", () => {
         });
     });
 
+
+    describe(RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION, () => {
+        it("input file extension matches the expected bam ext", () => {
+            const command = createCommand({
+               inputFile: "input.bam"
+            });
+
+            const rules = engine.evaluate(command);
+
+            expect(rules).toHaveLength(0);
+            expect(rules.some(rule => rule.id === 311)).toBe(false);
+        });
+        it("input file extension matches the expected sam ext", () => {
+            const command = createCommand({
+               inputFile: "input.sam"
+            });
+
+            const rules = engine.evaluate(command);
+
+            expect(rules).toHaveLength(0);
+            expect(rules.some(rule => rule.id === 311)).toBe(false);
+        });
+        it("input file extension matches the expected cram ext", () => {
+            const command = createCommand({
+               inputFile: "input.cram"
+            });
+
+            const rules = engine.evaluate(command);
+
+            expect(rules).toHaveLength(0);
+            expect(rules.some(rule => rule.id === 311)).toBe(false);
+        });
+        it("input file extension does not match an expected ext", () => {
+            const command = createCommand({
+               inputFile: "input.txt"
+            });
+
+            const rules = engine.evaluate(command);
+
+            expect(rules).toHaveLength(1);
+            expect(rules.some(rule => rule.id === 311)).toBe(true);
+        });
+        it("input file extension does not have an ext", () => {
+            const command = createCommand({
+               inputFile: "input"
+            });
+
+            const rules = engine.evaluate(command);
+
+            expect(rules).toHaveLength(1);
+            expect(rules.some(rule => rule.id === 311)).toBe(true);
+        });
+        it("input file is not populated", () => {
+            const command = createCommand({
+               inputFile: ""
+            });
+
+            const rules = engine.evaluate(command);
+
+            expect(rules).toHaveLength(0);
+            expect(rules.some(rule => rule.id === 311)).toBe(false);
+        });
+    });
+
     it("has matches for multiple rules", () => {
         const properPairFlag = getFlag(PROPER_PAIR_FLAG)
         const mateUnmappedFlag = getFlag(MATE_UNMAPPED)

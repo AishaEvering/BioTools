@@ -1,6 +1,8 @@
 import type { SamViewCommand } from "../../command/SamViewCommand";
 import type { SelectedViewOption } from "../../options/SelectedViewOption";
 
+export const DEFAULT_INPUT_FILE = "<input.bam>";
+
 export function renderSamViewCommand(command: SamViewCommand): string {
 
     const includedFlags = command.flagFilter.calculatedIncludeValue !== 0 ? 
@@ -11,7 +13,7 @@ export function renderSamViewCommand(command: SamViewCommand): string {
 
     const options = renderSelectedOptions(command.options);
     
-    const inputFileName = formatValue(command.inputFile) ?? "<input.bam>";
+    const inputFileName = formatValue(command.inputFile) ?? DEFAULT_INPUT_FILE;
 
     return [
         "samtools view",

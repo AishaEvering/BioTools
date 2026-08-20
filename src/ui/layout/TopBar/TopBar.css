@@ -6,6 +6,9 @@
     border-bottom:1px solid var(--line);
     background:var(--paper);
   }
+  .brand-block{
+    display:flex;flex-direction:column;gap:1px;
+  }
   .brand{
     display:flex;
     align-items:baseline;
@@ -43,6 +46,72 @@
     font-weight:600;
   }
 
+  .project-motto{
+    position:relative;
+    display:inline-block;
+    font-size:11px;
+    font-style:italic;
+    letter-spacing:.01em;
+    opacity:0.75;
+    cursor:default;
+    color:#93a19b;
+    padding-left:38px;
+    width:fit-content;
+  }
+
+.project-motto-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+
+  width: 280px;
+  padding: 14px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+
+  background: rgba(10, 25, 22, 0.96);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+
+  font-size: 0.85rem;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 160ms ease;
+
+  z-index: 20;
+}
+
+.project-motto:hover .project-motto-popover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.project-motto-popover::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 18px;
+
+  width: 10px;
+  height: 10px;
+
+  background: inherit;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+  transform: rotate(45deg);
+}
+
+
   .topbar-actions{
     display:flex;
     gap:14px;
@@ -66,4 +135,9 @@
 
 @media (max-width: 880px){
     .topbar{padding:14px 18px;}
+}
+
+@media (max-width: 560px){
+    .crumbs{display:none;}
+    .tagline{padding-left:0;}
 }

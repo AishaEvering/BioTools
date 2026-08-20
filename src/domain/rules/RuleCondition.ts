@@ -6,7 +6,8 @@ export const RULE_CONDITION_TYPES = {
     CONTRADICTION: "contradiction",
     REQUIRES_OPTION: "requires-option",
     INCLUDE_EXCLUDE_OVERLAP: "include-exclude-overlap",
-    OPTION_VALUE: "option-value"
+    OPTION_VALUE: "option-value",
+    INPUT_FILE_EXTENSION: "input-file-extension",
 } as const;
 
 export type RuleConditionType = 
@@ -67,16 +68,27 @@ export interface OptionValueConditionDefinition {
   readonly selectedOption: number;
     readonly selectedValue?: string | number;
 }
+export interface InputFileExtensionCondition {
+    readonly type: typeof RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION;
+    readonly allowedExtensions: string[];
+}
+
+export interface InputFileExtensionConditionDefinition {
+    readonly type: typeof RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION;
+    readonly allowedExtensions: string[];
+}
 
 
 export type RuleConditionDefinition = RequiresFlagsConditionDefinition 
 | ContradictionConditionDefinition 
 | RequiresOptionConditionDefinition
 | IncludeExcludeOverlapConditionDefinition
-| OptionValueConditionDefinition;
+| OptionValueConditionDefinition
+| InputFileExtensionConditionDefinition;
 
 export type RuleCondition = RequiresFlagsCondition 
 | ContradictionCondition 
 | RequiresOptionCondition
 | IncludeExcludeOverlapCondition
-| OptionValueCondition;
+| OptionValueCondition
+| InputFileExtensionCondition;

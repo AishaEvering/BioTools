@@ -13,7 +13,7 @@ describe("JsonRuleLoader", () => {
     it("loads all rule definitions", () => {
     const rules = loader.load();
 
-    expect(rules).toHaveLength(11);
+    expect(rules).toHaveLength(12);
     });
 
     it("resolves flag identifiers for a requires-flags condition", () => {
@@ -79,6 +79,17 @@ describe("JsonRuleLoader", () => {
         );
 
         expect(rule.message).toBe("A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality.");
+    });
+
+    it("resolves unexpected input file extension", () => {
+        const rules = loader.load();
+        const rule = rules.find(rule => rule.id === 311)!;
+
+        expect(rule.condition.type).toBe(
+            RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION
+        );
+
+        expect(rule.message).toBe("Input file does not have a typical SAM/BAM/CRAM extension.");
     });
 
     it("throws when a referenced SAM flag does not exist", () => {
