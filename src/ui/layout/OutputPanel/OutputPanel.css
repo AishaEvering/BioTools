@@ -7,6 +7,13 @@
     overflow:hidden;
     border:1px solid var(--teal-deep);
   }
+  .op-head{
+    padding:16px 20px 0;
+  }
+  .op-head h2{
+    font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+    color:#8fb3a6;font-weight:600;margin:0 0 12px;
+  }
 
  @media (max-width: 880px){
     .output-panel{position:static;}

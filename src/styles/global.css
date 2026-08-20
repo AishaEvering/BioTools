@@ -16,7 +16,7 @@ a{color:inherit;}
     margin:0 auto;
     padding:28px;
     display:grid;
-    grid-template-columns: 1fr 420px;
+    grid-template-columns: 1fr 520px;
     gap:24px;
     align-items:start;
 }
