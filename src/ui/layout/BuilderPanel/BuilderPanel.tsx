@@ -17,13 +17,18 @@ import type { SelectedViewOption } from "../../../domain/options/SelectedViewOpt
 const samFlagCatalog = new SamFlagCatalog();
 const viewOptionCatalog = new ViewOptionCatalog();
 
-export default function BuilderPanel() {
+interface BuilderPanelProps {
+  flagFilter: FlagFilter;
+  setFlagFilter: React.Dispatch<React.SetStateAction<FlagFilter>>;
+}
+
+export default function BuilderPanel({
+  flagFilter,
+  setFlagFilter,
+}: BuilderPanelProps) {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [hiddenFlagIds, setHiddenFlagIds] = useState<Set<number>>(new Set());
-  const [flagFilter, setFlagFilter] = useState<FlagFilter>(
-    createFlagFilter([], []),
-  );
   const [selectedOptions, setSelectedOptions] = useState<SelectedViewOption[]>(
     [],
   );
