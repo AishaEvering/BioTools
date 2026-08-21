@@ -20,18 +20,23 @@ const viewOptionCatalog = new ViewOptionCatalog();
 interface BuilderPanelProps {
   flagFilter: FlagFilter;
   setFlagFilter: React.Dispatch<React.SetStateAction<FlagFilter>>;
+  selectedOptions: SelectedViewOption[];
+  setSelectedOptions: React.Dispatch<
+    React.SetStateAction<SelectedViewOption[]>
+  >;
+  setHighlightedKeys: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function BuilderPanel({
   flagFilter,
   setFlagFilter,
+  selectedOptions,
+  setSelectedOptions,
+  setHighlightedKeys,
 }: BuilderPanelProps) {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [hiddenFlagIds, setHiddenFlagIds] = useState<Set<number>>(new Set());
-  const [selectedOptions, setSelectedOptions] = useState<SelectedViewOption[]>(
-    [],
-  );
 
   const flags = samFlagCatalog.getAll();
   const viewOptions = viewOptionCatalog.getAll();
@@ -85,6 +90,7 @@ export default function BuilderPanel({
           flagFilter?.excludedFlags,
         ),
       );
+      setHighlightedKeys(["f"]);
     }
 
     if (currentState === "include") {
@@ -94,6 +100,7 @@ export default function BuilderPanel({
           [...flagFilter.excludedFlags, flag],
         ),
       );
+      setHighlightedKeys(["F"]);
     }
 
     if (currentState === "exclude") {
@@ -103,6 +110,7 @@ export default function BuilderPanel({
           flagFilter.excludedFlags.filter((f) => f.id !== flag.id),
         ),
       );
+      setHighlightedKeys(["F"]);
     }
   }
 
@@ -145,6 +153,13 @@ export default function BuilderPanel({
         value,
       },
     ]);
+
+    if (option.requiresValue) {
+      if (value !== undefined || value !== "")
+        setHighlightedKeys([`opt-${option.id}`]);
+    } else {
+      setHighlightedKeys([`opt-${option.id}`]);
+    }
   }
 
   function handleRemoveOption(option: ViewOption) {
@@ -169,15 +184,8 @@ export default function BuilderPanel({
           : selected,
       ),
     );
+    setHighlightedKeys([`opt-${option.id}`]);
   }
-
-  //   const activeOptions = selectedOptions.filter((selected) => {
-  //     if (!selected.option.requiresValue) {
-  //       return true;
-  //     }
-
-  //     return selected.value !== undefined && selected.value !== "";
-  //   });
 
   return (
     <div className="builder">

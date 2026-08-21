@@ -1,0 +1,106 @@
+.command-block {
+  margin: 16px 20px;
+  background: #0a1712;
+  border: 1px solid var(--terminal-line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+}
+
+.command-block .prompt {
+  color: #5f8377;
+  margin-right: 8px;
+}
+
+/* -f include flags */
+.command-block .command-include {
+  color: var(--terminal-accent);
+}
+
+/* -F exclude flags */
+.command-block .command-exclude {
+  color: #e59aa2;
+}
+
+/* View options: -q, -h, -O, -o, etc. */
+.command-block .command-option {
+  color: #e0c37a;
+}
+
+/* Input file */
+.command-block .command-file {
+  color: #f2f7f4;
+  font-weight: 600;
+}
+
+/* Anything that can briefly highlight when changed */
+.command-block [data-key] {
+  padding: 1px 3px;
+  margin: 0 -3px;
+  border-radius: 4px;
+}
+
+.command-name,
+.command-include,
+.command-exclude {
+  white-space: nowrap;
+}
+
+.command-option{
+  display: inline-flex;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.command-option-syntax{
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.command-value{
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.command-file{
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@keyframes cmdPulse {
+  0% {
+    background-color: rgba(255, 255, 255, .4);
+  }
+
+  100% {
+    background-color: transparent;
+  }
+}
+
+.command-block [data-key].pulse {
+  animation: cmdPulse .9s ease;
+}
+
+.copy-btn{
+    margin:0 20px 20px;
+    width:calc(100% - 40px);
+    background:var(--terminal-accent);
+    color:#0a1712;
+    border:none;
+    padding:10px;
+    border-radius:7px;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+}
+
+.copy-btn:hover{background:#8ce7c8;}

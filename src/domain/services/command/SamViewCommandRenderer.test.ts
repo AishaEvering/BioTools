@@ -145,7 +145,7 @@ describe("renderSamViewCommand", () => {
     });
 
     expect(renderSamViewCommand(command))
-      .toBe('samtools view "sample.bam"');
+      .toBe('samtools view sample.bam');
   });
 
   it("renders the complete command", () => {
@@ -181,10 +181,10 @@ describe("renderSamViewCommand", () => {
     });
 
     expect(renderSamViewCommand(command))
-      .toBe('samtools view -h -q 20 -f 2 -F 256 "sample.bam"');
+      .toBe('samtools view -f 2 -F 256 -h -q 20 sample.bam');
   });
 
-  it("renders undefined when a required option value is missing", () => {
+  it("do not render option if value is undefined when a required option value", () => {
     const minimumMappingQualityOption = catalog.getViewOptionById(202);
 
     if (!minimumMappingQualityOption) {
@@ -200,7 +200,7 @@ describe("renderSamViewCommand", () => {
     });
 
     expect(renderSamViewCommand(command))
-      .toBe("samtools view -q undefined <input.bam>");
+      .toBe("samtools view <input.bam>");
   });
 
   it("wraps a string input filename in quotes", () => {
@@ -209,7 +209,7 @@ describe("renderSamViewCommand", () => {
     });
 
     expect(renderSamViewCommand(command))
-    .toBe('samtools view "sample.bam"');
+    .toBe('samtools view sample.bam');
   });
 
   it("preserves spaces inside a quoted input filename", () => {
@@ -232,7 +232,7 @@ describe("renderSamViewCommand", () => {
     });
 
     expect(renderSamViewCommand(command))
-        .toBe('samtools view -o "filtered.bam" <input.bam>');
+        .toBe('samtools view -o filtered.bam <input.bam>');
   });
 
  it("does not wrap numeric option values in quotes", () => {
@@ -260,6 +260,6 @@ describe("renderSamViewCommand", () => {
         });
 
         expect(renderSamViewCommand(command))
-            .toBe('samtools view -O "BAM" <input.bam>');
+            .toBe('samtools view -O BAM <input.bam>');
  });
 });
