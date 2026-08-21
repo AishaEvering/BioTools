@@ -21,6 +21,7 @@ a{color:inherit;}
     align-items:start;
 }
 
+
 @media (max-width: 880px){
     .workspace{grid-template-columns:1fr;padding:16px;}
 }

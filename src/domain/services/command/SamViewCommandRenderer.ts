@@ -17,26 +17,37 @@ export function renderSamViewCommand(command: SamViewCommand): string {
 
     return [
         "samtools view",
-        options,
         includedFlags,
         excludedFlags,
+        options,
         inputFileName
     ].filter(Boolean).join(" ");
 }
 
 function renderSelectedOptions(options: SelectedViewOption[]): string {
-    return options.map(({option, value}) => {
-        return option.requiresValue ? `${option.syntax} ${formatValue(value)}` : option.syntax;
-    }).join(" ");
+  return options
+    .filter(({ option, value }) => {
+      if (!option.requiresValue) {
+        return true;
+      }
+
+      return value !== undefined && value !== "";
+    })
+    .map(({ option, value }) => {
+      return option.requiresValue
+        ? `${option.syntax} ${formatValue(value!)}`
+        : option.syntax;
+    })
+    .join(" ");
 }
 
-function formatValue(value: string | number | undefined): string | number | undefined {
-    if (value === undefined) {
+export function formatValue(value: string | number | undefined): string | number | undefined {
+    if (value === undefined || value === "") {
         return undefined;
     }
 
     if (typeof value === "string") {
-        return `"${value}"`;
+        return value.includes(" ") ? `"${value}"` : value;
     }
     return value;
 }
