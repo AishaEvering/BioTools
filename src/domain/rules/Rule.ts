@@ -7,4 +7,10 @@ export interface Rule {
     readonly message: string;
 }
 
-export type RuleSeverity = "info" | "warning" | "error";
+export const RULE_SEVERITY= {
+    INFO: "info",
+    WARNING: "warning",
+    ERROR: "error"
+} as const;
+
+export type RuleSeverity = typeof RULE_SEVERITY[keyof typeof RULE_SEVERITY];

@@ -21,6 +21,7 @@ export default function InputFile({ value, onChange }: InputFileProps) {
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={DEFAULT_INPUT_FILE}
+          title={value}
         />
       </div>
       <div className="file-msg" id="fileMsg"></div>

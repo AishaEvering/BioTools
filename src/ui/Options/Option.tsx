@@ -60,6 +60,7 @@ export default function Option({
         type="text"
         value={value ?? ""}
         placeholder={option.placeholder ?? ""}
+        title={value ? String(value) : ""}
         onChange={(event) => onValueChange(option, event.target.value)}
       />
     );

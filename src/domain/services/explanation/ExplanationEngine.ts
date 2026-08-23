@@ -1,6 +1,7 @@
 import type { SamViewCommand } from "../../command/SamViewCommand";
-import { EXPLANATION_TYPE, type ExplanationMessage } from "../../explanation/ExplanationMessage";
+import { EXPLANATION_GROUP, EXPLANATION_TYPE, type ExplanationMessage } from "../../explanation/ExplanationMessage";
 import type { Rule } from "../../rules/Rule";
+import { isSelectedOptionRenderable } from "../../options/SelectedViewOption";
 
 export class ExplanationEngine{
     explain(command: SamViewCommand, matchedRules: readonly Rule[]) : readonly ExplanationMessage[]{
@@ -9,6 +10,7 @@ export class ExplanationEngine{
             flag => ({
                 type: EXPLANATION_TYPE.COMMAND,
                 text: flag.inclusionPhrase,
+                group: EXPLANATION_GROUP.INCLUDE,
             })
         );
         // excluded flag messages
@@ -16,13 +18,16 @@ export class ExplanationEngine{
             flag => ({
                 type: EXPLANATION_TYPE.COMMAND,
                 text: flag.exclusionPhrase,
+                group: EXPLANATION_GROUP.EXCLUDE,
             })
         );
         // option messages
-        const optionMessages = command.options.map(
-            selectedOption => ({
+        const optionMessages = command.options
+        .filter(isSelectedOptionRenderable)
+        .map(selectedOption => ({
                 type: EXPLANATION_TYPE.COMMAND,
-                text: selectedOption.option.explanation.replace("{value}", String(selectedOption.value))
+                text: selectedOption.option.explanation.replace("{value}", String(selectedOption.value)),
+                group: EXPLANATION_GROUP.OPTION,
             })
         );
         // rule messages
@@ -30,6 +35,7 @@ export class ExplanationEngine{
             rule => ({
                 type: EXPLANATION_TYPE.RULE,
                 text: rule.message,
+                severity: rule.severity,
             })
         );
 

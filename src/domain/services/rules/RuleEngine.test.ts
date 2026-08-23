@@ -6,6 +6,7 @@ import type { SamViewCommand } from "../../command/SamViewCommand";
 import { RuleEngine } from "./RuleEngine";
 import { RuleCatalog } from "./RuleCatalog";
 import type { SelectedViewOption } from "../../options/SelectedViewOption";
+import { VIEW_OPTION_CATEGORY } from "../../options/ViewOption";
 
 
 
@@ -39,6 +40,28 @@ describe("Rules", () => {
         const FIRST_IN_PAIR = 106;
         const SECOND_IN_PAIR = 107;
 
+        const OUTPUT_FORMAT = 203;
+        const REFERENCE_FILE = 205;
+        const INCLUDE_HEADER = 200;
+        const MIN_MAPPING_QUALITY = 202;
+
+        function createSelectedViewOption(
+            overrides: Partial<SelectedViewOption> = {},
+        ): SelectedViewOption {
+                return {
+                    option: {
+                        id: 0,
+                        name: "",
+                        syntax: "",
+                        description: "",
+                        explanation: "",
+                        requiresValue: false,
+                        category: VIEW_OPTION_CATEGORY.OUTPUT
+                    },
+                    ...overrides,
+                };
+        }
+
     function getFlag(id: number){
         const flag = samFlagCatalog.getFlagById(id);
 
@@ -65,8 +88,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(1);
+            expect(rules).toHaveLength(2);
             expect(rules.some(rule => rule.id === 300)).toBe(true);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
 
         it("does not match when the required flag is also included", () => {
@@ -84,8 +108,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
             expect(rules.some(rule => rule.id === 300)).toBe(false);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
 
         it("does not match when the triggering flag is excluded", () => {
@@ -102,8 +127,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
             expect(rules.some(rule => rule.id === 300)).toBe(false);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
 
         it("does not match when the triggering flag is not selected", () => {
@@ -118,8 +144,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
             expect(rules.some(rule => rule.id === 300)).toBe(false);
+            expect(rules.some(rule => rule.id === 312)).toBe(true);
         });
 
         it("returns multiple matching rules of the same type", () => {
@@ -143,6 +170,7 @@ describe("Rules", () => {
 
             expect(requiredFlagRules).toHaveLength(2);
             expect(requiredFlagRules.map(rule => rule.id)).toEqual([300, 301]);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
     });
 
@@ -164,8 +192,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(1);
+            expect(rules).toHaveLength(2);
             expect(rules.some(rule => rule.id === 305)).toBe(true);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
 
         it("does not match when all contradicting flags are not included", () => {
@@ -184,8 +213,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
             expect(rules.some(rule => rule.id === 305)).toBe(false);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
 
         it("does not match when one contradicting flag is excluded", () => {
@@ -205,6 +235,7 @@ describe("Rules", () => {
             const rules = engine.evaluate(command);
 
             expect(rules.some(rule => rule.id === 305)).toBe(false);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
     });
 
@@ -223,8 +254,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(1);
+            expect(rules).toHaveLength(2);
             expect(rules.some(rule => rule.id === 307)).toBe(true);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
 
         it("matches when multiple flags are included and excluded", () => {
@@ -242,8 +274,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(1);
+            expect(rules).toHaveLength(2);
             expect(rules.some(rule => rule.id === 307)).toBe(true);
+            expect(rules.some(rule => rule.id === 313)).toBe(true);
         });
 
         it("does not match when included and excluded flags do not overlap", () => {
@@ -266,27 +299,6 @@ describe("Rules", () => {
     });
     
     describe("Option_Rules", () => {
-        const OUTPUT_FORMAT = 203;
-        const REFERENCE_FILE = 205;
-        const INCLUDE_HEADER = 200;
-        const MIN_MAPPING_QUALITY = 202;
-
-        function createSelectedViewOption(
-            overrides: Partial<SelectedViewOption> = {},
-        ): SelectedViewOption {
-                return {
-                    option: {
-                        id: 0,
-                        name: "",
-                        syntax: "",
-                        description: "",
-                        explanation: "",
-                        requiresValue: false
-                    },
-                    ...overrides,
-                };
-        }
-
         function getSelectedViewOption(id: number, value?: string | number):SelectedViewOption{
             const option = viewOptionCatalog.getViewOptionById(id);
                 
@@ -310,8 +322,9 @@ describe("Rules", () => {
 
                 const rules = engine.evaluate(command);
 
-                expect(rules).toHaveLength(0);
+                expect(rules).toHaveLength(1);
                 expect(rules.some(rule => rule.id === 310)).toBe(false);
+                expect(rules.some(rule => rule.id === 313)).toBe(true);
             });
 
             it("matches when option and value matches", () => {
@@ -324,8 +337,9 @@ describe("Rules", () => {
 
                 const rules = engine.evaluate(command);
 
-                expect(rules).toHaveLength(1);
+                expect(rules).toHaveLength(2);
                 expect(rules.some(rule => rule.id === 310)).toBe(true);
+                expect(rules.some(rule => rule.id === 313)).toBe(true);
             });
 
             it("does not match when option matches but value is undefined", () => {
@@ -337,8 +351,9 @@ describe("Rules", () => {
 
                 const rules = engine.evaluate(command);
 
-                expect(rules).toHaveLength(0);
+                expect(rules).toHaveLength(1);
                 expect(rules.some(rule => rule.id === 310)).toBe(false);
+                expect(rules.some(rule => rule.id === 312)).toBe(true);
             });
         });
 
@@ -354,8 +369,9 @@ describe("Rules", () => {
 
                 const rules = engine.evaluate(command);
 
-                expect(rules).toHaveLength(0);
+                expect(rules).toHaveLength(1);
                 expect(rules.some(rule => rule.id === 306)).toBe(false);
+                expect(rules.some(rule => rule.id === 314)).toBe(true);
             });
 
             it("matches when option and value matches and does not have required option", () => {
@@ -368,8 +384,9 @@ describe("Rules", () => {
 
                 const rules = engine.evaluate(command);
 
-                expect(rules).toHaveLength(1);
+                expect(rules).toHaveLength(2);
                 expect(rules.some(rule => rule.id === 306)).toBe(true);
+                expect(rules.some(rule => rule.id === 314)).toBe(true);
             });
 
             it("does not match when option matches but value does not match", () => {
@@ -382,8 +399,9 @@ describe("Rules", () => {
 
                 const rules = engine.evaluate(command);
 
-                expect(rules).toHaveLength(0);
+                expect(rules).toHaveLength(1);
                 expect(rules.some(rule => rule.id === 306)).toBe(false);
+                expect(rules.some(rule => rule.id === 314)).toBe(true);
             });
 
             it("does not match when option matches but value does not match with required option", () => {
@@ -397,8 +415,9 @@ describe("Rules", () => {
 
                 const rules = engine.evaluate(command);
 
-                expect(rules).toHaveLength(0);
+                expect(rules).toHaveLength(1);
                 expect(rules.some(rule => rule.id === 306)).toBe(false);
+                expect(rules.some(rule => rule.id === 314)).toBe(true);
             });
 
             it("does not match when option does not match", () => {
@@ -414,8 +433,158 @@ describe("Rules", () => {
                 expect(rules.some(rule => rule.id === 306)).toBe(false);
             });
         });
-    });
 
+        describe(RULE_CONDITION_TYPES.EMPTY_COMMAND, () => {
+            it("does not match when an option is selected", () => {
+                const includeHeaderOption = getSelectedViewOption(INCLUDE_HEADER)
+                const command = createCommand({
+                    options: [includeHeaderOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(0);
+                expect(rules.some(rule => rule.id === 312)).toBe(false);
+            });
+
+            it("does not match when a flag is selected", () => {
+                const readPairFlag = getFlag(READ_PAIR_FLAG);
+
+                const command = createCommand({
+                    flagFilter: {
+                        includedFlags: [readPairFlag],
+                        excludedFlags: [],
+                        calculatedIncludeValue: 0,
+                        calculatedExcludeValue: 0
+                    },
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 312)).toBe(false);
+                expect(rules.some(rule => rule.id === 313)).toBe(true);
+            });
+
+            it("matches when no flags or options are selected", () => {
+                const command = createCommand({
+                    flagFilter: {
+                        includedFlags: [],
+                        excludedFlags: [],
+                        calculatedIncludeValue: 0,
+                        calculatedExcludeValue: 0
+                    },
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 312)).toBe(true);
+            });
+        });
+
+        describe(RULE_CONDITION_TYPES.HAS_FILTERING_SELECTION, () => {
+            it("matches when a filtering option is selected", () => {
+                const minMappingQualityOption = getSelectedViewOption(MIN_MAPPING_QUALITY, 20)
+                const command = createCommand({
+                    options: [minMappingQualityOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 313)).toBe(true);
+            });
+
+            it("does not match when a filtering option is selected and value is not set", () => {
+                const minMappingQualityOption = getSelectedViewOption(MIN_MAPPING_QUALITY)
+                const command = createCommand({
+                    options: [minMappingQualityOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 313)).toBe(false);
+                expect(rules.some(rule => rule.id === 312)).toBe(true);
+            });
+
+            it("matches when a flag is selected", () => {
+                const readPairFlag = getFlag(READ_PAIR_FLAG);
+
+                const command = createCommand({
+                    flagFilter: {
+                        includedFlags: [readPairFlag],
+                        excludedFlags: [],
+                        calculatedIncludeValue: 0,
+                        calculatedExcludeValue: 0
+                    },
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 313)).toBe(true);
+            });
+
+            it("matches when a flag and filtering option are selected", () => {
+                const readPairFlag = getFlag(READ_PAIR_FLAG);
+                const minMappingQualityOption = getSelectedViewOption(MIN_MAPPING_QUALITY, 20)
+
+                const command = createCommand({
+                    flagFilter: {
+                        includedFlags: [readPairFlag],
+                        excludedFlags: [],
+                        calculatedIncludeValue: 0,
+                        calculatedExcludeValue: 0
+                    },
+                    options: [minMappingQualityOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 313)).toBe(true);
+            });
+
+            it("matches when a flag and output option are selected", () => {
+                const readPairFlag = getFlag(READ_PAIR_FLAG);
+                const minMappingQualityOption = getSelectedViewOption(MIN_MAPPING_QUALITY, 20)
+                const includeHeaderOption = getSelectedViewOption(INCLUDE_HEADER);
+
+                const command = createCommand({
+                    flagFilter: {
+                        includedFlags: [readPairFlag],
+                        excludedFlags: [],
+                        calculatedIncludeValue: 0,
+                        calculatedExcludeValue: 0
+                    },
+                    options: [minMappingQualityOption, includeHeaderOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 313)).toBe(true);
+            });
+        });
+
+        describe(RULE_CONDITION_TYPES.CONTAINS_OPTION, () => {
+            it("matches output format option is selected", () => {
+                const outputFormatOption = getSelectedViewOption(OUTPUT_FORMAT, "CRAM")
+                const referenceFileOption = getSelectedViewOption(REFERENCE_FILE, "ref.fastq")
+
+                const command = createCommand({
+                    options: [outputFormatOption, referenceFileOption]
+                });
+
+                const rules = engine.evaluate(command);
+
+                expect(rules).toHaveLength(1);
+                expect(rules.some(rule => rule.id === 314)).toBe(true);
+            });
+        });
+    });
 
     describe(RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION, () => {
         it("input file extension matches the expected bam ext", () => {
@@ -425,7 +594,8 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
+            expect(rules.some(rule => rule.id === 312)).toBe(true);
             expect(rules.some(rule => rule.id === 311)).toBe(false);
         });
         it("input file extension matches the expected sam ext", () => {
@@ -435,8 +605,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
             expect(rules.some(rule => rule.id === 311)).toBe(false);
+            expect(rules.some(rule => rule.id === 312)).toBe(true);
         });
         it("input file extension matches the expected cram ext", () => {
             const command = createCommand({
@@ -445,8 +616,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
             expect(rules.some(rule => rule.id === 311)).toBe(false);
+            expect(rules.some(rule => rule.id === 312)).toBe(true);
         });
         it("input file extension does not match an expected ext", () => {
             const command = createCommand({
@@ -455,8 +627,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(1);
+            expect(rules).toHaveLength(2);
             expect(rules.some(rule => rule.id === 311)).toBe(true);
+            expect(rules.some(rule => rule.id === 312)).toBe(true);
         });
         it("input file extension does not have an ext", () => {
             const command = createCommand({
@@ -465,8 +638,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(1);
+            expect(rules).toHaveLength(2);
             expect(rules.some(rule => rule.id === 311)).toBe(true);
+            expect(rules.some(rule => rule.id === 312)).toBe(true);
         });
         it("input file is not populated", () => {
             const command = createCommand({
@@ -475,8 +649,9 @@ describe("Rules", () => {
 
             const rules = engine.evaluate(command);
 
-            expect(rules).toHaveLength(0);
+            expect(rules).toHaveLength(1);
             expect(rules.some(rule => rule.id === 311)).toBe(false);
+            expect(rules.some(rule => rule.id === 312)).toBe(true);
         });
     });
 
@@ -495,7 +670,7 @@ describe("Rules", () => {
 
         const rules = engine.evaluate(command);
 
-        expect(rules).toHaveLength(3);
-        expect(rules.map(rule => rule.id)).toEqual([300, 301, 309]);
+        expect(rules).toHaveLength(4);
+        expect(rules.map(rule => rule.id)).toEqual([300, 301, 309, 313]);
     });
 });

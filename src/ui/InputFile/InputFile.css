@@ -39,6 +39,9 @@
     font-family:var(--mono);
     font-size:13px;
     color:var(--terminal-accent);
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .file-field input::placeholder{color:#3f5f54;}

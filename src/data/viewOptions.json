@@ -5,7 +5,8 @@
         "syntax": "-h",
         "description": "Include the SAM header in the output.",
         "explanation": "Includes the SAM header in the output.",
-        "requiresValue": false
+        "requiresValue": false,
+        "category": "output"
     },
     {
         "id": 201,
@@ -13,7 +14,8 @@
         "syntax": "-c",
         "description": "Return only the number of matching alignment records.",
         "explanation": "Returns only the number of matching alignment records.",
-        "requiresValue": false
+        "requiresValue": false,
+        "category": "output"
     },
     {
         "id": 202,
@@ -27,7 +29,8 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 255
-        }
+        },
+        "category": "filter"
     },
     {
         "id": 203,
@@ -39,7 +42,8 @@
         "constraints": {
             "type": "enum",
             "allowableValues": ["SAM", "BAM", "CRAM"]
-        }
+        },
+        "category": "output"
     },
     {
         "id": 204,
@@ -51,7 +55,8 @@
         "requiresValue": true,
         "constraints": {
             "type": "string"
-        }
+        },
+        "category": "output"
     },
     {
         "id": 205,
@@ -63,6 +68,7 @@
         "requiresValue": true,
         "constraints": {
             "type": "string"
-        }
+        },
+        "category": "output"
     }
 ]

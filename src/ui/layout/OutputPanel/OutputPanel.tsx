@@ -8,6 +8,11 @@ import ActiveFlags from "../../ActiveFlags/ActiveFlags";
 import Command from "../../Command/Command";
 import type { SelectedViewOption } from "../../../domain/options/SelectedViewOption";
 import type { SamViewCommand } from "../../../domain/command/SamViewCommand";
+import { ViewOptionCatalog } from "../../../domain/services/viewOptions/ViewOptionCatalog";
+import { RuleCatalog } from "../../../domain/services/rules/RuleCatalog";
+import { RuleEngine } from "../../../domain/services/rules/RuleEngine";
+import { ExplanationEngine } from "../../../domain/services/explanation/ExplanationEngine";
+import Explanations from "../../Explanations/Explanations";
 
 interface OutputPanelProps {
   flagFilter: FlagFilter;
@@ -17,6 +22,9 @@ interface OutputPanelProps {
 }
 
 const samFlagCatalog = new SamFlagCatalog();
+const viewOptionCatalog = new ViewOptionCatalog();
+const explanationEngine = new ExplanationEngine();
+const ruleCatalog = new RuleCatalog(samFlagCatalog, viewOptionCatalog);
 
 export default function OutputPanel({
   flagFilter,
@@ -38,6 +46,10 @@ export default function OutputPanel({
     inputFile,
   };
 
+  const ruleEngine = new RuleEngine(ruleCatalog);
+  const rules = ruleEngine.evaluate(command);
+  const explanations = explanationEngine.explain(command, rules);
+
   return (
     <div className="output-panel">
       <div className="op-head">
@@ -51,6 +63,7 @@ export default function OutputPanel({
         setHighlightedKeys={setHighlightedKeys}
         highlightedKeys={highlightedKeys}
       />
+      <Explanations explanations={explanations} />
     </div>
   );
 }
