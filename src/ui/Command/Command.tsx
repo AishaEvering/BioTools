@@ -6,6 +6,7 @@ import {
   renderSamViewCommand,
 } from "../../domain/services/command/SamViewCommandRenderer";
 import "./Command.css";
+import { isSelectedOptionRenderable } from "../../domain/options/SelectedViewOption";
 
 interface CommandProps {
   readonly command: SamViewCommand;
@@ -73,25 +74,27 @@ export default function SamViewCommand({
           </span>
         )}
 
-        {command.options.map(({ option, value }) => {
-          if (option.requiresValue && (value === undefined || value === "")) {
-            return null;
-          }
+        {command.options
+          .filter(isSelectedOptionRenderable)
+          .map(({ option, value }) => {
+            if (option.requiresValue && (value === undefined || value === "")) {
+              return null;
+            }
 
-          return (
-            <span
-              key={option.id}
-              className={`command-option ${highlightedKeys.includes("opt-" + option.id) ? "pulse" : ""}`}
-              data-key={`opt-${option.id}`}
-            >
-              {" "}
-              <span className="command-option-syntax">{option.syntax}</span>
-              {option.requiresValue && (
-                <span className="command-value">{formatValue(value!)}</span>
-              )}
-            </span>
-          );
-        })}
+            return (
+              <span
+                key={option.id}
+                className={`command-option ${highlightedKeys.includes("opt-" + option.id) ? "pulse" : ""}`}
+                data-key={`opt-${option.id}`}
+              >
+                {" "}
+                <span className="command-option-syntax">{option.syntax}</span>
+                {option.requiresValue && (
+                  <span className="command-value">{formatValue(value!)}</span>
+                )}
+              </span>
+            );
+          })}
 
         <span
           className={`command-file ${highlightedKeys.includes("file") ? "pulse" : ""}`}

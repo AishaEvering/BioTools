@@ -70,6 +70,22 @@ private readonly viewOptionCatalog: ViewOptionCatalog;
                     type: RULE_CONDITION_TYPES.INPUT_FILE_EXTENSION,
                     allowedExtensions: ruleCondition.allowedExtensions,
                 };
+            
+            case RULE_CONDITION_TYPES.EMPTY_COMMAND:
+                return{
+                    type: RULE_CONDITION_TYPES.EMPTY_COMMAND,
+                };
+            
+            case RULE_CONDITION_TYPES.HAS_FILTERING_SELECTION:
+                return{
+                    type: RULE_CONDITION_TYPES.HAS_FILTERING_SELECTION,
+                };
+                
+            case RULE_CONDITION_TYPES.CONTAINS_OPTION:
+                return{
+                    type: RULE_CONDITION_TYPES.CONTAINS_OPTION,
+                    selectedOption: this.getViewOption(ruleCondition.selectedOption),
+                }
 
 			default:
 				throw new Error(`Unknown rule condition: ${ruleCondition}`);

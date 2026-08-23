@@ -13,7 +13,7 @@ describe("JsonRuleLoader", () => {
     it("loads all rule definitions", () => {
     const rules = loader.load();
 
-    expect(rules).toHaveLength(12);
+    expect(rules).toHaveLength(15);
     });
 
     it("resolves flag identifiers for a requires-flags condition", () => {
@@ -90,6 +90,39 @@ describe("JsonRuleLoader", () => {
         );
 
         expect(rule.message).toBe("Input file does not have a typical SAM/BAM/CRAM extension.");
+    });
+
+    it("resolves zero flags or options selected", () => {
+        const rules = loader.load();
+        const rule = rules.find(rule => rule.id === 312)!;
+
+        expect(rule.condition.type).toBe(
+            RULE_CONDITION_TYPES.EMPTY_COMMAND
+        );
+
+        expect(rule.message).toBe("No flags or options selected yet, this command will return every read in the file.");
+    });
+
+    it("resolves if fiags are filtering optins are selected", () => {
+        const rules = loader.load();
+        const rule = rules.find(rule => rule.id === 313)!;
+
+        expect(rule.condition.type).toBe(
+            RULE_CONDITION_TYPES.HAS_FILTERING_SELECTION
+        );
+
+        expect(rule.message).toBe("Included flags and filtering options are combined with AND, every condition must hold for a read to appear in the output.");
+    });
+
+    it("resolves if selected options are output formats", () => {
+        const rules = loader.load();
+        const rule = rules.find(rule => rule.id === 314)!;
+
+        expect(rule.condition.type).toBe(
+            RULE_CONDITION_TYPES.CONTAINS_OPTION
+        );
+
+        expect(rule.message).toBe("The output format controls how the resulting alignments are written, not which reads are selected.");
     });
 
     it("throws when a referenced SAM flag does not exist", () => {

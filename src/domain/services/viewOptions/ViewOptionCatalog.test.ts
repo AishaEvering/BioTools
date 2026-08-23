@@ -18,6 +18,7 @@ describe("ViewOptionCatalog", () => {
     expect(option?.requiresValue).toBe(true);
     expect(option?.placeholder).toBe("20");
     expect(option?.constraints?.type).toBe("integer");
+    expect(option?.category).toBe("filter");
 
     if(option?.constraints?.type === "integer"){
       expect(option?.constraints?.minimum).toBe(0);

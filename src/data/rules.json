@@ -113,5 +113,30 @@
         },
         "severity": "warning",
         "message": "Input file does not have a typical SAM/BAM/CRAM extension."
+    },
+    {
+        "id": 312,
+        "condition": {
+            "type": "empty-command"
+        },
+        "severity": "info",
+        "message": "No flags or options selected yet, this command will return every read in the file."
+    },
+    {
+        "id": 313,
+        "condition": {
+            "type": "has-filtering-selection"
+        },
+        "severity": "info",
+        "message": "Included flags and filtering options are combined with AND, every condition must hold for a read to appear in the output."
+    },
+    {
+        "id": 314,
+        "condition": {
+            "type": "contains-option",
+            "selectedOption": 203
+        },
+        "severity": "info",
+        "message": "The output format controls how the resulting alignments are written, not which reads are selected."
     }
 ]

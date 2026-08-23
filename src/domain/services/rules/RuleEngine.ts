@@ -1,9 +1,10 @@
 import type { SamViewCommand } from "../../command/SamViewCommand";
+import { isSelectedOptionRenderable } from "../../options/SelectedViewOption";
+import { VIEW_OPTION_CATEGORY } from "../../options/ViewOption";
 import type { Rule } from "../../rules/Rule";
 import { RULE_CONDITION_TYPES, type RuleCondition } from "../../rules/RuleCondition";
 import { DEFAULT_INPUT_FILE } from "../command/SamViewCommandRenderer";
 import type { RuleCatalog } from "./RuleCatalog";
-import * as path from 'path';
  export class RuleEngine {
   private readonly ruleCatalog: RuleCatalog;
 
@@ -11,12 +12,20 @@ import * as path from 'path';
     this.ruleCatalog = ruleCatalog;
   }
 
-
    evaluate(command: SamViewCommand): readonly Rule[] {
     return this.ruleCatalog
         .getAll()
         .filter(rule => this.isConditionSatisfied(rule.condition, command));
    }
+
+    private getFileExtension(fileName: string): string{
+        const lastDot = fileName.lastIndexOf(".");
+
+        if(lastDot === -1)
+            return "";
+
+        return fileName.slice(lastDot).toLowerCase();
+    }
 
    private isConditionSatisfied(condition: RuleCondition, command: SamViewCommand): boolean {
         switch (condition.type) { 
@@ -44,7 +53,8 @@ import * as path from 'path';
             }
             case RULE_CONDITION_TYPES.REQUIRES_OPTION: {
                 const selectedOption = command.options.find(
-                    option => option.option.id === condition.selectedOption.id
+                    selectedOption => selectedOption.option.id === condition.selectedOption.id &&
+                    isSelectedOptionRenderable(selectedOption)
                 );
 
                 // did not find condition option in the command
@@ -61,7 +71,8 @@ import * as path from 'path';
 
                 // find the required option
                 const requiredOptionSelected = command.options.some(
-                    option => option.option.id === condition.requiredOption.id
+                    selectedOption => selectedOption.option.id === condition.requiredOption.id &&
+                    isSelectedOptionRenderable(selectedOption)
                 );
 
                 // the required option was not found
@@ -84,9 +95,36 @@ import * as path from 'path';
                 if(!command.inputFile || command.inputFile === DEFAULT_INPUT_FILE)
                     return false;
                 
-                const extension = path.extname(command.inputFile).toLowerCase();
+                const extension = this.getFileExtension(command.inputFile);
 
                 return !condition.allowedExtensions.includes(extension) 
+            }
+            case RULE_CONDITION_TYPES.EMPTY_COMMAND: {
+                const hasActiveOption = command.options.some(isSelectedOptionRenderable);
+
+                return (command.flagFilter.includedFlags.length === 0 &&
+                    command.flagFilter.excludedFlags.length === 0 &&
+                    !hasActiveOption
+                );
+            }
+            case RULE_CONDITION_TYPES.HAS_FILTERING_SELECTION: {
+                const hasFlag = command.flagFilter.includedFlags.length > 0 ||
+                    command.flagFilter.excludedFlags.length > 0;
+
+                const hasFilterOption = command.options.some(
+                    selectedOption =>
+                        selectedOption.option.category === VIEW_OPTION_CATEGORY.FILTER &&
+                        isSelectedOptionRenderable(selectedOption)
+                );
+
+                return hasFlag || hasFilterOption;
+            }
+            case RULE_CONDITION_TYPES.CONTAINS_OPTION: {
+                return command.options.some(selectedOption => 
+                    selectedOption.option.id === condition.selectedOption.id &&(
+                        isSelectedOptionRenderable(selectedOption)
+                    )
+                )
             }
             default:
                 throw new Error(`Unknown rule condition type: ${(condition as RuleCondition).type}`);

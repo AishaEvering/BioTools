@@ -1,5 +1,5 @@
 import type { SamViewCommand } from "../../command/SamViewCommand";
-import type { SelectedViewOption } from "../../options/SelectedViewOption";
+import { isSelectedOptionRenderable, type SelectedViewOption } from "../../options/SelectedViewOption";
 
 export const DEFAULT_INPUT_FILE = "<input.bam>";
 
@@ -26,13 +26,7 @@ export function renderSamViewCommand(command: SamViewCommand): string {
 
 function renderSelectedOptions(options: SelectedViewOption[]): string {
   return options
-    .filter(({ option, value }) => {
-      if (!option.requiresValue) {
-        return true;
-      }
-
-      return value !== undefined && value !== "";
-    })
+    .filter(isSelectedOptionRenderable)
     .map(({ option, value }) => {
       return option.requiresValue
         ? `${option.syntax} ${formatValue(value!)}`
