@@ -1,3 +1,4 @@
+import Feedback from "./Feedback";
 import "./TopBar.css";
 
 export default function TopBar() {
@@ -19,7 +20,7 @@ export default function TopBar() {
           </div>
         </div>
       </div>
-      <div className="topbar-actions">{/* TODO: will add actions*/}</div>
+      <Feedback />
     </header>
   );
 }
