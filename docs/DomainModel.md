@@ -105,7 +105,7 @@ Calculated exclude value:
 
 ### $${\color{purple}View \space Option}$$
 
-Represents a supported Samtools view argument that is not part of the SAM bitwise flag filter.
+Represents a supported `samtools view` command-line option that is not part of the SAM bitwise flag filter.
 
 A View Option exists in 3 forms within BioTools:
 
@@ -118,20 +118,21 @@ Options include:
 - Include the header - `-h`
 - Count matching records - `-c`
 - Set a minimum mapping quality - `-q INT`
-- Select an output format - `SAM, BAM, or CRAM`
+- Select an output format - `-O SAM|BAM|CRAM`
 - Specify an output file - `-o FILE`
 
 > [!IMPORTANT]
 > Only options explicitly supported by BioTools should be included in the model.
 
 A View Option contains:
-
-- Immutable unique name
+- Immutable unique identifier
+- Immutable name
 - Immutable command-line syntax
 - Immutable description
 - Immutable explanation
 - Immutable indication of whether a value is required
 - Optional immutable structured constraints describing the type and allowable values of user input.
+- Immutable category: filter | output
 
 Example:
 
@@ -139,32 +140,45 @@ Example:
 Name: Minimum Mapping Quality
 Syntax: -q
 Requires Value: true
-Description: Filters alignments below the specified mapping quality.
-Explanation: Includes only alignments with mapping quality of at least {value}.
+Description: Only include alignments with a minimum mapping quality.
+Explanation: Includes only alignments with a minimum mapping quality of {value}.
 Constraints: integer
+Placeholder: 20
+RequiresValue: true
+Category: filter
 ```
 
 ```JSON
 {
-  "name": "Output Format",
-  "syntax": "...",
-  "requiresValue": true,
-  "constraints": {
-    "type": "enum",
-    "allowableValues": ["SAM", "BAM", "CRAM"]
-  }
+        "id": 203,
+        "name": "Output Format",
+        "syntax": "-O",
+        "description": "Specify the output format.",
+        "explanation": "Uses {value} as the output format.",
+        "requiresValue": true,
+        "constraints": {
+            "type": "enum",
+            "allowableValues": ["SAM", "BAM", "CRAM"]
+        },
+        "category": "output"
 }
 ```
 
 ```JSON
 {
-  "name": "Minimum Mapping Quality",
-  "syntax": "-q",
-  "requiresValue": true,
-  "constraints": {
-    "type": "integer",
-    "minimum": 0
-  }
+        "id": 202,
+        "name": "Minimum Mapping Quality",
+        "syntax": "-q",
+        "description": "Only include alignments with a minimum mapping quality.",
+        "explanation": "Includes only alignments with a minimum mapping quality of {value}.",
+        "placeholder": "20",
+        "requiresValue": true,
+        "constraints": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+        },
+        "category": "filter"
 }
 ```
 
