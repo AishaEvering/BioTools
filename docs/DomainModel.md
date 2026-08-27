@@ -105,7 +105,7 @@ Calculated exclude value:
 
 ### $${\color{purple}View \space Option}$$
 
-Represents a supported Samtools view argument that is not part of the SAM bitwise flag filter.
+Represents a supported `samtools view` command-line option that is not part of the SAM bitwise flag filter.
 
 A View Option exists in 3 forms within BioTools:
 
@@ -118,20 +118,21 @@ Options include:
 - Include the header - `-h`
 - Count matching records - `-c`
 - Set a minimum mapping quality - `-q INT`
-- Select an output format - `SAM, BAM, or CRAM`
+- Select an output format - `-O SAM|BAM|CRAM`
 - Specify an output file - `-o FILE`
 
 > [!IMPORTANT]
 > Only options explicitly supported by BioTools should be included in the model.
 
 A View Option contains:
-
-- Immutable unique name
+- Immutable unique identifier
+- Immutable name
 - Immutable command-line syntax
 - Immutable description
 - Immutable explanation
 - Immutable indication of whether a value is required
 - Optional immutable structured constraints describing the type and allowable values of user input.
+- Immutable category: filter | output
 
 Example:
 
@@ -139,32 +140,45 @@ Example:
 Name: Minimum Mapping Quality
 Syntax: -q
 Requires Value: true
-Description: Filters alignments below the specified mapping quality.
-Explanation: Includes only alignments with mapping quality of at least {value}.
+Description: Only include alignments with a minimum mapping quality.
+Explanation: Includes only alignments with a minimum mapping quality of {value}.
 Constraints: integer
+Placeholder: 20
+RequiresValue: true
+Category: filter
 ```
 
 ```JSON
 {
-  "name": "Output Format",
-  "syntax": "...",
-  "requiresValue": true,
-  "constraints": {
-    "type": "enum",
-    "allowableValues": ["SAM", "BAM", "CRAM"]
-  }
+        "id": 203,
+        "name": "Output Format",
+        "syntax": "-O",
+        "description": "Specify the output format.",
+        "explanation": "Uses {value} as the output format.",
+        "requiresValue": true,
+        "constraints": {
+            "type": "enum",
+            "allowableValues": ["SAM", "BAM", "CRAM"]
+        },
+        "category": "output"
 }
 ```
 
 ```JSON
 {
-  "name": "Minimum Mapping Quality",
-  "syntax": "-q",
-  "requiresValue": true,
-  "constraints": {
-    "type": "integer",
-    "minimum": 0
-  }
+        "id": 202,
+        "name": "Minimum Mapping Quality",
+        "syntax": "-q",
+        "description": "Only include alignments with a minimum mapping quality.",
+        "explanation": "Includes only alignments with a minimum mapping quality of {value}.",
+        "placeholder": "20",
+        "requiresValue": true,
+        "constraints": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+        },
+        "category": "filter"
 }
 ```
 
@@ -292,7 +306,7 @@ to the current application state.
 
 A Rule exists in 2 forms within BioTools:
 
-- Rule Condition Interface - the TypeScript contract defining that required shape of a Rule Condition.
+- Rule Condition Interface - the TypeScript contract defining the required shape of a Rule Condition.
 - Rule Condition Object - the runtime object used by the Rule Engine when evaluating a Rule.
 
 > [!NOTE]
@@ -305,17 +319,15 @@ A Rule Condition contains:
 - Immutable condition specific values, when required
 
 Supported condition types for version 1:
-`requires-flags`
-Determines whether a selected SAM Flag requires another SAM Flag to also be selected.
-`contradiction`
-Determines whether a selected SAM Flags are mutually exclusive.
-`requires-option`
-Determines whether a selected SAM Flags require another SAM Flag.
-
-Contains:
-
-- Selected Flags: `SamFlag[]`
-- Required Flags: `SamFlag[]`
+- `requires-flags`: selected flags require other flags.
+- `contradiction`: a combination of selected flags is contradictory.
+- `requires-option`: an option/value requires another option.
+- `include-exclude-overlap`: a flag appears in both the include and exclude filters.
+- `option-value`: — an option has a particular value.
+- `input-file-extension`: — the input filename has an allowed extension.
+- `empty-command`: — no meaningful command selections have been made.
+- `has-filtering-selection`: — the command contains at least one filtering selection.
+- `contains-option`: — a particular option has been selected.
 
 Example:
 
@@ -330,19 +342,6 @@ Selected Flags: [First in Pair, Second in Pair]
 
 This condition is satisfied when `Proper Pair` is selected but `Read Paired` is not selected.
 
-```TypeScript
-type RuleCondition =
-{
-  readonly type: "requires-flags";
-  readonly includedFlags: SamFlag[];
-  readonly requiredFlags: SamFlag[];
-}
-{
-  readonly type: "contradiction";
-  readonly includedFlags: SamFlag[];
-}
-```
-
 In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers:
 
 ```JSON
@@ -350,22 +349,38 @@ In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers
   "type": "requires-flags",
   "includedFlags": [100],
   "requiredFlags": [101]
-}
-```
-
-```JSON
+},
 {
   "type": "contradiction",
   "includedFlags": [102, 103]
-}
-```
-
-```JSON
+},
 {
   "type": "requires-option",
   "selectedOptions": [203],
   "selectedValue": "CRAM",
   "requiredOptions": [205]
+},
+{
+  "type": "include-exclude-overlap"
+},
+{
+  "type": "option-value",
+  "selectedOption": 202,
+  "selectedValue": 255
+},
+{
+  "type": "input-file-extension",
+  "allowedExtensions": [".bam", ".sam", ".cram"]
+},
+{
+  "type": "empty-command"
+},
+{
+  "type": "has-filtering-selection"
+},
+{
+   "type": "contains-option",
+   "selectedOption": 203
 }
 ```
 
@@ -404,7 +419,7 @@ Describes a relationship, warning, or implication involving one or more domain c
 A Rule exists in 3 forms within BioTools:
 
 - Rule Definition - the reference data stored in JSON.
-- Rule Interface - the TypeScript contract defining that required shape of a Rule.
+- Rule Interface - the TypeScript contract defining the required shape of a Rule.
 - Rule Object - the runtime object created from a Rule definition and used by the application.
 
 Rule Definitions are converted into Rule Objects by a Rule Loader. Loaded Rule Objects
@@ -432,7 +447,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Proper Pair]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Proper Pair normally applies to reads marked as paired.
    ```
 2. Mate Unmapped selected without Read Paired
@@ -441,7 +456,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Mate Unmapped]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Mate Unmapped applies to reads that are part of a paired template.
    ```
 3. Mate Reverse selected without Read Paired
@@ -450,7 +465,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Mate Reverse]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Mate Reverse applies to reads that are part of a paired template.
    ```
 4. First in Pair selected without Read Paired
@@ -459,7 +474,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [First in Pair]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: First in Pair applies to reads that are part of a paired template.
    ```
 5. Second in Pair selected without Read Paired
@@ -468,7 +483,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Second in Pair]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Second in Pair applies to reads that are part of a paired template.
    ```
 6. First in pair and Second in pair are mutually exclusive
@@ -476,7 +491,7 @@ Possible severity levels:
    id: 6
    condition type: contradiction
    included flags: [First in Pair, Second in Pair]
-   severity: Error
+   severity: error
    message: A read can't be both first and second in a pair.
    ```
 7. CRAM output selected without a Reference File
@@ -486,8 +501,70 @@ Possible severity levels:
    selected option: Output Format
    selected value: "CRAM"
    required option: Reference File
-   severity: Warning
+   severity: warning
    message: CRAM output may require access to a reference FASTA.  Specify a reference file with -T when the reference can't otherwise be resolved.
+   ```
+8. SAM Flag is in include and exclude filter
+   ```
+   id: 8
+   condition type: include-exclude-overlap
+   severity: error
+   message: A SAM flag can't be both included and excluded at the same time.
+   ```
+9. Contradicting SAM Flags properly paired and unmapped included
+   ```
+   id: 9
+   condition type: contradiction
+   included flags: [Proper Pair, Read Unmapped]
+   severity: error
+   message: A read marked as properly paired can't also be marked as unmapped.
+   ```
+10. Contradicting SAM Flags properly paired and unmapped mate
+   ```
+   id: 10
+   condition type: contradiction
+   included flags: [Proper Pair, Mate Unmapped]
+   severity: error
+   message: A properly paired read can't have an unmapped mate.
+   ```
+11. Map quality set to 255
+   ```
+   id: 11
+   condition type: option-value
+   selected option: Minimum Mapping Quality
+   selected value: 255
+   severity: warning
+   message: A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality.
+   ```
+12. Input file extension is unexpected
+   ```
+   id: 12
+   condition type: input-file-extension
+   allowed extensions: [.sam. .bam, .cram]
+   severity: warning
+   message: Input file does not have a typical SAM/BAM/CRAM extension.
+   ```
+13. Command is empty
+   ```
+   id: 13
+   condition type: empty-command
+   severity: info
+   message: No flags or options selected yet, this command will return every read in the file.
+   ```
+14. Command contains filtering selections
+   ```
+   id: 14
+   condition type: has-filtering-selection
+   severity: info
+   message: Included flags and filtering options are combined with AND, every condition must hold for a read to appear in the output.
+   ```
+15. Command contains output format options
+   ```
+   id: 15
+   condition type: contains-option
+   severity: info
+   selected option: Output Format
+   message: The output format controls how the resulting alignments are written, not which reads are selected.
    ```
 
 The Rule Interface defines the runtime shape of a Rule:
@@ -693,11 +770,11 @@ Contains a predefined Flag Filter configuration and a researcher facing explanat
 
 A Filter Preset exists in 5 forms within BioTools:
 
-- Filter Preset Definition - the reference data stored in JSON.
-- Filter Preset Interface - the TypeScript contract defining that required shape of a FilterPreset.
-- Filter Preset Object - created after its referenced SAM Flag identifiers are resolved.
-- Filter Preset Catalog - owns the loaded collection and provides lookup/access
-- Filter Preset Loader - loads the collection of JSON objects to a list of concrete object.
+- Filter Preset Definition - reference data stored in JSON.
+- Filter Preset Interface - TypeScript contract defining the required shape.
+- Filter Preset Object - runtime object created after referenced SAM Flag identifiers are resolved.
+
+Filter Preset Definitions are converted into Filter Preset Objects by a Filter Preset Loader. Loaded Filter Preset Objects are maintained by the Filter Preset Catalog.
 
 Examples may include:
 
@@ -714,7 +791,6 @@ A filter preset contains:
 - Immutable name
 - Immutable description
 - Immutable Flag Filter
-- Immutable explanation
 
 Filter Presets populate the same flag filter used by manual selections.
 They do not use a separate command generation process.
@@ -730,8 +806,7 @@ be further edited through normal manual selection.
   "filter": {
     "includedFlags": [],
     "excludedFlags": [102, 103]
-  },
-  "explanation": "Returns primary alignments by excluding secondary and supplementary alignments."
+  }
 }
 ```
 
@@ -741,7 +816,6 @@ interface FilterPreset {
   readonly name: string;
   readonly description: string;
   readonly filter: FlagFilter;
-  readonly explanation: string;
 }
 ```
 
@@ -773,6 +847,10 @@ class FilterPresetCatalog {
   findMatching(filter: FlagFilter): FilterPreset | undefined;
 }
 ```
+> [!NOTE]
+> The Filter Preset Catalog can identify whether the current FlagFilter exactly matches a known preset. This allows the
+> UI to reflect preset state consistently whether the filter was created by selecting a preset or by manual flag
+> selection.
 
 Filter Preset Loader Example:
 
@@ -783,18 +861,142 @@ interface FilterPresetLoader {
 ```
 
 ---
+## Domain Services
 
-### $${\color{purple}Filter \space Inversion}$$
+### $${\color{blue}Decoder}$$
 
-An inversion creates the logical opposite of a supported selection Flag Filter or filter Preset.
+Converts either a raw SAM flag integer or a supported `samtools view` command string into BioTools domain state.
 
-An inversion must be determined by domain rules rather than by simply exchanging every included and excluded flag.
+The Decoder allows existing flag values and command strings to be loaded into BioTools so that their flags, options, and input file can be viewed, explained, and edited using the same application state used by manually created commands.
 
-Not every command has a meaningful or safe automatic inversion. Unsupported inversions should be identified clearly.
+The Decoder does not maintain its own command state.
+
+The Decoder accepts:
+- A non-negative SAM flag integer.
+- A full or parital `samtools view` command string.
+
+A standalone integer is interpreted as an included `-f` SAM flag bitmask.
+
+Example:
+
+3
+
+is decoded as:
+
+Included Flags:
+- Read Paired
+- Proper Pair
+
+A `samtools view` command is decoded by identifying the syntax supported by BioTools.
+
+Example:
+samtools view -f 3 -F 2048 -h -q 20 sample.bam
+
+may be decoded into:
+
+SamViewCommand
+flagFilter:
+  includedFlags:
+    - Read Paired
+    - Proper Pair
+  excludedFlags:
+    -Supplementary
+
+options:
+  - Include Header
+  - Minimum Mapping Quality: 20
+
+inputFile:
+  sample.bam
+
+The Decoder is responsible for:
+<ul>
+  <li>Determining whether the input is a raw flag integer or a `samtools view` command.</li>
+  <li>Decoding standalone integers as included SAM Flags.</li>
+  <li>Decoding `-f` and `-F` bitmask values into the corresponding SamFlag objects.</li>
+  <li>Resolving supported View Options through the `ViewOptionCatalog`.</li>
+  <li>Preserving supported option values.</li>
+  <li>Preserving the input file name when one is present.</li>
+  <li>Reporting syntax that BioTools does not recognize or support.</li>
+  <li>Returning the successfully decoded domain state.</li>
+</ul>
+
+The Decoder uses existing catalogs to resolve decoded values into domain objects rather than creating duplicate definitions.
+
+Decode Result
+
+A Decode Result contains the portion of the input that BioTools successfully decoded together with information about syntax that could not be decoded.
+
+interface DecodeResult {
+  readonly command: SamViewCommand;
+  readonly warnings: DecodeWarning[];
+}
+
+A Decode Warning describes syntax that BioTools could not interpret.
+
+interface DecodeWarning {
+  readonly token: string;
+  readonly message: string;
+}
+
+Example:
+
+samtools view -f 3 -q 20 -x 7 sample.bam
+
+may produce:
+
+Decode Result
+command:
+  includedFlags:
+    - Read Paired
+    - Proper Pair
+
+  options:
+    - Minimum Mapping Quality: 20
+
+  inputFile:
+    sample.bam
+
+warnings:
+  - token: -x
+  message: BioTools does not recognize or support this option.
+
+The successfully decoded portion of the command is loaded into the application even when warnings are present.
+
+> [!IMPORTANT]
+> Unsupported or unrecognized syntax must never be silently discarded.
+> BioTools may partially decode a command, but the user must be informed about any portion
+> that could not be interpreted.
+
+> [!IMPORTANT]
+> Decoded state uses the same `SamViewCommand`, `FlagFilter`, `SamFlag`, and View Option domain
+> objects used by manually created commands. Decoding does not use a separate command generation,
+> explanation, or rule-evaluation path.
+
+> [!NOTE]
+> A standalone negative integer is not treated as an exclusion shorthand.
+> To decode excluded flags, the user should provide a `samtools view` command using `-F`.
+
+Example Decoder Interface:
+
+interface SamViewCommandDecoder {
+  decode(input: string): DecodeResult;
+}
+
+A concrete Decoder may receive the catalogs required to resolve supported flags and options:
+
+class DefaultSamViewCommandDecoder implements SamViewCommandDecoder {
+  constructor(
+    private readonly flagCatalog: SamFlagCatalog,
+    private readonly viewOptionCatalog: ViewOptionCatalog
+  ) {}
+
+  decode(input: string): DecodeResult;
+}
+
 
 ---
 
-## Domain Services
 
 ### $${\color{blue}Explanation \space Engine}$$
 
@@ -925,27 +1127,14 @@ SAM Flag
    │
    └── included in or excluded from Flag Filter
              │
-             ├── used by SAMtools View Command
-             │         │
-             │         ├── contains Selected View Options
-             │         │         │
-             │         │         └── references View Options
-             │         │
-             │         ├── used by Explanation Engine
-             │         │
-             │         └── passed to Command Renderer
-             │                   │
-             │                   └── produces Rendered Command
+             └── contained by SAMtools View Command
+
+
+View Option
+   │
+   └── referenced by Selected View Option
              │
-             └── evaluated by Rule Engine
-                       │
-                       ├── evaluates Rules
-                       │         │
-                       │         └── contains Rule Condition
-                       │
-                       └── produces Validation Results
-                                  │
-                                  └── references triggered Rule
+             └── contained by SAMtools View Command
 
 
 Filter Preset
@@ -954,18 +1143,40 @@ Filter Preset
    │
    ├── loaded through Filter Preset Catalog
    │
-   └── may be recognized by Explanation Engine
+   └── may populate the current Flag Filter
+             │
+             └── current Flag Filter may be matched
+                 to a Filter Preset by the Catalog
+
+
+SAMtools View Command
+   │
+   ├── contains Flag Filter
+   ├── contains Selected View Options
+   ├── contains input file
+   │
+   ├── evaluated by Rule Engine
+   │         │
+   │         └── produces Validation Results
+   │
+   ├── used by Explanation Engine
+   │         │
+   │         └── produces Explanation Messages
+   │
+   └── passed to Command Renderer
+             │
+             └── produces Rendered Command
 
 
 Rule
    │
    ├── contains Rule Condition
-   │
    ├── loaded through Rule Catalog
    │
    └── evaluated by Rule Engine
              │
-             └── produces Validation Result when satisfied
+             └── produces Validation Result
+                 when condition is satisfied
 
 
 Validation Result
@@ -978,7 +1189,6 @@ Validation Result
 Explanation Engine
    │
    ├── receives SAMtools View Command
-   ├── uses Filter Preset Catalog
    ├── receives Validation Results
    │
    └── produces Explanation Messages
@@ -987,13 +1197,30 @@ Explanation Engine
 Explanation Message
    │
    ├── contains explanation type
+   ├── contains explanation group
    └── contains researcher-facing message
 
 
-Inversion
+Decoder
    │
-   └── transforms a supported Flag Filter
-       or Filter Preset using domain-defined behavior
+   ├── receives raw SAM flag integer
+   │      └── interprets as included (-f) bitmask
+   │
+   ├── receives samtools view command string
+   │
+   ├── resolves supported SAM Flags
+   ├── resolves supported View Options
+   │
+   └── produces Decode Result
+             │
+             ├── contains decoded SAMtools View Command
+             │         │
+             │         └── becomes ordinary application state
+             │
+             └── contains Decode Warnings
+                       │
+                       └── identifies syntax that
+                           could not be decoded
 ```
 
 ## Domain Rules
@@ -1033,13 +1260,3 @@ The following concepts are planned but are not required for the base Visual Comm
 - Command history
 - Exporting command history
 - User accounts
-
-## Open Questions
-
-The following decisions should be resolved during architecture design or implementation:
-
-- Which non-flag `samtools view` filters belong in Version 1?
-- Should selecting a dependent flag automatically select its related parent flag, or only display a warning?
-- Which combinations should be classified as errors versus warnings?
-- Should generated commands use decimal flag values only, or optionally display hexadecimal values?
-- How should the application represent flags whose meaning depends on whether the record is paired?
