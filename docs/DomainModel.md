@@ -319,17 +319,15 @@ A Rule Condition contains:
 - Immutable condition specific values, when required
 
 Supported condition types for version 1:
-`requires-flags`
-Determines whether a selected SAM Flag requires another SAM Flag to also be selected.
-`contradiction`
-Determines whether a selected SAM Flags are mutually exclusive.
-`requires-option`
-Determines whether a selected SAM Flags require another SAM Flag.
-
-Contains:
-
-- Selected Flags: `SamFlag[]`
-- Required Flags: `SamFlag[]`
+- `requires-flags`: selected flags require other flags.
+- `contradiction`: a combination of selected flags is contradictory.
+- `requires-option`: an option/value requires another option.
+- `include-exclude-overlap`: a flag appears in both the include and exclude filters.
+- `option-value`: — an option has a particular value.
+- `input-file-extension`: — the input filename has an allowed extension.
+- `empty-command`: — no meaningful command selections have been made.
+- `has-filtering-selection`: — the command contains at least one filtering selection.
+- `contains-option`: — a particular option has been selected.
 
 Example:
 
@@ -344,19 +342,6 @@ Selected Flags: [First in Pair, Second in Pair]
 
 This condition is satisfied when `Proper Pair` is selected but `Read Paired` is not selected.
 
-```TypeScript
-type RuleCondition =
-{
-  readonly type: "requires-flags";
-  readonly includedFlags: SamFlag[];
-  readonly requiredFlags: SamFlag[];
-}
-{
-  readonly type: "contradiction";
-  readonly includedFlags: SamFlag[];
-}
-```
-
 In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers:
 
 ```JSON
@@ -364,22 +349,38 @@ In Rule Definition stored in JSON, SAM Flags are referenced by their identifiers
   "type": "requires-flags",
   "includedFlags": [100],
   "requiredFlags": [101]
-}
-```
-
-```JSON
+},
 {
   "type": "contradiction",
   "includedFlags": [102, 103]
-}
-```
-
-```JSON
+},
 {
   "type": "requires-option",
   "selectedOptions": [203],
   "selectedValue": "CRAM",
   "requiredOptions": [205]
+},
+{
+  "type": "include-exclude-overlap"
+},
+{
+  "type": "option-value",
+  "selectedOption": 202,
+  "selectedValue": 255
+},
+{
+  "type": "input-file-extension",
+  "allowedExtensions": [".bam", ".sam", ".cram"]
+},
+{
+  "type": "empty-command"
+},
+{
+  "type": "has-filtering-selection"
+},
+{
+   "type": "contains-option",
+   "selectedOption": 203
 }
 ```
 
