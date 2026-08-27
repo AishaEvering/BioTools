@@ -791,7 +791,6 @@ A filter preset contains:
 - Immutable name
 - Immutable description
 - Immutable Flag Filter
-- Immutable explanation
 
 Filter Presets populate the same flag filter used by manual selections.
 They do not use a separate command generation process.
@@ -807,8 +806,7 @@ be further edited through normal manual selection.
   "filter": {
     "includedFlags": [],
     "excludedFlags": [102, 103]
-  },
-  "explanation": "Returns primary alignments by excluding secondary and supplementary alignments."
+  }
 }
 ```
 
@@ -818,7 +816,6 @@ interface FilterPreset {
   readonly name: string;
   readonly description: string;
   readonly filter: FlagFilter;
-  readonly explanation: string;
 }
 ```
 
