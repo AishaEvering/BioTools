@@ -770,11 +770,11 @@ Contains a predefined Flag Filter configuration and a researcher facing explanat
 
 A Filter Preset exists in 5 forms within BioTools:
 
-- Filter Preset Definition - the reference data stored in JSON.
-- Filter Preset Interface - the TypeScript contract defining the required shape of a FilterPreset.
-- Filter Preset Object - created after its referenced SAM Flag identifiers are resolved.
-- Filter Preset Catalog - owns the loaded collection and provides lookup/access
-- Filter Preset Loader - loads the collection of JSON objects to a list of concrete object.
+- Filter Preset Definition - reference data stored in JSON.
+- Filter Preset Interface - TypeScript contract defining the required shape.
+- Filter Preset Object - runtime object created after referenced SAM Flag identifiers are resolved.
+
+Filter Preset Definitions are converted into Filter Preset Objects by a Filter Preset Loader. Loaded Filter Preset Objects are maintained by the Filter Preset Catalog.
 
 Examples may include:
 
@@ -850,6 +850,10 @@ class FilterPresetCatalog {
   findMatching(filter: FlagFilter): FilterPreset | undefined;
 }
 ```
+> [!NOTE]
+> The Filter Preset Catalog can identify whether the current FlagFilter exactly matches a known preset. This allows the
+> UI to reflect preset state consistently whether the filter was created by selecting a preset or by manual flag
+> selection.
 
 Filter Preset Loader Example:
 
@@ -860,18 +864,142 @@ interface FilterPresetLoader {
 ```
 
 ---
+## Domain Services
 
-### $${\color{purple}Filter \space Inversion}$$
+### $${\color{blue}Decoder}$$
 
-An inversion creates the logical opposite of a supported selection Flag Filter or filter Preset.
+Converts either a raw SAM flag integer or a supported `samtools view` command string into BioTools domain state.
 
-An inversion must be determined by domain rules rather than by simply exchanging every included and excluded flag.
+The Decoder allows existing flag values and command strings to be loaded into BioTools so that their flags, options, and input file can be viewed, explained, and edited using the same application state used by manually created commands.
 
-Not every command has a meaningful or safe automatic inversion. Unsupported inversions should be identified clearly.
+The Decoder does not maintain its own command state.
+
+The Decoder accepts:
+- A non-negative SAM flag integer.
+- A full or parital `samtools view` command string.
+
+A standalone integer is interpreted as an included `-f` SAM flag bitmask.
+
+Example:
+
+3
+
+is decoded as:
+
+Included Flags:
+- Read Paired
+- Proper Pair
+
+A `samtools view` command is decoded by identifying the syntax supported by BioTools.
+
+Example:
+samtools view -f 3 -F 2048 -h -q 20 sample.bam
+
+may be decoded into:
+
+SamViewCommand
+flagFilter:
+  includedFlags:
+    - Read Paired
+    - Proper Pair
+  excludedFlags:
+    -Supplementary
+
+options:
+  - Include Header
+  - Minimum Mapping Quality: 20
+
+inputFile:
+  sample.bam
+
+The Decoder is responsible for:
+<ul>
+  <li>Determining whether the input is a raw flag integer or a `samtools view` command.</li>
+  <li>Decoding standalone integers as included SAM Flags.</li>
+  <li>Decoding `-f` and `-F` bitmask values into the corresponding SamFlag objects.</li>
+  <li>Resolving supported View Options through the `ViewOptionCatalog`.</li>
+  <li>Preserving supported option values.</li>
+  <li>Preserving the input file name when one is present.</li>
+  <li>Reporting syntax that BioTools does not recognize or support.</li>
+  <li>Returning the successfully decoded domain state.</li>
+</ul>
+
+The Decoder uses existing catalogs to resolve decoded values into domain objects rather than creating duplicate definitions.
+
+Decode Result
+
+A Decode Result contains the portion of the input that BioTools successfully decoded together with information about syntax that could not be decoded.
+
+interface DecodeResult {
+  readonly command: SamViewCommand;
+  readonly warnings: DecodeWarning[];
+}
+
+A Decode Warning describes syntax that BioTools could not interpret.
+
+interface DecodeWarning {
+  readonly token: string;
+  readonly message: string;
+}
+
+Example:
+
+samtools view -f 3 -q 20 -x 7 sample.bam
+
+may produce:
+
+Decode Result
+command:
+  includedFlags:
+    - Read Paired
+    - Proper Pair
+
+  options:
+    - Minimum Mapping Quality: 20
+
+  inputFile:
+    sample.bam
+
+warnings:
+  - token: -x
+  message: BioTools does not recognize or support this option.
+
+The successfully decoded portion of the command is loaded into the application even when warnings are present.
+
+> [!IMPORTANT]
+> Unsupported or unrecognized syntax must never be silently discarded.
+> BioTools may partially decode a command, but the user must be informed about any portion
+> that could not be interpreted.
+
+> [!IMPORTANT]
+> Decoded state uses the same `SamViewCommand`, `FlagFilter`, `SamFlag`, and View Option domain
+> objects used by manually created commands. Decoding does not use a separate command generation,
+> explanation, or rule-evaluation path.
+
+> [!NOTE]
+> A standalone negative integer is not treated as an exclusion shorthand.
+> To decode excluded flags, the user should provide a `samtools view` command using `-F`.
+
+Example Decoder Interface:
+
+interface SamViewCommandDecoder {
+  decode(input: string): DecodeResult;
+}
+
+A concrete Decoder may receive the catalogs required to resolve supported flags and options:
+
+class DefaultSamViewCommandDecoder implements SamViewCommandDecoder {
+  constructor(
+    private readonly flagCatalog: SamFlagCatalog,
+    private readonly viewOptionCatalog: ViewOptionCatalog
+  ) {}
+
+  decode(input: string): DecodeResult;
+}
+
 
 ---
 
-## Domain Services
 
 ### $${\color{blue}Explanation \space Engine}$$
 
@@ -1002,27 +1130,14 @@ SAM Flag
    │
    └── included in or excluded from Flag Filter
              │
-             ├── used by SAMtools View Command
-             │         │
-             │         ├── contains Selected View Options
-             │         │         │
-             │         │         └── references View Options
-             │         │
-             │         ├── used by Explanation Engine
-             │         │
-             │         └── passed to Command Renderer
-             │                   │
-             │                   └── produces Rendered Command
+             └── contained by SAMtools View Command
+
+
+View Option
+   │
+   └── referenced by Selected View Option
              │
-             └── evaluated by Rule Engine
-                       │
-                       ├── evaluates Rules
-                       │         │
-                       │         └── contains Rule Condition
-                       │
-                       └── produces Validation Results
-                                  │
-                                  └── references triggered Rule
+             └── contained by SAMtools View Command
 
 
 Filter Preset
@@ -1031,18 +1146,40 @@ Filter Preset
    │
    ├── loaded through Filter Preset Catalog
    │
-   └── may be recognized by Explanation Engine
+   └── may populate the current Flag Filter
+             │
+             └── current Flag Filter may be matched
+                 to a Filter Preset by the Catalog
+
+
+SAMtools View Command
+   │
+   ├── contains Flag Filter
+   ├── contains Selected View Options
+   ├── contains input file
+   │
+   ├── evaluated by Rule Engine
+   │         │
+   │         └── produces Validation Results
+   │
+   ├── used by Explanation Engine
+   │         │
+   │         └── produces Explanation Messages
+   │
+   └── passed to Command Renderer
+             │
+             └── produces Rendered Command
 
 
 Rule
    │
    ├── contains Rule Condition
-   │
    ├── loaded through Rule Catalog
    │
    └── evaluated by Rule Engine
              │
-             └── produces Validation Result when satisfied
+             └── produces Validation Result
+                 when condition is satisfied
 
 
 Validation Result
@@ -1055,7 +1192,6 @@ Validation Result
 Explanation Engine
    │
    ├── receives SAMtools View Command
-   ├── uses Filter Preset Catalog
    ├── receives Validation Results
    │
    └── produces Explanation Messages
@@ -1064,13 +1200,30 @@ Explanation Engine
 Explanation Message
    │
    ├── contains explanation type
+   ├── contains explanation group
    └── contains researcher-facing message
 
 
-Inversion
+Decoder
    │
-   └── transforms a supported Flag Filter
-       or Filter Preset using domain-defined behavior
+   ├── receives raw SAM flag integer
+   │      └── interprets as included (-f) bitmask
+   │
+   ├── receives samtools view command string
+   │
+   ├── resolves supported SAM Flags
+   ├── resolves supported View Options
+   │
+   └── produces Decode Result
+             │
+             ├── contains decoded SAMtools View Command
+             │         │
+             │         └── becomes ordinary application state
+             │
+             └── contains Decode Warnings
+                       │
+                       └── identifies syntax that
+                           could not be decoded
 ```
 
 ## Domain Rules
@@ -1110,13 +1263,3 @@ The following concepts are planned but are not required for the base Visual Comm
 - Command history
 - Exporting command history
 - User accounts
-
-## Open Questions
-
-The following decisions should be resolved during architecture design or implementation:
-
-- Which non-flag `samtools view` filters belong in Version 1?
-- Should selecting a dependent flag automatically select its related parent flag, or only display a warning?
-- Which combinations should be classified as errors versus warnings?
-- Should generated commands use decimal flag values only, or optionally display hexadecimal values?
-- How should the application represent flags whose meaning depends on whether the record is paired?
