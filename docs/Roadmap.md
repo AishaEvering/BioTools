@@ -19,26 +19,29 @@ Goal: Define what BioTools is before writing significant code.
 ## 🎯 Milestone 2 - Visual Command Builder
 Goal: Build a usable base version of the SAM Flag Visual Builder.
 
+### Completed
 ### Core Logic
-- SAM Flag Library data and loading
-- Flag Filter include and exclude calculations
-- SAMtools View Command
-- View Options
-- Command Renderer
-- Rule Engine
-- Base Rules
-- Validation Results
-- Explanation Engine
-- Explanation Messages
-  
+- ✅ SAM Flag Library data and loading
+- ✅ Flag Filter include and exclude calculations
+- ✅ SAMtools View Command
+- ✅ View Options
+- ✅ Command Renderer
+- ✅ Rule Engine
+- ✅ Base Rules
+- ✅ Explanation Engine
+- ✅ Explanation Messages
+- ✅ Advanced Rules and conflict detection
+
+### Completed
 ### User Interface
-- UI Skeleton
-- Flag selection controls
-- View Option controls
-- Live command preview
-- Readable Explanations
-- Validation feedback
-- Copy command
+- ✅ UI Skeleton
+- ✅ Flag selection controls
+- ✅ View Option controls
+- ✅ Live command preview
+- ✅ Readable Explanations
+- ✅ Validation feedback
+- ✅ Copy command
+- ✅ Ability to decode filters
   
 
 ## 🎯 Milestone 3 - Smart Builder
@@ -47,14 +50,12 @@ Goal: Add intelligent guidance and advanced interactions.
 ### Core Logic
 - Filter Presets
 - Filter Preset matching
-- Advanced Rules and conflict detection
-- Filter Inversion
+- Decoder
 
 ### User Interface
 - Filter Preset selection
 - Preset match/divergence feedback
 - Advanced conflict feedback
-- Ability to invert supported filters
 
 ## 🎯 Milestone 4 - Version 1.0
 Goal: SAM Flag Version 1 Release
