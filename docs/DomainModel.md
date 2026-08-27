@@ -306,7 +306,7 @@ to the current application state.
 
 A Rule exists in 2 forms within BioTools:
 
-- Rule Condition Interface - the TypeScript contract defining that required shape of a Rule Condition.
+- Rule Condition Interface - the TypeScript contract defining the required shape of a Rule Condition.
 - Rule Condition Object - the runtime object used by the Rule Engine when evaluating a Rule.
 
 > [!NOTE]
@@ -419,7 +419,7 @@ Describes a relationship, warning, or implication involving one or more domain c
 A Rule exists in 3 forms within BioTools:
 
 - Rule Definition - the reference data stored in JSON.
-- Rule Interface - the TypeScript contract defining that required shape of a Rule.
+- Rule Interface - the TypeScript contract defining the required shape of a Rule.
 - Rule Object - the runtime object created from a Rule definition and used by the application.
 
 Rule Definitions are converted into Rule Objects by a Rule Loader. Loaded Rule Objects
@@ -447,7 +447,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Proper Pair]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Proper Pair normally applies to reads marked as paired.
    ```
 2. Mate Unmapped selected without Read Paired
@@ -456,7 +456,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Mate Unmapped]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Mate Unmapped applies to reads that are part of a paired template.
    ```
 3. Mate Reverse selected without Read Paired
@@ -465,7 +465,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Mate Reverse]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Mate Reverse applies to reads that are part of a paired template.
    ```
 4. First in Pair selected without Read Paired
@@ -474,7 +474,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [First in Pair]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: First in Pair applies to reads that are part of a paired template.
    ```
 5. Second in Pair selected without Read Paired
@@ -483,7 +483,7 @@ Possible severity levels:
    condition type: requires-flags
    included flags: [Second in Pair]
    required flags: [Read Paired]
-   severity: Warning
+   severity: warning
    message: Second in Pair applies to reads that are part of a paired template.
    ```
 6. First in pair and Second in pair are mutually exclusive
@@ -491,7 +491,7 @@ Possible severity levels:
    id: 6
    condition type: contradiction
    included flags: [First in Pair, Second in Pair]
-   severity: Error
+   severity: error
    message: A read can't be both first and second in a pair.
    ```
 7. CRAM output selected without a Reference File
@@ -501,8 +501,70 @@ Possible severity levels:
    selected option: Output Format
    selected value: "CRAM"
    required option: Reference File
-   severity: Warning
+   severity: warning
    message: CRAM output may require access to a reference FASTA.  Specify a reference file with -T when the reference can't otherwise be resolved.
+   ```
+8. SAM Flag is in include and exclude filter
+   ```
+   id: 8
+   condition type: include-exclude-overlap
+   severity: error
+   message: A SAM flag can't be both included and excluded at the same time.
+   ```
+9. Contradicting SAM Flags properly paired and unmapped included
+   ```
+   id: 9
+   condition type: contradiction
+   included flags: [Proper Pair, Read Unmapped]
+   severity: error
+   message: A read marked as properly paired can't also be marked as unmapped.
+   ```
+10. Contradicting SAM Flags properly paired and unmapped mate
+   ```
+   id: 10
+   condition type: contradiction
+   included flags: [Proper Pair, Mate Unmapped]
+   severity: error
+   message: A properly paired read can't have an unmapped mate.
+   ```
+11. Map quality set to 255
+   ```
+   id: 11
+   condition type: option-value
+   selected option: Minimum Mapping Quality
+   selected value: 255
+   severity: warning
+   message: A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality.
+   ```
+12. Input file extension is unexpected
+   ```
+   id: 12
+   condition type: input-file-extension
+   allowed extensions: [.sam. .bam, .cram]
+   severity: warning
+   message: Input file does not have a typical SAM/BAM/CRAM extension.
+   ```
+13. Command is empty
+   ```
+   id: 13
+   condition type: empty-command
+   severity: info
+   message: No flags or options selected yet, this command will return every read in the file.
+   ```
+14. Command contains filtering selections
+   ```
+   id: 14
+   condition type: has-filtering-selection
+   severity: info
+   message: Included flags and filtering options are combined with AND, every condition must hold for a read to appear in the output.
+   ```
+15. Command contains output format options
+   ```
+   id: 15
+   condition type: contains-option
+   severity: info
+   selected option: Output Format
+   message: The output format controls how the resulting alignments are written, not which reads are selected.
    ```
 
 The Rule Interface defines the runtime shape of a Rule:
@@ -709,7 +771,7 @@ Contains a predefined Flag Filter configuration and a researcher facing explanat
 A Filter Preset exists in 5 forms within BioTools:
 
 - Filter Preset Definition - the reference data stored in JSON.
-- Filter Preset Interface - the TypeScript contract defining that required shape of a FilterPreset.
+- Filter Preset Interface - the TypeScript contract defining the required shape of a FilterPreset.
 - Filter Preset Object - created after its referenced SAM Flag identifiers are resolved.
 - Filter Preset Catalog - owns the loaded collection and provides lookup/access
 - Filter Preset Loader - loads the collection of JSON objects to a list of concrete object.
