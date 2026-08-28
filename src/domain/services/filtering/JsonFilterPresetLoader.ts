@@ -1,4 +1,4 @@
-import filterPresetDefinitions from "../../../data/filterpresets.json";
+import filterPresetDefinitions from "../../../data/filterPresets.json";
 import type { FilterPreset } from "../../filtering/FilterPreset";
 import type { FilterPresetDefinition } from "../../filtering/FilterPresetDefinition";
 import type { Loader } from "../../loaders/Loader";
