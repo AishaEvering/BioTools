@@ -25,7 +25,7 @@ export default function Explanations({
       (message.group === EXPLANATION_GROUP.INCLUDE ||
         message.group === EXPLANATION_GROUP.OPTION),
   );
-  console.log(commandMessages);
+
   const excludeMessage = explanations.filter(
     (message) =>
       message.type === EXPLANATION_TYPE.COMMAND &&

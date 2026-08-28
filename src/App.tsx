@@ -25,7 +25,6 @@ function App() {
   const handleResetAll = () => {
     setFlagFilter(createFlagFilter([], []));
     setSelectedOptions([]);
-    setHighlightedKeys([]);
     setInputFile("");
   };
 
