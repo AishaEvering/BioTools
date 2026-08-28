@@ -1,0 +1,92 @@
+[
+    {
+        "id": 400,
+        "name": "Properly Paired Reads",
+        "description": "Select reads that are marked as paired and properly paired.",
+        "filter": {
+            "includedFlags": [100, 101],
+            "excludedFlags": []
+        }
+    },
+    {
+        "id": 401,
+        "name": "Primary Alignments",
+        "description": "Exclude secondary and supplementary alignments.",
+        "filter": {
+            "includedFlags": [],
+            "excludedFlags": [108, 111]
+        }
+  },
+  {
+        "id": 402,
+        "name": "Mapped Reads",
+        "description": "Exclude reads marked as unmapped.",
+        "filter": {
+            "includedFlags": [],
+            "excludedFlags": [102]
+        }
+  },
+  {
+        "id": 403,
+        "name": "Unmapped Reads",
+        "description": "Select reads marked as unmapped.",
+        "filter": {
+            "includedFlags": [102],
+            "excludedFlags": []
+        }
+  },
+  {
+        "id": 404,
+        "name": "Forward Strand Alignments",
+        "description": "Exclude reads aligned to the reverse strand.",
+        "filter": {
+            "includedFlags": [],
+            "excludedFlags": [104]
+        }
+  },
+  {
+        "id": 405,
+        "name": "Reverse Strand Alignments",
+        "description": "Select reads aligned to the reverse strand.",
+        "filter": {
+            "includedFlags": [104],
+            "excludedFlags": []
+        }
+  },
+  {
+        "id": 406,
+        "name": "First in Pair",
+        "description": "Select reads marked as the first read in a paired template.",
+        "filter": {
+            "includedFlags": [100, 106],
+            "excludedFlags": []
+        }
+  },
+  {
+        "id": 407,
+        "name": "Second in Pair",
+        "description": "Select reads marked as the second read in a paired template.",
+        "filter": {
+            "includedFlags": [100, 107],
+            "excludedFlags": []
+        }
+  },
+  {
+        "id": 408,
+        "name": "Duplicate Reads",
+        "description": "Select reads marked as duplicates.",
+        "filter": {
+            "includedFlags": [110],
+            "excludedFlags": []
+            }
+  },
+  {
+        "id": 409,
+        "name": "Non-Duplicate Reads",
+        "description": "Exclude reads marked as duplicates.",
+        "filter": {
+            "includedFlags": [],
+            "excludedFlags": [110]
+        }
+  }
+]

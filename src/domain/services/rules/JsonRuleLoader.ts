@@ -1,14 +1,14 @@
 import rulesDefinitions from "../../../data/rules.json";
 import type { Rule } from "../../rules/Rule";
-import type { RuleLoader } from "../../rules/RuleLoader";
 import { RULE_CONDITION_TYPES, type RuleCondition, type RuleConditionDefinition } from "../../rules/RuleCondition";
 import type { SamFlagCatalog } from "../samFlags/SamFlagCatalog";
 import type { ViewOptionCatalog } from "../viewOptions/ViewOptionCatalog";
 import type { RuleDefinition } from "../../rules/RuleDefinition";
+import type { Loader } from "../../loaders/Loader";
 
 
 
-export class JsonRuleLoader implements RuleLoader {
+export class JsonRuleLoader implements Loader<Rule> {
 
     private readonly flagCatalog: SamFlagCatalog;
 private readonly viewOptionCatalog: ViewOptionCatalog;
