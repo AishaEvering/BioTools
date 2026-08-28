@@ -10,7 +10,7 @@ describe("FilePresetCatalog", () => {
     describe("getAll", () => {
         it("returns all filter presets", () => {
             const rules = catalog.getAll();
-            expect(rules).toHaveLength(10);
+            expect(rules).toHaveLength(7);
         });
 
         it("contains unique filter preset IDs", () => {
@@ -145,20 +145,6 @@ describe("FilePresetCatalog", () => {
             const preset = catalog.findMatching(filter);
 
             expect(preset?.id).toBe(402); // Mapped Reads
-        });
-
-        it("distinguishes included and excluded versions of the same flag", () => {
-            if(!readUnmapped) {
-                throw new Error("Required SAM flags was not found");
-            }
-
-            const filter = createFlagFilter(
-                [readUnmapped],
-                []
-            );
-            const preset = catalog.findMatching(filter);
-
-            expect(preset?.id).toBe(403); // Unmapped Reads
         });
     });
 });

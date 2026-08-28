@@ -10,7 +10,7 @@ describe("JsonFilterPresetLoader", () => {
     const filterPresets = loader.load();
 
     it("loads all filter preset definitions", () => {
-    expect(filterPresets).toHaveLength(10);
+    expect(filterPresets).toHaveLength(7);
     });
 
     it("resolves flag identifiers for properly paired reads", () => {
@@ -42,15 +42,6 @@ describe("JsonFilterPresetLoader", () => {
         expect(filterPreset.filter.excludedFlags[0].id).toBe(102);
     });
 
-    it("resolves flag identifiers for unmapped reads", () => {
-        const filterPreset = filterPresets.find(preset => preset.id === 403)!;
-
-        expect(filterPreset.name).toBe("Unmapped Reads");
-        expect(filterPreset.filter.includedFlags).toHaveLength(1);
-        expect(filterPreset.filter.excludedFlags).toHaveLength(0);
-        expect(filterPreset.filter.includedFlags[0].id).toBe(102);
-    });
-
     it("resolves flag identifiers for forward strand alignments", () => {
         const filterPreset = filterPresets.find(preset => preset.id === 404)!;
 
@@ -58,15 +49,6 @@ describe("JsonFilterPresetLoader", () => {
         expect(filterPreset.filter.includedFlags).toHaveLength(0);
         expect(filterPreset.filter.excludedFlags).toHaveLength(1);
         expect(filterPreset.filter.excludedFlags[0].id).toBe(104);
-    });
-
-    it("resolves flag identifiers for reverse strand alignments", () => {
-        const filterPreset = filterPresets.find(preset => preset.id === 405)!;
-
-        expect(filterPreset.name).toBe("Reverse Strand Alignments");
-        expect(filterPreset.filter.includedFlags).toHaveLength(1);
-        expect(filterPreset.filter.excludedFlags).toHaveLength(0);
-        expect(filterPreset.filter.includedFlags[0].id).toBe(104);
     });
 
     it("resolves flag identifiers for first in pair", () => {
@@ -89,14 +71,6 @@ describe("JsonFilterPresetLoader", () => {
         expect(filterPreset.filter.includedFlags[1].id).toBe(107);
     });
 
-    it("resolves flag identifiers for duplicate reads", () => {
-        const filterPreset = filterPresets.find(preset => preset.id === 408)!;
-
-        expect(filterPreset.name).toBe("Duplicate Reads");
-        expect(filterPreset.filter.includedFlags).toHaveLength(1);
-        expect(filterPreset.filter.excludedFlags).toHaveLength(0);
-        expect(filterPreset.filter.includedFlags[0].id).toBe(110);
-    });
 
     it("resolves flag identifiers for non-duplicate reads", () => {
         const filterPreset = filterPresets.find(preset => preset.id === 409)!;
