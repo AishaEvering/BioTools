@@ -27,30 +27,12 @@
         }
   },
   {
-        "id": 403,
-        "name": "Unmapped Reads",
-        "description": "Select reads marked as unmapped.",
-        "filter": {
-            "includedFlags": [102],
-            "excludedFlags": []
-        }
-  },
-  {
         "id": 404,
         "name": "Forward Strand Alignments",
         "description": "Exclude reads aligned to the reverse strand.",
         "filter": {
             "includedFlags": [],
             "excludedFlags": [104]
-        }
-  },
-  {
-        "id": 405,
-        "name": "Reverse Strand Alignments",
-        "description": "Select reads aligned to the reverse strand.",
-        "filter": {
-            "includedFlags": [104],
-            "excludedFlags": []
         }
   },
   {
@@ -70,15 +52,6 @@
             "includedFlags": [100, 107],
             "excludedFlags": []
         }
-  },
-  {
-        "id": 408,
-        "name": "Duplicate Reads",
-        "description": "Select reads marked as duplicates.",
-        "filter": {
-            "includedFlags": [110],
-            "excludedFlags": []
-            }
   },
   {
         "id": 409,
