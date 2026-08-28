@@ -23,7 +23,7 @@ export default function TopBar() {
               <path d="M14 4L10 20" />
             </svg>
           </span>
-          <h1>Biotools</h1>
+          <h1>BioTools</h1>
           <span className="crumbs">
             / <strong>SAM View Command Builder</strong>
           </span>
