@@ -15,6 +15,12 @@
     transition:all .15s ease;
 }
 
+.bit-box.hidden-selected{
+    outline: 2px dashed currentColor;
+    /* outline-offset: 2px; */
+}
+
+
 .bit-cell.include .bit-box{
     background:var(--terminal-accent);
     border-color:var(--terminal-accent);

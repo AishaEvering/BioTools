@@ -13,12 +13,14 @@ import { RuleCatalog } from "../../../domain/services/rules/RuleCatalog";
 import { RuleEngine } from "../../../domain/services/rules/RuleEngine";
 import { ExplanationEngine } from "../../../domain/services/explanation/ExplanationEngine";
 import Explanations from "../../Explanations/Explanations";
+import type { SamFlag } from "../../../domain/sam/SamFlag";
 
 interface OutputPanelProps {
   flagFilter: FlagFilter;
   selectedOptions: SelectedViewOption[];
   setHighlightedKeys: React.Dispatch<React.SetStateAction<string[]>>;
   highlightedKeys: string[];
+  hiddenFlags: SamFlag[];
 }
 
 const samFlagCatalog = new SamFlagCatalog();
@@ -31,6 +33,7 @@ export default function OutputPanel({
   selectedOptions,
   setHighlightedKeys,
   highlightedKeys,
+  hiddenFlags,
 }: OutputPanelProps) {
   const [inputFile, setInputFile] = useState("");
   const flags = samFlagCatalog.getAll();
@@ -55,7 +58,11 @@ export default function OutputPanel({
       <div className="op-head">
         <h2>Flag bitmask</h2>
       </div>
-      <BitMaskBar flags={flags} flagFilter={flagFilter} />
+      <BitMaskBar
+        flags={flags}
+        flagFilter={flagFilter}
+        hiddenFlags={hiddenFlags}
+      />
       <InputFile value={inputFile} onChange={handleInputFileChange} />
       <ActiveFlags flags={flags} flagFilter={flagFilter} />
       <Command
@@ -63,7 +70,11 @@ export default function OutputPanel({
         setHighlightedKeys={setHighlightedKeys}
         highlightedKeys={highlightedKeys}
       />
-      <Explanations explanations={explanations} />
+      <Explanations
+        explanations={explanations}
+        flagFilter={flagFilter}
+        hiddenFlags={hiddenFlags}
+      />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { useState } from "react";
 import type { FlagFilter } from "./domain/filtering/FlagFilter";
 import BottomBar from "./ui/layout/BottomBar/BottomBar";
 import type { SelectedViewOption } from "./domain/options/SelectedViewOption";
+import type { SamFlag } from "./domain/sam/SamFlag";
 
 function App() {
   const [flagFilter, setFlagFilter] = useState<FlagFilter>(
@@ -18,6 +19,7 @@ function App() {
   );
 
   const [highlightedKeys, setHighlightedKeys] = useState<string[]>([]);
+  const [hiddenFlags, setHiddenFlags] = useState<SamFlag[]>([]);
 
   return (
     <>
@@ -30,12 +32,15 @@ function App() {
           selectedOptions={selectedOptions}
           setSelectedOptions={setSelectedOptions}
           setHighlightedKeys={setHighlightedKeys}
+          hiddenFlags={hiddenFlags}
+          setHiddenFlags={setHiddenFlags}
         />
         <OutputPanel
           flagFilter={flagFilter}
           selectedOptions={selectedOptions}
           setHighlightedKeys={setHighlightedKeys}
           highlightedKeys={highlightedKeys}
+          hiddenFlags={hiddenFlags}
         />
       </main>
 
