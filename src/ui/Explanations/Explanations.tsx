@@ -22,9 +22,10 @@ export default function Explanations({
   const commandMessages = explanations.filter(
     (message) =>
       message.type === EXPLANATION_TYPE.COMMAND &&
-      (message.group === EXPLANATION_GROUP.INCLUDE || EXPLANATION_GROUP.OPTION),
+      (message.group === EXPLANATION_GROUP.INCLUDE ||
+        message.group === EXPLANATION_GROUP.OPTION),
   );
-
+  console.log(commandMessages);
   const excludeMessage = explanations.filter(
     (message) =>
       message.type === EXPLANATION_TYPE.COMMAND &&
@@ -52,11 +53,10 @@ export default function Explanations({
   const uiWarning =
     selectedHiddenFlags.length > 0
       ? `This selection includes ${selectedHiddenFlags.length} hidden 
-            ${selectedHiddenFlags.length === 1 ? "flag" : "flags"} (
-            ${selectedHiddenFlags.map((flag) => flag.name).join(", ")}
-            ) not shown in the list above — hidden flags are still included
-            in the generated command.`
-      : "";
+            ${selectedHiddenFlags.length === 1 ? "flag" : "flags"} (${selectedHiddenFlags.map((flag) => flag.name).join(", ")}).
+            ${selectedHiddenFlags.length === 1 ? "Although it is hidden, it is" : "Although they are hidden, they are"}
+             still included in the generated command.`
+      : undefined;
 
   const warnings = [
     ...ruleWarnings.map((warning) => warning.text),
