@@ -20,6 +20,14 @@ function App() {
 
   const [highlightedKeys, setHighlightedKeys] = useState<string[]>([]);
   const [hiddenFlags, setHiddenFlags] = useState<SamFlag[]>([]);
+  const [inputFile, setInputFile] = useState("");
+
+  const handleResetAll = () => {
+    setFlagFilter(createFlagFilter([], []));
+    setSelectedOptions([]);
+    setHighlightedKeys([]);
+    setInputFile("");
+  };
 
   return (
     <>
@@ -34,6 +42,7 @@ function App() {
           setHighlightedKeys={setHighlightedKeys}
           hiddenFlags={hiddenFlags}
           setHiddenFlags={setHiddenFlags}
+          onResetAll={handleResetAll}
         />
         <OutputPanel
           flagFilter={flagFilter}
@@ -41,6 +50,8 @@ function App() {
           setHighlightedKeys={setHighlightedKeys}
           highlightedKeys={highlightedKeys}
           hiddenFlags={hiddenFlags}
+          inputFile={inputFile}
+          setInputFile={setInputFile}
         />
       </main>
 

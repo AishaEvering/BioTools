@@ -15,6 +15,7 @@ import type { ViewOption } from "../../../domain/options/ViewOption";
 import type { SelectedViewOption } from "../../../domain/options/SelectedViewOption";
 import Presets from "../../FilterPresets/Presets";
 import { FilterPresetCatalog } from "../../../domain/services/filtering/FilterPresetCatalog";
+import Utility from "../../Utility/Utility";
 
 const samFlagCatalog = new SamFlagCatalog();
 const viewOptionCatalog = new ViewOptionCatalog();
@@ -29,6 +30,7 @@ interface BuilderPanelProps {
   setHighlightedKeys: React.Dispatch<React.SetStateAction<string[]>>;
   hiddenFlags: SamFlag[];
   setHiddenFlags: React.Dispatch<React.SetStateAction<SamFlag[]>>;
+  onResetAll: () => void;
 }
 
 export default function BuilderPanel({
@@ -39,6 +41,7 @@ export default function BuilderPanel({
   setHighlightedKeys,
   hiddenFlags,
   setHiddenFlags,
+  onResetAll,
 }: BuilderPanelProps) {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -222,6 +225,8 @@ export default function BuilderPanel({
           setFlagFilter(preset.filter);
         }}
       />
+
+      <Utility onResetAll={onResetAll} />
 
       <HiddenFlags flags={currentHiddenFlags} onRestore={handleRestoreFlag} />
 

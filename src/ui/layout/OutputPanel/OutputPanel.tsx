@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./OutputPanel.css";
 import InputFile from "../../InputFile/InputFile";
 import { SamFlagCatalog } from "../../../domain/services/samFlags/SamFlagCatalog";
@@ -21,6 +20,8 @@ interface OutputPanelProps {
   setHighlightedKeys: React.Dispatch<React.SetStateAction<string[]>>;
   highlightedKeys: string[];
   hiddenFlags: SamFlag[];
+  inputFile: string;
+  setInputFile: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const samFlagCatalog = new SamFlagCatalog();
@@ -34,8 +35,9 @@ export default function OutputPanel({
   setHighlightedKeys,
   highlightedKeys,
   hiddenFlags,
+  inputFile,
+  setInputFile,
 }: OutputPanelProps) {
-  const [inputFile, setInputFile] = useState("");
   const flags = samFlagCatalog.getAll();
 
   function handleInputFileChange(value: string) {
