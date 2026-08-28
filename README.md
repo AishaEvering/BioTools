@@ -1,4 +1,7 @@
-# BioTools
+<p align="center">
+  <img src="src/assets/banners/github-banner-1280x320.png" alt="BioTools banner" width="100%">
+</p>
+
 Build bioinformatics workflows the way researchers think, not the way command line tools are implemented.
 
 ## Current Milestone
