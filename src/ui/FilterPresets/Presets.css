@@ -1,0 +1,33 @@
+ .preset-row{
+    margin-top:16px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .preset-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);font-weight:600;}
+  .presets-group{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    flex:1 1 auto;
+  }
+  .preset-chip{
+    border:1px dashed var(--teal);
+    background:var(--teal-dim);
+    color:var(--teal-deep);
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:12.5px;
+    font-weight:500;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .preset-chip:hover{background:#d3e8e2;}
+  .preset-chip.applied{
+    background:var(--teal);
+    border-style:solid;
+    color:#fff;
+  }
+  .preset-chip.applied:hover{background:var(--teal-deep);}

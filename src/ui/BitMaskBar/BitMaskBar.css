@@ -1,7 +1,7 @@
   .bitstrip{
     display:flex;
     gap:3px;
-    padding:0 20px 16px;
+    padding:4px 20px 16px;
     overflow-x:auto;
   }
 .bitstrip::-webkit-scrollbar{height:5px;}

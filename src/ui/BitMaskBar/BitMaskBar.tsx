@@ -6,9 +6,14 @@ import BitMask from "./BitMask";
 interface BitMaskBarProps {
   flags: readonly SamFlag[];
   flagFilter: FlagFilter;
+  hiddenFlags: SamFlag[];
 }
 
-export default function BitMaskBar({ flags, flagFilter }: BitMaskBarProps) {
+export default function BitMaskBar({
+  flags,
+  flagFilter,
+  hiddenFlags,
+}: BitMaskBarProps) {
   const sortedFlags = [...flags].sort((a, b) => b.value - a.value);
 
   return (
@@ -20,6 +25,9 @@ export default function BitMaskBar({ flags, flagFilter }: BitMaskBarProps) {
         const isExcluded = flagFilter.excludedFlags.some(
           (excludedFlag) => excludedFlag.id === flag.id,
         );
+        const isHiddenSelected =
+          hiddenFlags.some((hiddenFlag) => hiddenFlag.id === flag.id) &&
+          (isIncluded || isExcluded);
 
         const state = isIncluded
           ? "include"
@@ -27,7 +35,14 @@ export default function BitMaskBar({ flags, flagFilter }: BitMaskBarProps) {
             ? "exclude"
             : undefined;
 
-        return <BitMask key={flag.id} flag={flag} state={state} />;
+        return (
+          <BitMask
+            key={flag.id}
+            flag={flag}
+            state={state}
+            isHidden={isHiddenSelected}
+          />
+        );
       })}
     </div>
   );

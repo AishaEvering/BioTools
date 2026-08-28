@@ -13,6 +13,8 @@ import Options from "../../Options/Options";
 import { ViewOptionCatalog } from "../../../domain/services/viewOptions/ViewOptionCatalog";
 import type { ViewOption } from "../../../domain/options/ViewOption";
 import type { SelectedViewOption } from "../../../domain/options/SelectedViewOption";
+import Presets from "../../FilterPresets/Presets";
+import { FilterPresetCatalog } from "../../../domain/services/filtering/FilterPresetCatalog";
 
 const samFlagCatalog = new SamFlagCatalog();
 const viewOptionCatalog = new ViewOptionCatalog();
@@ -25,6 +27,8 @@ interface BuilderPanelProps {
     React.SetStateAction<SelectedViewOption[]>
   >;
   setHighlightedKeys: React.Dispatch<React.SetStateAction<string[]>>;
+  hiddenFlags: SamFlag[];
+  setHiddenFlags: React.Dispatch<React.SetStateAction<SamFlag[]>>;
 }
 
 export default function BuilderPanel({
@@ -33,11 +37,13 @@ export default function BuilderPanel({
   selectedOptions,
   setSelectedOptions,
   setHighlightedKeys,
+  hiddenFlags,
+  setHiddenFlags,
 }: BuilderPanelProps) {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [hiddenFlagIds, setHiddenFlagIds] = useState<Set<number>>(new Set());
 
+  const flagPresetCatalog = new FilterPresetCatalog(samFlagCatalog);
   const flags = samFlagCatalog.getAll();
   const viewOptions = viewOptionCatalog.getAll();
 
@@ -49,9 +55,8 @@ export default function BuilderPanel({
   ];
 
   const filteredFlags = flags.filter((flag) => {
-    if (hiddenFlagIds.has(flag.id)) {
+    if (hiddenFlags.some((hiddenFlag) => hiddenFlag.id === flag.id))
       return false;
-    }
 
     const matchedSearch =
       !normalizedSearch ||
@@ -122,21 +127,21 @@ export default function BuilderPanel({
       ),
     );
 
-    setHiddenFlagIds((current) => {
-      const next = new Set(current);
-      next.add(flag.id);
-      return next;
-    });
+    setHiddenFlags((current) =>
+      current.some((hiddenFlags) => hiddenFlags.id === flag.id)
+        ? current
+        : [...current, flag],
+    );
   }
 
-  const hiddenFlags = flags.filter((flag) => hiddenFlagIds.has(flag.id));
+  const currentHiddenFlags = flags.filter((flag) =>
+    hiddenFlags.some((hf) => hf.id === flag.id),
+  );
 
   function handleRestoreFlag(flag: SamFlag) {
-    setHiddenFlagIds((current) => {
-      const next = new Set(current);
-      next.delete(flag.id);
-      return next;
-    });
+    setHiddenFlags((current) =>
+      current.filter((hiddenFlags) => hiddenFlags.id !== flag.id),
+    );
   }
 
   function handleAddOption(option: ViewOption) {
@@ -210,7 +215,15 @@ export default function BuilderPanel({
         </span>
       </div>
 
-      <HiddenFlags flags={hiddenFlags} onRestore={handleRestoreFlag} />
+      <Presets
+        flagFilter={flagFilter}
+        catalog={flagPresetCatalog}
+        onPresetSelected={(preset) => {
+          setFlagFilter(preset.filter);
+        }}
+      />
+
+      <HiddenFlags flags={currentHiddenFlags} onRestore={handleRestoreFlag} />
 
       <FlagGroups
         flags={filteredFlags}
