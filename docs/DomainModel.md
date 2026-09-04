@@ -125,6 +125,7 @@ Options include:
 > Only options explicitly supported by BioTools should be included in the model.
 
 A View Option contains:
+
 - Immutable unique identifier
 - Immutable name
 - Immutable command-line syntax
@@ -319,6 +320,7 @@ A Rule Condition contains:
 - Immutable condition specific values, when required
 
 Supported condition types for version 1:
+
 - `requires-flags`: selected flags require other flags.
 - `contradiction`: a combination of selected flags is contradictory.
 - `requires-option`: an option/value requires another option.
@@ -520,52 +522,63 @@ Possible severity levels:
    message: A read marked as properly paired can't also be marked as unmapped.
    ```
 10. Contradicting SAM Flags properly paired and unmapped mate
-   ```
-   id: 10
-   condition type: contradiction
-   included flags: [Proper Pair, Mate Unmapped]
-   severity: error
-   message: A properly paired read can't have an unmapped mate.
-   ```
+
+```
+id: 10
+condition type: contradiction
+included flags: [Proper Pair, Mate Unmapped]
+severity: error
+message: A properly paired read can't have an unmapped mate.
+```
+
 11. Map quality set to 255
-   ```
-   id: 11
-   condition type: option-value
-   selected option: Minimum Mapping Quality
-   selected value: 255
-   severity: warning
-   message: A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality.
-   ```
+
+```
+id: 11
+condition type: option-value
+selected option: Minimum Mapping Quality
+selected value: 255
+severity: warning
+message: A mapping quality of 255 indicates that mapping quality is unavailable; it does not represent the highest mapping quality.
+```
+
 12. Input file extension is unexpected
-   ```
-   id: 12
-   condition type: input-file-extension
-   allowed extensions: [.sam. .bam, .cram]
-   severity: warning
-   message: Input file does not have a typical SAM/BAM/CRAM extension.
-   ```
+
+```
+id: 12
+condition type: input-file-extension
+allowed extensions: [.sam. .bam, .cram]
+severity: warning
+message: Input file does not have a typical SAM/BAM/CRAM extension.
+```
+
 13. Command is empty
-   ```
-   id: 13
-   condition type: empty-command
-   severity: info
-   message: No flags or options selected yet, this command will return every read in the file.
-   ```
+
+```
+id: 13
+condition type: empty-command
+severity: info
+message: No flags or options selected yet, this command will return every read in the file.
+```
+
 14. Command contains filtering selections
-   ```
-   id: 14
-   condition type: has-filtering-selection
-   severity: info
-   message: Included flags and filtering options are combined with AND, every condition must hold for a read to appear in the output.
-   ```
+
+```
+id: 14
+condition type: has-filtering-selection
+severity: info
+message: Included flags and filtering options are combined with AND, every condition must hold for a read to appear in the output.
+```
+
 15. Command contains output format options
-   ```
-   id: 15
-   condition type: contains-option
-   severity: info
-   selected option: Output Format
-   message: The output format controls how the resulting alignments are written, not which reads are selected.
-   ```
+
+```
+id: 15
+condition type: contains-option
+severity: info
+selected option: Output Format
+message: The output format controls how the resulting alignments are written, not which reads are selected.
+```
 
 The Rule Interface defines the runtime shape of a Rule:
 
@@ -847,6 +860,7 @@ class FilterPresetCatalog {
   findMatching(filter: FlagFilter): FilterPreset | undefined;
 }
 ```
+
 > [!NOTE]
 > The Filter Preset Catalog can identify whether the current FlagFilter exactly matches a known preset. This allows the
 > UI to reflect preset state consistently whether the filter was created by selecting a preset or by manual flag
@@ -861,6 +875,7 @@ interface FilterPresetLoader {
 ```
 
 ---
+
 ## Domain Services
 
 ### $${\color{blue}Decoder}$$
@@ -872,8 +887,16 @@ The Decoder allows existing flag values and command strings to be loaded into Bi
 The Decoder does not maintain its own command state.
 
 The Decoder accepts:
+
 - A non-negative SAM flag integer.
-- A full or parital `samtools view` command string.
+  - `decoder.decode("3") // valid standalone flag value`
+  - `decoder.decode("0") // valid, no included flags`
+  - `decoder.decode("-3") // not treated as exclusion shorthand`
+  - `decoder.decode("hello") // not a valid raw integer or command`
+
+- A full or partial `samtools view` command string.
+  - Correct "partial" example: `samtools view -f 3`
+  - Incorrect "partial" example: `-f 3 -q 20`
 
 A standalone integer is interpreted as an included `-f` SAM flag bitmask.
 
@@ -884,6 +907,7 @@ Example:
 is decoded as:
 
 Included Flags:
+
 - Read Paired
 - Proper Pair
 
@@ -896,20 +920,19 @@ may be decoded into:
 
 SamViewCommand
 flagFilter:
-  includedFlags:
-    - Read Paired
-    - Proper Pair
-  excludedFlags:
-    -Supplementary
+includedFlags: - Read Paired - Proper Pair
+excludedFlags: Supplementary
 
 options:
-  - Include Header
-  - Minimum Mapping Quality: 20
+
+- Include Header
+- Minimum Mapping Quality: 20
 
 inputFile:
-  sample.bam
+sample.bam
 
 The Decoder is responsible for:
+
 <ul>
   <li>Determining whether the input is a raw flag integer or a `samtools view` command.</li>
   <li>Decoding standalone integers as included SAM Flags.</li>
@@ -928,15 +951,15 @@ Decode Result
 A Decode Result contains the portion of the input that BioTools successfully decoded together with information about syntax that could not be decoded.
 
 interface DecodeResult {
-  readonly command: SamViewCommand;
-  readonly warnings: DecodeWarning[];
+readonly command: SamViewCommand;
+readonly warnings: DecodeWarning[];
 }
 
 A Decode Warning describes syntax that BioTools could not interpret.
 
 interface DecodeWarning {
-  readonly token: string;
-  readonly message: string;
+readonly token: string;
+readonly message: string;
 }
 
 Example:
@@ -947,18 +970,16 @@ may produce:
 
 Decode Result
 command:
-  includedFlags:
-    - Read Paired
-    - Proper Pair
+includedFlags: - Read Paired - Proper Pair
 
-  options:
-    - Minimum Mapping Quality: 20
+options: - Minimum Mapping Quality: 20
 
-  inputFile:
-    sample.bam
+inputFile:
+sample.bam
 
 warnings:
-  - token: -x
+
+- token: -x
   message: BioTools does not recognize or support this option.
 
 The successfully decoded portion of the command is loaded into the application even when warnings are present.
@@ -977,26 +998,18 @@ The successfully decoded portion of the command is loaded into the application e
 > A standalone negative integer is not treated as an exclusion shorthand.
 > To decode excluded flags, the user should provide a `samtools view` command using `-F`.
 
-Example Decoder Interface:
+A Decoder may receive the catalogs required to resolve supported flags and options:
 
-interface SamViewCommandDecoder {
-  decode(input: string): DecodeResult;
+class SamViewCommandDecoder {
+constructor(
+private readonly flagCatalog: SamFlagCatalog,
+private readonly viewOptionCatalog: ViewOptionCatalog
+) {}
+
+decode(input: string): DecodeResult;
 }
-
-A concrete Decoder may receive the catalogs required to resolve supported flags and options:
-
-class DefaultSamViewCommandDecoder implements SamViewCommandDecoder {
-  constructor(
-    private readonly flagCatalog: SamFlagCatalog,
-    private readonly viewOptionCatalog: ViewOptionCatalog
-  ) {}
-
-  decode(input: string): DecodeResult;
-}
-
 
 ---
-
 
 ### $${\color{blue}Explanation \space Engine}$$
 
