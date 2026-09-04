@@ -12,4 +12,8 @@ export class ViewOptionCatalog {
   getViewOptionById(id: number): ViewOption | undefined {
     return this.options.find(option => option.id === id);
   }
+
+  getBySyntax(syntax: string): ViewOption | undefined {
+    return this.options.find(option => option.syntax === syntax );
+  } 
 }
