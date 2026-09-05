@@ -25,6 +25,7 @@ export class ViewOptionDecoder {
             if (value === undefined || value.trim().length === 0) {
                 return { 
                     isValid: false, 
+                    requiresValue: option.requiresValue,
                     error: `Option ${syntax} requires a value, but none was provided.` 
                 };
             }
@@ -35,6 +36,7 @@ export class ViewOptionDecoder {
                 if(error){
                     return {
                         isValid: false,
+                        requiresValue: option.requiresValue,
                         error
                     }
                 };
@@ -43,10 +45,10 @@ export class ViewOptionDecoder {
 
         const selectedOption: SelectedViewOption = {
             option,
-            value    
+            value: option.requiresValue ? value : undefined 
         }
 
-        return { option: selectedOption, isValid: true };
+        return { option: selectedOption, isValid: true, requiresValue: option.requiresValue };
     }
 
     private validateConstraints(syntax: string, value: string,
