@@ -4,4 +4,5 @@ export interface DecodeViewOptionResult {
     readonly option?: SelectedViewOption;
     readonly isValid: boolean;
     readonly error?: string;
+    readonly requiresValue?: boolean;
 }
