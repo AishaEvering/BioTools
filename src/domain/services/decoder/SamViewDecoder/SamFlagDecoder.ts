@@ -1,6 +1,6 @@
-import type { DecodeSamFlagResult } from "../../decode/DecodeSamFlagResult";
-import type { SamFlag } from "../../sam/SamFlag";
-import type { SamFlagCatalog } from "../samFlags/SamFlagCatalog";
+import type { DecodeSamFlagResult } from "../../../decode/DecodeSamFlagResult";
+import type { SamFlag } from "../../../sam/SamFlag";
+import type { SamFlagCatalog } from "../../samFlags/SamFlagCatalog";
 
 export class SamFlagDecoder {
     private readonly flagCatalog: SamFlagCatalog;

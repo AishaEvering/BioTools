@@ -1,7 +1,7 @@
 import {describe, expect, it} from "vitest";
-import { SamFlagCatalog } from "../samFlags/SamFlagCatalog";
+import { SamFlagCatalog } from "../../samFlags/SamFlagCatalog";
 import { SamFlagDecoder } from "./SamFlagDecoder";
-import { ViewOptionCatalog } from "../viewOptions/ViewOptionCatalog";
+import { ViewOptionCatalog } from "../../viewOptions/ViewOptionCatalog";
 import { ViewOptionDecoder } from "./ViewOptionDecoder";
 import { SamCommandDecoder } from "./SamCommandDecoder";
 
@@ -624,6 +624,22 @@ describe("SamCommandDecoder", () => {
             expect(result.command.flagFilter.calculatedIncludeValue).toBe(0);
             expect(result.command.flagFilter.calculatedExcludeValue).toBe(0);
             expect(result.command.inputFile).toBe(undefined);
+        });
+
+
+        it("xshould handle a command with missing flag and option values gracefully", () => {
+            const input = "samtools view -f 147 input.bam";
+
+            const result = samCommandDecoder.decode(input);
+
+            console.log(result.command.flagFilter.includedFlags.map(flag => flag.value));
+
+            console.log(result.command.flagFilter.includedFlags.map(flag => flag.name));
+
+            expect(result.command.options.length).toBe(0);
+            expect(result.command.flagFilter.calculatedIncludeValue).toBe(147);
+            expect(result.command.flagFilter.calculatedExcludeValue).toBe(0);
+            expect(result.command.inputFile).toBe("input.bam");
         });
     });
 }); 

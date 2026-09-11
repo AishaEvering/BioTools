@@ -4,7 +4,7 @@ import { Tokenizer } from "./Tokenizer";
 describe("Tokenizer", () => {
 
     it("tokenizes a simple samtools command", () => {
-        expect(Tokenizer.tokenizeSamCommand("samtools view -f 3 -q 10 input.bam")).toEqual([
+        expect(Tokenizer.tokenize("samtools view -f 3 -q 10 input.bam")).toEqual([
             "samtools",
             "view",
             "-f",
@@ -16,7 +16,7 @@ describe("Tokenizer", () => {
     });
 
     it("tokenizes a command with quoted arguments", () => {
-        expect(Tokenizer.tokenizeSamCommand('samtools view -o "output file.bam" -O BAM')).toEqual([
+        expect(Tokenizer.tokenize('samtools view -o "output file.bam" -O BAM')).toEqual([
             "samtools",
             "view",
             "-o",
@@ -27,7 +27,7 @@ describe("Tokenizer", () => {
     });
 
     it("tokenizes a command with single-quoted arguments", () => {
-        expect(Tokenizer.tokenizeSamCommand("samtools view -o 'output file.bam' -O BAM")).toEqual([
+        expect(Tokenizer.tokenize("samtools view -o 'output file.bam' -O BAM")).toEqual([
             "samtools",
             "view",
             "-o",
@@ -38,7 +38,7 @@ describe("Tokenizer", () => {
     });
 
     it("tokenizes a command with mixed quotes and spaces", () => {
-        expect(Tokenizer.tokenizeSamCommand('samtools view -o "output file.bam" -O BAM -f 3')).toEqual([
+        expect(Tokenizer.tokenize('samtools view -o "output file.bam" -O BAM -f 3')).toEqual([
             "samtools",
             "view",
             "-o",
@@ -51,7 +51,7 @@ describe("Tokenizer", () => {
     });
 
     it("tokenizes a command with multiple spaces", () => {
-        expect(Tokenizer.tokenizeSamCommand("samtools   view   -f 3   -q 10   input.bam")).toEqual([
+        expect(Tokenizer.tokenize("samtools   view   -f 3   -q 10   input.bam")).toEqual([
             "samtools",
             "view",
             "-f",
@@ -63,13 +63,13 @@ describe("Tokenizer", () => {
     });
 
     it("tokenizes a command with no arguments", () => {
-        expect(Tokenizer.tokenizeSamCommand("samtools view")).toEqual([
+        expect(Tokenizer.tokenize("samtools view")).toEqual([
             "samtools",
             "view"
         ]);
     });
 
     it("tokenizes an empty command", () => {
-        expect(Tokenizer.tokenizeSamCommand("")).toEqual([]);
+        expect(Tokenizer.tokenize("")).toEqual([]);
     });
 });

@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
 import { SamFlagDecoder } from "./SamFlagDecoder";
-import { SamFlagCatalog } from "../samFlags/SamFlagCatalog";
+import { SamFlagCatalog } from "../../samFlags/SamFlagCatalog";
 
 describe("SamFlagDecoder", () => {
     const samFlagCatalog = new SamFlagCatalog();
