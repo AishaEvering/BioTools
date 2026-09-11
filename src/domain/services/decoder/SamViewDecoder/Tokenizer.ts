@@ -1,5 +1,5 @@
 export class Tokenizer {
-    static  tokenizeSamCommand(input: string): string[] {
+    static  tokenize(input: string): string[] {
         const tokens: string[] = [];
 
         /*

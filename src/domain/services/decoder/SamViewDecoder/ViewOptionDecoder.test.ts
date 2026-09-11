@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import { ViewOptionCatalog } from "../viewOptions/ViewOptionCatalog";
+import { ViewOptionCatalog } from "../../viewOptions/ViewOptionCatalog";
 import { ViewOptionDecoder } from "./ViewOptionDecoder";
 
 describe('ViewOptionDecoder', () => {  

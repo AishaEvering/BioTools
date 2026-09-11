@@ -1,7 +1,7 @@
-import type { DecodeViewOptionResult } from "../../decode/DecodeViewOptionResult";
-import type { ViewOptionCatalog } from "../viewOptions/ViewOptionCatalog";
-import type { SelectedViewOption } from "../../options/SelectedViewOption";
-import type { ViewOptionConstraints } from "../../options/ViewOptionConstraints";
+import type { DecodeViewOptionResult } from "../../../decode/DecodeViewOptionResult";
+import type { ViewOptionCatalog } from "../../viewOptions/ViewOptionCatalog";
+import type { SelectedViewOption } from "../../../options/SelectedViewOption";
+import type { ViewOptionConstraints } from "../../../options/ViewOptionConstraints";
 
 export class ViewOptionDecoder {
 

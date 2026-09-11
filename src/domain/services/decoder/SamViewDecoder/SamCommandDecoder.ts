@@ -1,10 +1,10 @@
-import type { DecodeSamCommandResult } from "../../decode/DecodeSamCommandResult";
+import type { DecodeSamCommandResult } from "../../../decode/DecodeSamCommandResult";
 import type { SamFlagDecoder } from "./SamFlagDecoder";
 import type { ViewOptionDecoder } from "./ViewOptionDecoder";
 import { Tokenizer } from "./Tokenizer";
-import { createFlagFilter } from "../filtering/CreateFlagFilter";
-import type { SamFlag } from "../../sam/SamFlag";
-import type { SelectedViewOption } from "../../options/SelectedViewOption";
+import { createFlagFilter } from "../../filtering/CreateFlagFilter";
+import type { SamFlag } from "../../../sam/SamFlag";
+import type { SelectedViewOption } from "../../../options/SelectedViewOption";
 
 export class SamCommandDecoder {
 
@@ -28,7 +28,7 @@ export class SamCommandDecoder {
     
 
     // tokenize the input
-    const tokens = Tokenizer.tokenizeSamCommand(input);
+    const tokens = Tokenizer.tokenize(input);
 
     // validate samtools view prefix
     if (tokens.length < 2 || tokens[0] !== "samtools" || tokens[1] !== "view") {
