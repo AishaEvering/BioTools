@@ -1,0 +1,89 @@
+  .decode-panel{
+    margin-top:14px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    border:1.5px solid var(--teal);
+    background:var(--teal-dim);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+
+  .decode-panel .decode-hint{
+    font-size:12px;
+    color:var(--ink-soft);
+    line-height:1.5;
+    margin:0;
+  }
+
+  .decode-panel .decode-input-row{
+    display:flex;
+    gap:8px;
+  }
+
+  .decode-panel input{
+    flex:1;min-width:0;
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:9px 12px;
+    font-family:var(--mono);
+    font-size:13px;
+    outline:none;
+    background:var(--paper);
+  }
+
+  .decode-panel input:focus{
+    border-color:var(--teal);
+  }
+
+  .decode-panel .decode-actions{
+    display:flex;gap:8px;
+  }
+
+  .decode-panel button{
+    border:none;
+    border-radius:7px;
+    padding:9px 16px;
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:var(--sans);
+  }
+
+  .decode-panel .btn-decode{
+    background:var(--teal);
+    color:#fff;
+  }
+
+  .decode-panel .btn-decode:hover{background:var(--teal-deep);}
+
+  .decode-panel .btn-decode-cancel{
+    background:transparent;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+ }
+
+  .decode-result{
+    font-size:12.5px;
+    line-height:1.5;
+    padding:9px 12px;
+    border-radius:7px;
+  }
+
+  .decode-result.info{
+    background:var(--teal-dim);
+    color:var(--teal-deep);
+    border:1px solid var(--teal);
+  }
+
+  .decode-result.warn{
+    background:var(--amber-dim);
+    color:#7a4d12;
+    border:1px solid var(--amber);
+  }
+
+  .decode-result.error{
+    background:var(--error-dim);
+    color:var(--error);
+    border:1px solid var(--error);
+  }

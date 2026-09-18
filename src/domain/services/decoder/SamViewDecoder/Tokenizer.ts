@@ -14,7 +14,7 @@ export class Tokenizer {
         let match: RegExpExecArray | null;
 
         while ((match = pattern.exec(input)) !== null) {
-            tokens.push(match[1] || match[2] || match[3]);
+            tokens.push(match[1] ?? match[2] ?? match[3]);
         }
 
         return tokens;     

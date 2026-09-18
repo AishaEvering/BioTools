@@ -72,4 +72,13 @@ describe("Tokenizer", () => {
     it("tokenizes an empty command", () => {
         expect(Tokenizer.tokenize("")).toEqual([]);
     });
+
+    it("tokenizes a command with an empty value", () => {
+        expect(Tokenizer.tokenize('samtools view -o ""')).toEqual([
+        "samtools",
+        "view",
+        "-o",
+        "",
+        ]);
+    });
 });

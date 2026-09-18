@@ -65,6 +65,6 @@ describe('ViewOptionDecoder', () => {
 
         expect(result.isValid).toBe(true);
         expect(result.option?.option.id).toEqual(202);
-        expect(result.option?.value).toEqual("20");
+        expect(result.option?.value).toEqual(20);
     });
 });   

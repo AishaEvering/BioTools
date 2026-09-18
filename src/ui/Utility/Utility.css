@@ -1,12 +1,13 @@
-  .utility-row{
-    display:flex;
-    gap:18px;
-    align-items:center;
-    flex-wrap:wrap;
-    margin-top:12px;
-    padding-top:12px;
-    border-top:1px dashed var(--line-soft);
-  }
+.utility-row {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line-soft);
+}
 
 .utility-btn {
     appearance: none;

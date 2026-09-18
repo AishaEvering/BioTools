@@ -49,6 +49,12 @@ export class SamCommandDecoder {
 
     for (let i = 2; i < tokens.length; i++) {
       const token = tokens[i];
+
+      if (token === undefined) {
+        errors.push("Unexpected empty token.");
+        continue;
+      }
+
       const nextToken = tokens[i + 1];
       const isNegativeInteger = /^-\d+(\.\d+)?$/.test(nextToken ?? "");
   
@@ -110,8 +116,13 @@ export class SamCommandDecoder {
       } else {
         // assume it's the input file
        if (i === tokens.length - 1) {
-            // last token, treat as input file
-            inputFile = token;
+            if(token.trim().length === 0){
+              errors.push("Input file can't be empty.");
+              skippedTokens.push(token);
+            } else {
+              // last token, treat as input file
+              inputFile = token;
+            }
         } else {
             skippedTokens.push(token);
             errors.push(`Unexpected token: ${token}`);
