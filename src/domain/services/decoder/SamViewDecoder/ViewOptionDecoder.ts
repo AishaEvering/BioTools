@@ -21,6 +21,8 @@ export class ViewOptionDecoder {
             };
         }
 
+        let decodedValue: string | number | undefined;
+
         if (option.requiresValue){
             if (value === undefined || value.trim().length === 0) {
                 return { 
@@ -41,14 +43,23 @@ export class ViewOptionDecoder {
                     }
                 };
             }
+
+            decodedValue =
+                option.constraints?.type === "integer"
+                ? Number(value)
+                : value;
         }
 
         const selectedOption: SelectedViewOption = {
             option,
-            value: option.requiresValue ? value : undefined 
-        }
+            value: decodedValue,
+        };
 
-        return { option: selectedOption, isValid: true, requiresValue: option.requiresValue };
+        return {
+            option: selectedOption,
+            isValid: true,
+            requiresValue: option.requiresValue,
+        };
     }
 
     private validateConstraints(syntax: string, value: string,

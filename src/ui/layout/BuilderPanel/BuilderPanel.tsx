@@ -16,9 +16,7 @@ import type { SelectedViewOption } from "../../../domain/options/SelectedViewOpt
 import Presets from "../../FilterPresets/Presets";
 import { FilterPresetCatalog } from "../../../domain/services/filtering/FilterPresetCatalog";
 import Utility from "../../Utility/Utility";
-
-const samFlagCatalog = new SamFlagCatalog();
-const viewOptionCatalog = new ViewOptionCatalog();
+import type { DecodeMessage } from "../../DecodeMessage";
 
 interface BuilderPanelProps {
   flagFilter: FlagFilter;
@@ -31,6 +29,11 @@ interface BuilderPanelProps {
   hiddenFlags: SamFlag[];
   setHiddenFlags: React.Dispatch<React.SetStateAction<SamFlag[]>>;
   onResetAll: () => void;
+  onDecode: (value: string) => void;
+  decodeMessage: DecodeMessage;
+  samFlagCatalog: SamFlagCatalog;
+  viewOptionCatalog: ViewOptionCatalog;
+  onClearDecodeMessage: () => void;
 }
 
 export default function BuilderPanel({
@@ -42,9 +45,15 @@ export default function BuilderPanel({
   hiddenFlags,
   setHiddenFlags,
   onResetAll,
+  onDecode,
+  decodeMessage,
+  samFlagCatalog,
+  viewOptionCatalog,
+  onClearDecodeMessage,
 }: BuilderPanelProps) {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isDecoderOpen, setIsDecoderOpen] = useState(false);
 
   const flagPresetCatalog = new FilterPresetCatalog(samFlagCatalog);
   const flags = samFlagCatalog.getAll();
@@ -195,6 +204,12 @@ export default function BuilderPanel({
     setHighlightedKeys([`opt-${option.id}`]);
   }
 
+  function handleResetAll() {
+    onClearDecodeMessage();
+    setIsDecoderOpen(false);
+    onResetAll();
+  }
+
   return (
     <div className="builder">
       <FlagSearch value={searchText} onChange={setSearchText} />
@@ -223,10 +238,19 @@ export default function BuilderPanel({
         catalog={flagPresetCatalog}
         onPresetSelected={(preset) => {
           setFlagFilter(preset.filter);
+          onClearDecodeMessage();
+          setIsDecoderOpen(false);
         }}
       />
 
-      <Utility onResetAll={onResetAll} />
+      <Utility
+        onResetAll={handleResetAll}
+        onDecode={onDecode}
+        decodeMessage={decodeMessage}
+        onClearDecodeMessage={onClearDecodeMessage}
+        isDecoderOpen={isDecoderOpen}
+        onToggleDecoder={() => setIsDecoderOpen((prev) => !prev)}
+      />
 
       <HiddenFlags flags={currentHiddenFlags} onRestore={handleRestoreFlag} />
 

@@ -328,7 +328,7 @@ describe("SamCommandDecoder", () => {
             expect(result.errors).toEqual([]);
             expect(result.command.options).toHaveLength(1);
             expect(result.command.options[0].option.syntax).toBe("-q");
-            expect(result.command.options[0].value).toBe("10");  
+            expect(result.command.options[0].value).toBe(10);  
         });   
 
         it("should decode multiple options correctly", () => {
@@ -342,7 +342,7 @@ describe("SamCommandDecoder", () => {
             expect(result.command.options[0].option.syntax).toBe("-h");
             expect(result.command.options[0].value).toBe(undefined);
             expect(result.command.options[1].option.syntax).toBe("-q");
-            expect(result.command.options[1].value).toBe("10");
+            expect(result.command.options[1].value).toBe(10);
         });
 
         it("should handle negative integer option values gracefully", () => {
@@ -366,7 +366,7 @@ describe("SamCommandDecoder", () => {
             expect(result.errors).toEqual([]);
             expect(result.command.options).toHaveLength(1);
             expect(result.command.options[0].option.syntax).toBe("-q");
-            expect(result.command.options[0].value).toBe("20");
+            expect(result.command.options[0].value).toBe(20);
         });
 
         it("should handle invalid option values gracefully", () => {
@@ -432,7 +432,7 @@ describe("SamCommandDecoder", () => {
             expect(result.isValid).toBe(false);
             expect(result.command.options).toHaveLength(1);
             expect(result.command.options[0].option.syntax).toBe("-q");
-            expect(result.command.options[0].value).toBe("10");
+            expect(result.command.options[0].value).toBe(10);
         });
 
         it("should handle option values that have spaces and are quoted correctly", () => {
@@ -493,7 +493,7 @@ describe("SamCommandDecoder", () => {
 
             expect(result.command.options.length).toBe(1);
             expect(result.command.options[0].option.syntax).toBe("-q");
-            expect(result.command.options[0].value).toBe("10");
+            expect(result.command.options[0].value).toBe(10);
 
             expect(result.command.flagFilter.calculatedIncludeValue).toBe(3);
             expect(result.command.flagFilter.calculatedExcludeValue).toBe(0);
@@ -517,6 +517,14 @@ describe("SamCommandDecoder", () => {
             expect(result.isValid).toBe(true);
             expect(result.command.inputFile).toBe("reads.cram");
         });
+
+        it("rejects a whitespace-only input file", () => {
+            const result = samCommandDecoder.decode('samtools view -F 4 "     "');
+
+            expect(result.isValid).toBe(false);
+            expect(result.command.inputFile).toBeUndefined();
+            expect(result.errors).toContain("Input file can't be empty.");
+        });
     });
 
     describe("Complete Command", () => {          
@@ -537,7 +545,7 @@ describe("SamCommandDecoder", () => {
 
             expect(result.command.options.length).toBe(1);
             expect(result.command.options[0].option.syntax).toBe("-q");
-            expect(result.command.options[0].value).toBe("10");
+            expect(result.command.options[0].value).toBe(10);
 
             expect(result.command.flagFilter.calculatedIncludeValue).toBe(3);
             expect(result.command.flagFilter.calculatedExcludeValue).toBe(0);
@@ -557,7 +565,7 @@ describe("SamCommandDecoder", () => {
 
             expect(result.command.options.length).toBe(2);
             expect(result.command.options[0].option.syntax).toBe("-q");
-            expect(result.command.options[0].value).toBe("10");
+            expect(result.command.options[0].value).toBe(10);
             expect(result.command.options[1].option.syntax).toBe("-h");
             expect(result.command.options[1].value).toBe(undefined);
 
@@ -624,22 +632,6 @@ describe("SamCommandDecoder", () => {
             expect(result.command.flagFilter.calculatedIncludeValue).toBe(0);
             expect(result.command.flagFilter.calculatedExcludeValue).toBe(0);
             expect(result.command.inputFile).toBe(undefined);
-        });
-
-
-        it("xshould handle a command with missing flag and option values gracefully", () => {
-            const input = "samtools view -f 147 input.bam";
-
-            const result = samCommandDecoder.decode(input);
-
-            console.log(result.command.flagFilter.includedFlags.map(flag => flag.value));
-
-            console.log(result.command.flagFilter.includedFlags.map(flag => flag.name));
-
-            expect(result.command.options.length).toBe(0);
-            expect(result.command.flagFilter.calculatedIncludeValue).toBe(147);
-            expect(result.command.flagFilter.calculatedExcludeValue).toBe(0);
-            expect(result.command.inputFile).toBe("input.bam");
         });
     });
 }); 

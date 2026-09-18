@@ -96,7 +96,7 @@ describe("SamInputDecoder", () => {
                 
                 expect(optionResult.isValid).toBe(true);
                 expect(optionResult.option?.option.syntax).toBe("-q");
-                expect(optionResult.option?.value).toBe("10");
+                expect(optionResult.option?.value).toBe(10);
             }
         });
 
@@ -147,7 +147,7 @@ describe("SamInputDecoder", () => {
 
                 expect(commandResult.command.options.length).toBe(1);
                 expect(commandResult.command.options[0].option.syntax).toBe("-q");
-                expect(commandResult.command.options[0].value).toBe("10");
+                expect(commandResult.command.options[0].value).toBe(10);
 
                 expect(commandResult.command.flagFilter.calculatedIncludeValue).toBe(3);
                 expect(commandResult.command.flagFilter.calculatedExcludeValue).toBe(0);
