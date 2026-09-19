@@ -779,9 +779,9 @@ message: A properly paired read cannot have an unmapped mate.
 
 ### $${\color{purple}Filter \space Preset}$$
 
-Contains a predefined Flag Filter configuration and a researcher facing explanation.
+Contains a predefined Flag Filter configuration and a researcher facing explanation. Preset selection is derived from the current Flag Filter rather than maintained as independent filter state. A preset is considered active when the current Flag Filter exactly matches the preset's Flag Filter.
 
-A Filter Preset exists in 5 forms within BioTools:
+A Filter Preset exists in 3 forms within BioTools:
 
 - Filter Preset Definition - reference data stored in JSON.
 - Filter Preset Interface - TypeScript contract defining the required shape.
@@ -808,8 +808,9 @@ A filter preset contains:
 Filter Presets populate the same flag filter used by manual selections.
 They do not use a separate command generation process.
 
-Once loaded, a preset's flags remain part of the ordinary Flag Filter and may
-be further edited through normal manual selection.
+When a preset is applied, its predefined configuration becomes the current Flag Filter. The resulting Flag Filter may then be edited through normal manual flag selection.
+
+Appyling a Filter Preset replaces the current Flag Filter configuration rather than merging with the existing configuration.
 
 ```JSON
 {
@@ -840,7 +841,7 @@ filter:
   includedFlags: []
   excludedFlags: [102, 103]
 
-          ↓ resolve identifiers
+          ↓ resolve SAM Flag definition identifiers
 
 FilterPreset Object
 -------------------
@@ -851,6 +852,10 @@ filter:
     - Secondary → SamFlag Object
     - Supplementary → SamFlag Object
 ```
+
+> [!NOTE]
+> Flag identifiers stored in Filter Preset Definitions reference SAM Flag
+> definitions; they are not SAM FLAG bit values.
 
 Filter Preset Catalog Example:
 
@@ -895,8 +900,14 @@ The Decoder accepts:
   - `decoder.decode("hello") // not a valid raw integer or command`
 
 - A full or partial `samtools view` command string.
-  - Correct "partial" example: `samtools view -f 3`
-  - Incorrect "partial" example: `-f 3 -q 20`
+  - `samtools view -f 3 // valid partial command`
+  - `samtools view -f 3 -q 20 sample.bam // valid full command`
+  - `-f 3 -q 20 // invalid: multiple command arguments without the samtools view prefix`
+
+- A single supported Sam View Option.
+  - `-q 20 // valid standalone option`
+  - `-h // valid standalone option`
+  - `-q 20 -h // invalid: standalone decoding accepts only one option at a time`
 
 A standalone integer is interpreted as an included `-f` SAM flag bitmask.
 
