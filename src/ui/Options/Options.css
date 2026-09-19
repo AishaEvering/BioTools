@@ -80,7 +80,7 @@
 
   .add-option-form .btn-add:hover{background:var(--teal-deep);}
 
-  .add-option-form .btn-cancel{
+  .add-option-form .form-actions .btn-cancel{
     background:transparent;
     color:var(--ink-soft);
     border:1px solid var(--line);

@@ -103,6 +103,11 @@
     background:rgba(0,0,0,.08);
   }
 
+  .card-remove:focus-visible{
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
   @media (max-width: 880px){
     .flag-card{min-width:140px;flex:1 1 calc(50% - 10px);}
   }

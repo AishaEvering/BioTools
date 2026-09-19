@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Options.css";
 import Option from "./Option";
 import type { ViewOption } from "../../domain/options/ViewOption";
@@ -21,6 +21,25 @@ export default function Options({
 }: OptionsProps) {
   const [addOptionOpen, setAddOptionOpen] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
+  const [newlyAddedOptionId, setNewlyAddedOptionId] = useState<number | null>(
+    null,
+  );
+  const returnFocusToAdd = useRef(false);
+  const optionSelectRef = useRef<HTMLSelectElement>(null);
+  const addOptionButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!addOptionOpen && returnFocusToAdd.current) {
+      addOptionButtonRef.current?.focus();
+      returnFocusToAdd.current = false;
+    }
+  }, [addOptionOpen]);
+
+  useEffect(() => {
+    if (addOptionOpen) {
+      optionSelectRef.current?.focus();
+    }
+  }, [addOptionOpen]);
 
   const optionsToAdd = availableOptions.filter(
     (option) =>
@@ -35,6 +54,8 @@ export default function Options({
     );
 
     if (!option) return;
+
+    setNewlyAddedOptionId(option.requiresValue ? option.id : null);
 
     onAdd(option);
     setAddOptionOpen(false);
@@ -105,6 +126,7 @@ export default function Options({
             error={error}
             onRemove={onRemove}
             onValueChange={onValueChange}
+            autoFocusValue={selectedOption.option.id === newlyAddedOptionId}
           />
         );
       })}
@@ -115,6 +137,7 @@ export default function Options({
         </p>
       ) : !addOptionOpen ? (
         <button
+          ref={addOptionButtonRef}
           type="button"
           className="add-option-btn"
           onClick={() => setAddOptionOpen(true)}
@@ -122,8 +145,15 @@ export default function Options({
           + Add option
         </button>
       ) : (
-        <div className="add-option-form">
+        <form
+          className="add-option-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleAdd();
+          }}
+        >
           <select
+            ref={optionSelectRef}
             value={selectedOptionId ?? ""}
             onChange={(event) =>
               setSelectedOptionId(Number(event.target.value))
@@ -144,7 +174,11 @@ export default function Options({
           </p>
 
           <div className="form-actions">
-            <button type="button" className="btn-add" onClick={handleAdd}>
+            <button
+              type="submit"
+              className="btn-add"
+              disabled={selectedOptionId === null}
+            >
               Add
             </button>
 
@@ -152,6 +186,7 @@ export default function Options({
               type="button"
               className="btn-cancel"
               onClick={() => {
+                returnFocusToAdd.current = true;
                 setAddOptionOpen(false);
                 setSelectedOptionId(null);
               }}
@@ -159,7 +194,7 @@ export default function Options({
               Cancel
             </button>
           </div>
-        </div>
+        </form>
       )}
     </section>
   );
