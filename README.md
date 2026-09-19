@@ -6,14 +6,20 @@
 
 Build bioinformatics workflows the way researchers think, not the way command line tools are implemented.
 
-![status](https://img.shields.io/badge/status-early%20development-orange)
+![status](https://img.shields.io/badge/status-v1.0.0-2ea44f)
 ![license](https://img.shields.io/badge/license-MIT-blue)
+
+### [Launch BioTools →](https://bio-tools.dev)
 
 ## What it is
 
 BioTools puts intuitive visual interfaces on top of the bioinformatics
 software researchers already rely on, so they can learn, understand, and
 confidently use those tools.
+
+## Current tool: SAM View Command Builder
+
+Visually build and decode samtools view filtering commands using SAM flags, presets, and supported options. BioTools shows the generated command alongside plain-language explanations of what the selected filters do.
 
 ## Demo
 
@@ -26,6 +32,6 @@ at least once. Bitwise flags are compact and machine-friendly, and almost
 nobody reads them fluently.
 
 I hit this in a class using the Biostar Handbook, which was candid that
-the flags are hard to decipher. The information isn't complicated — it's
+the flags are hard to decipher. The information isn't complicated, it's
 just encoded in a format built for computers rather than people. BioTools
 is my attempt to decode it on the reader's behalf.
