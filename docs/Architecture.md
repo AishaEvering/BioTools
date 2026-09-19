@@ -8,7 +8,7 @@
 - Engines are stateless whenever possible.
 - Explanations are separated from rule evaluation.
 - Shared functionality should be reusable across applications when it naturally belongs in the platform core.
-  
+
 ## Philosophy
 
 BioTools is designed as a platform of educational bioinformatics applications.
@@ -49,6 +49,14 @@ Commands are always derived from that state and are never stored independently.
 
 The Rule Engine evaluates the Filter State against immutable rule definitions.
 Results are transformed into user-friendly explanations.
+
+---
+
+## Decoder
+
+![Core Data Model](imgs/decoder.png)
+
+`SamCommandDecoder` reuses the specialized flag and option decoders.
 
 ---
 

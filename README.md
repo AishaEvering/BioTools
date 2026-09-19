@@ -2,15 +2,30 @@
   <img src="src/assets/banners/github-banner-1280x320.png" alt="BioTools banner" width="100%">
 </p>
 
+# BioTools
+
 Build bioinformatics workflows the way researchers think, not the way command line tools are implemented.
 
-## Current Milestone
-BioTools is currently building its first module:
+![status](https://img.shields.io/badge/status-early%20development-orange)
+![license](https://img.shields.io/badge/license-MIT-blue)
 
-**Visual Command Builder for `samtools view`**
+## What it is
 
-The long term vision is a collection of visual bioinformatics tools that help researchers construct, understand, and learn command line workflows.
+BioTools puts intuitive visual interfaces on top of the bioinformatics
+software researchers already rely on, so they can learn, understand, and
+confidently use those tools.
 
-<b>
-BioTools builds upon trusted bioinformatics software by providing intuitive visual interfaces that help researchers learn, understand, and confidently use the tools they already rely on.
-</b>
+## Demo
+
+![Demo](/docs/imgs/demo.gif)
+
+## Why I'm building this
+
+Anyone who has worked with alignment files has looked up what `99` means
+at least once. Bitwise flags are compact and machine-friendly, and almost
+nobody reads them fluently.
+
+I hit this in a class using the Biostar Handbook, which was candid that
+the flags are hard to decipher. The information isn't complicated — it's
+just encoded in a format built for computers rather than people. BioTools
+is my attempt to decode it on the reader's behalf.
