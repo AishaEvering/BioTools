@@ -48,7 +48,10 @@ export default function FlagCard({
       tabIndex={0}
       onClick={handleCycle}
       onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
+        if (
+          event.target === event.currentTarget &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
           event.preventDefault();
           handleCycle();
         }

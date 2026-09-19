@@ -7,6 +7,7 @@ interface OptionProps {
   readonly error?: string;
   readonly onValueChange: (option: ViewOption, value: string | number) => void;
   readonly onRemove: (option: ViewOption) => void;
+  readonly autoFocusValue?: boolean;
 }
 
 export default function Option({
@@ -14,6 +15,7 @@ export default function Option({
   error,
   onValueChange,
   onRemove,
+  autoFocusValue = false,
 }: OptionProps) {
   const { option, value } = selectedOption;
 
@@ -26,6 +28,7 @@ export default function Option({
       return (
         <select
           className="opt-value"
+          autoFocus={autoFocusValue}
           value={value ?? ""}
           onChange={(event) => onValueChange(option, event.target.value)}
         >
@@ -43,6 +46,7 @@ export default function Option({
         <input
           className="opt-value"
           type="number"
+          autoFocus={autoFocusValue}
           min={option.constraints.minimum}
           max={option.constraints.maximum}
           value={value ?? ""}
@@ -59,6 +63,7 @@ export default function Option({
         className="opt-value"
         type="text"
         value={value ?? ""}
+        autoFocus={autoFocusValue}
         placeholder={option.placeholder ?? ""}
         title={value ? String(value) : ""}
         onChange={(event) => onValueChange(option, event.target.value)}
