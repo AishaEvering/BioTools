@@ -13,6 +13,8 @@ import { SamFlagCatalog } from "./domain/services/samFlags/SamFlagCatalog";
 import { ViewOptionCatalog } from "./domain/services/viewOptions/ViewOptionCatalog";
 import { SamInputDecoder } from "./domain/services/decoder/SamViewDecoder/SamInputDecoder";
 import { DECODE_INPUT_TYPE } from "./domain/decode/DecodeInputClassifier";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
   const samFlagCatalog = useMemo(() => new SamFlagCatalog(), []);
@@ -217,6 +219,8 @@ function App() {
           inputFile={inputFile}
           setInputFile={setInputFile}
         />
+        <Analytics />
+        <SpeedInsights />
       </main>
 
       <BottomBar />
